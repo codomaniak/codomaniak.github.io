@@ -303,8 +303,13 @@ body {
   justify-content: flex-start;
   list-style: none; }
   .half__list li {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     font-weight: 700;
     width: 50%; }
+  .half__list select {
+    margin: auto; }
 
 .tiers__list {
   display: flex;
@@ -318,7 +323,7 @@ body {
     flex-wrap: wrap;
     flex-direction: row-reverse;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     font-weight: 700;
     list-style: none;
     width: 30%;
