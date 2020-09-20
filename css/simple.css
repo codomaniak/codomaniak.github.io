@@ -328,7 +328,8 @@ body {
     list-style: none;
     width: 30%;
     line-height: 1.6;
-    margin-right: auto; }
+    margin-right: auto;
+    font-size: 0.6em; }
 
 .tiers__el {
   width: 20%; }
