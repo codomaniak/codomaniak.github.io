@@ -7,11 +7,11 @@
     unitsToggleList[i].addEventListener('click', function (evt) {
       evt.preventDefault();
       var parent = this.parentElement;
-      var list = parent.querySelector('.units__sublist-hide');
+      var list = parent.querySelector('.units__sublist');
       if (list) {
-        list.classList.toggle('units__sublist');
+        list.classList.toggle('hidden');
       }
-      // parent.classList.toggle('active');
+      parent.classList.toggle('active');
     });
   }
 
