@@ -324,7 +324,6 @@ body {
     flex-wrap: wrap;
     flex-direction: row-reverse;
     align-items: center;
-    justify-content: flex-end;
     font-weight: 700;
     list-style: none;
     width: 30%;
@@ -333,7 +332,10 @@ body {
     font-size: 0.6em; }
 
 .tiers__el {
-  width: 20%; }
+  width: 20%;
+  margin-bottom: 20px; }
+  .tiers__el select {
+    font-size: 1em; }
   .tiers__el img {
     width: 100%;
     height: 150px;
@@ -341,6 +343,8 @@ body {
     margin: 10px 0; }
   .tiers__el figcaption {
     font-size: 0.75em; }
+  .tiers__el--center {
+    justify-content: center; }
 
 .tiers__price {
   font-size: 0.5em; }
@@ -375,7 +379,6 @@ body {
   margin-left: 20px; }
 
 .tiers select {
-  font-size: 0.7em;
   font-weight: 700;
   margin-right: 20px; }
 
@@ -472,6 +475,10 @@ body {
 
 .credentials li {
   font-size: 0.5em; }
+
+.text input {
+  font-size: 1em;
+  width: 180px; }
 
 .text select {
   font-size: 1em;
