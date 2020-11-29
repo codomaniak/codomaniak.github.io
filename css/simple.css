@@ -313,6 +313,7 @@ body {
     margin: auto; }
 
 .tiers__list {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -322,7 +323,6 @@ body {
     flex-direction: column;
     display: flex;
     flex-wrap: wrap;
-    flex-direction: row-reverse;
     align-items: center;
     font-weight: 700;
     list-style: none;
