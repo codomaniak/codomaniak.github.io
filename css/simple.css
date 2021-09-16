@@ -373,6 +373,7 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   justify-content: flex-start;
   font-weight: 700;
   width: 50%;
+  font-size: 0.8em;
 }
 
 .half__list select {
