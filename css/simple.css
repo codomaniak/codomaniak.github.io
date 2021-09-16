@@ -370,7 +370,7 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 .half__list li {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-around;
   font-weight: 700;
   width: 50%;
   font-size: 0.8em;
@@ -378,6 +378,7 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 
 .half__list select {
   margin: auto;
+  font-size: 1em;
 }
 
 .tiers__list {
