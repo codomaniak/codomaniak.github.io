@@ -11,7 +11,7 @@
     const totalCommuteHours = totalCommuteMinutes / 60;
 
     // Create the problem statement
-    const problemStatement = Mark's commute to university takes ${commuteTimeMinutes} minutes by bus. If he has classes ${daysPerWeek} days a week for ${weeksInSemester} weeks in a semester, how many hours does he spend commuting in total for one semester?;
+    const problemStatement = Mark`s commute to university takes ${commuteTimeMinutes} minutes by bus. If he has classes ${daysPerWeek} days a week for ${weeksInSemester} weeks in a semester, how many hours does he spend commuting in total for one semester?;
 
     return {
         problem: problemStatement,
