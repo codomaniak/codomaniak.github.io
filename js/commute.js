@@ -18,8 +18,3 @@
         answer: totalCommuteHours
     };
 })();
-
-// Example of how to use the function
-const result = calculateCommute();
-console.log(result.problem);
-console.log(Total hours spent commuting: ${result.answer.toFixed(2)} hours);
