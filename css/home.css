@@ -162,7 +162,7 @@ ul { list-style: none; }
   font-weight: 600;
 }
 
-.eyebrow--orange { color: var(--orange); }
+.eyebrow--magenta { color: var(--magenta); }
 .eyebrow--dim { color: var(--dim); }
 
 .eyebrow-row {
@@ -182,7 +182,7 @@ ul { list-style: none; }
 
 .text-muted { color: var(--muted); }
 .text-dim { color: var(--dim); }
-.text-orange { color: var(--orange); }
+.text-magenta { color: var(--magenta); }
 .text-sm { font-size: 0.875rem; }
 .text-xs { font-size: 0.75rem; }
 
