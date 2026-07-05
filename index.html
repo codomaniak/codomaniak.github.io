@@ -2,30 +2,189 @@
 <html lang="ru">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>main</title>
-  <link rel="stylesheet" type="text/css" href="css/style.css">
-  <link rel="preload" href="fonts/Roboto.woff2" as="font" type="font/woff2">
-  <link rel="preload" href="fonts/robotomedium.woff2" as="font" type="font/woff2">
-  <link rel="preload" href="fonts/RobotoBold.woff2" as="font" type="font/woff2">
-  <link rel="preload" href="fonts/RobotoBlack.woff2" as="font" type="font/woff2">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ольга Плохотнюк — преподаватель иностранных языков, разработчик учебных материалов. Курсы английского и французского, интерактивные материалы.">
+  <title>Ольга Плохотнюк — codomania.ru</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/home.css">
 </head>
 
-<body class="page">
-  <header class="header container container--fluid">
+<body class="grid-bg stars-bg">
 
+  <div class="bg-glows" aria-hidden="true">
+    <div class="bg-glow bg-glow--tl"></div>
+    <div class="bg-glow bg-glow--br"></div>
+    <div class="bg-glow bg-glow--center"></div>
+  </div>
+
+  <header class="nav-wrap anim-in anim-d1">
+    <nav class="nav-bar" aria-label="Главная">
+      <a href="/" class="nav-brand">
+        <div class="nav-logo">
+          <img src="img/sticker.png" alt="Ольга Плохотнюк">
+        </div>
+        <span class="nav-name">Ольга Плохотнюк</span>
+      </a>
+      <div class="nav-links">
+        <a href="#courses">Курсы</a>
+        <!-- <a href="https://github.com/codomaniak" target="_blank" rel="noopener">GitHub</a> -->
+      </div>
+      <button id="mobile-toggle" class="nav-toggle" aria-label="Открыть меню" aria-expanded="false">
+        <svg class="icon icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </nav>
   </header>
-  <main class="main container container--fluid">
-    <section class="modules container">
-      <ul class="modules__list">
 
-      </ul>
+  <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
+    <button id="mobile-close" class="mobile-close" aria-label="Закрыть меню">
+      <svg class="icon icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <a href="#courses" class="mobile-link">Курсы</a>
+    <a href="https://github.com/codomaniak" class="mobile-link" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <div id="mobile-overlay" class="mobile-overlay" aria-hidden="true"></div>
+
+  <main>
+    <section class="hero container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="status-pill anim-in anim-d2">
+            <span class="status-dot"></span>
+            Преподавание и разработка курсов
+          </div>
+
+          <h1 class="hero-title display anim-in anim-d3">
+            <span class="gradient-text-blue">Преподаватель</span> <span>иностранных языков</span>,<br>
+            <span class="gradient-text-grey">разработчик</span> <span class="gradient-text-purple">учебных материалов</span>
+          </h1>
+
+          <p class="hero-lead anim-in anim-d4">
+            Добро пожаловать на страницу портфолио. Здесь можно найти учебные материалы по иностранным языкам: интерактивные слайды, упражнения и курсы для занятий в классе и онлайн.
+          </p>
+
+          <div class="hero-actions anim-in anim-d5">
+            <a href="#courses" class="btn btn-primary btn-glow">Курсы и материалы</a>
+            <a href="https://lakonika.github.io/" class="btn btn-ghost" target="_blank" rel="noopener">Портфолио</a>
+          </div>
+        </div>
+
+        <div class="hero-visual anim-in anim-d5">
+          <div class="hero-visual-inner">
+            <div class="profile-frame float">
+              <img src="img/photo.jpg" alt="Ольга Плохотнюк">
+              <div class="profile-overlay"></div>
+              <div class="profile-ring spin-slow"></div>
+            </div>
+
+            <div class="code-float code-block float" style="animation-delay: -1.5s;">
+              <div class="code-dots"><span></span><span></span><span></span></div>
+              <code>
+                <span class="code-keyword">def</span> <span class="code-function">teach</span>(<span class="code-variable">lesson</span>):<br>
+                &nbsp;&nbsp;<span class="code-variable">lesson</span>.<span class="code-function">engage</span>()<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"✨"</span>
+              </code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="courses" class="section container">
+      <div class="section-header reveal">
+        <div class="eyebrow-row eyebrow-row--center">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow eyebrow--blue">Материалы</span>
+          <div class="eyebrow-line"></div>
+        </div>
+        <h2 class="display" style="font-size:clamp(1.875rem,4vw,2.25rem);">Курсы и <span class="text-blue">проекты</span></h2>
+      </div>
+
+      <!-- <div class="projects-grid">
+        <article class="reveal card card-hover project-card">
+          <div class="project-row">
+            <div class="project-thumb project-thumb--eng"></div>
+            <div class="project-row-body">
+              <h3>English. Pre-intermediate</h3>
+              <p>Straightforward, уровень Pre-intermediate. Юниты 1–2 с интерактивными слайдами и аудио.</p>
+              <div class="tags" style="margin-bottom:1rem;">
+                <span class="tag tag--blue">English</span>
+                <span class="tag tag--neutral">Straightforward</span>
+              </div>
+              <div class="project-links">
+                <a href="preint.html" class="link link--blue">Открыть курс</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="reveal card card-hover project-card">
+          <div class="project-row">
+            <div class="project-thumb project-thumb--elem"></div>
+            <div class="project-row-body">
+              <h3>English. Elementary</h3>
+              <p>Straightforward, базовый уровень. Юниты 1–9, учебные слайды и упражнения.</p>
+              <div class="tags" style="margin-bottom:1rem;">
+                <span class="tag tag--indigo">English</span>
+                <span class="tag tag--neutral">Elementary</span>
+              </div>
+              <div class="project-links">
+                <a href="sfwd.html" class="link link--blue">Открыть курс</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="reveal card card-hover project-card">
+          <div class="project-row">
+            <div class="project-thumb project-thumb--hlf"></div>
+            <div class="project-row-body">
+              <h3>История французского языка</h3>
+              <p>Лекции по истории французского языка — от латинского периода до новофранцузского.</p>
+              <div class="tags" style="margin-bottom:1rem;">
+                <span class="tag tag--purple">Français</span>
+                <span class="tag tag--neutral">Лингвистика</span>
+              </div>
+              <div class="project-links">
+                <a href="hlf.html" class="link link--blue">Открыть курс</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="reveal card card-hover project-card project-wide">
+          <div class="project-row">
+            <div class="project-thumb project-thumb--ling"></div>
+            <div class="project-row-body">
+              <h3>Введение в языкознание</h3>
+              <p>Интерактивная игра в формате Jeopardy для занятий по общему языкознанию.</p>
+              <div class="tags" style="margin-bottom:1rem;">
+                <span class="tag tag--cyan">Jeopardy</span>
+                <span class="tag tag--neutral">Лингвистика</span>
+              </div>
+              <div class="project-links">
+                <a href="files/index.html" class="link link--blue">Играть</a>
+              </div>
+            </div>
+          </div>
+        </article> -->
+      </div>
     </section>
   </main>
-  <footer class="footer container container--fluid">
 
+  <footer class="site-footer container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="img/sticker.png" alt="Ольга Плохотнюк">
+        </div>
+        <span class="footer-copy">© <span id="footer-year">2026</span> Ольга Плохотнюк · codomania.ru</span>
+      </div>
+      <div class="footer-tagline">Учебные материалы для языковых занятий</div>
+    </div>
   </footer>
+
+  <script src="js/home.js"></script>
 </body>
 
 </html>
