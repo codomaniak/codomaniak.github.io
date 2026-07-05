@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Введение в языкознание</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0a1628;
+      --bg-board: #0d2847;
+      --cell: #1a4a8a;
+      --cell-hover: #2563b8;
+      --cell-used: #0f2238;
+      --gold: #f4c430;
+      --gold-dim: #c9a020;
+      --text: #e8f0fc;
+      --accent: #4ecdc4;
+      --danger: #e74c3c;
+      --panel: #122a4d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      background: var(--bg-deep);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(26, 74, 138, 0.45), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(78, 205, 196, 0.08), transparent);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 1.25rem 1rem 0.75rem;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      color: var(--gold);
+      text-shadow: 0 2px 20px rgba(244, 196, 48, 0.35);
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+
+    .score-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem 1rem;
+    }
+
+    .team {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--panel);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .team.active {
+      border-color: var(--gold);
+      box-shadow: 0 0 16px rgba(244, 196, 48, 0.25);
+    }
+
+    .team label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      opacity: 0.85;
+    }
+
+    .team input[type="text"] {
+      width: 7rem;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 0.35rem 0.5rem;
+      font: inherit;
+    }
+
+    .team .points {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+      min-width: 4ch;
+      text-align: right;
+    }
+
+    .board-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 0.75rem 2rem;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      background: var(--bg-board);
+      border: 3px solid var(--gold-dim);
+      border-radius: 8px;
+      padding: 6px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+    }
+
+    .category {
+      background: linear-gradient(180deg, #1e3a6e 0%, #152d52 100%);
+      color: var(--gold);
+      font-weight: 700;
+      font-size: clamp(0.65rem, 1.8vw, 0.9rem);
+      text-align: center;
+      padding: 0.65rem 0.35rem;
+      min-height: 3.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .cell {
+      aspect-ratio: 1.35;
+      background: var(--cell);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      color: var(--gold);
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .cell:hover:not(:disabled) {
+      background: var(--cell-hover);
+      transform: scale(1.02);
+    }
+
+    .cell:disabled {
+      background: var(--cell-used);
+      color: transparent;
+      cursor: default;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    button.ctrl {
+      font: inherit;
+      font-weight: 600;
+      padding: 0.55rem 1.25rem;
+      border-radius: 8px;
+      border: 2px solid var(--gold-dim);
+      background: transparent;
+      color: var(--gold);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    button.ctrl:hover {
+      background: var(--gold);
+      color: var(--bg-deep);
+    }
+
+    /* Modal */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 8, 20, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s, visibility 0.25s;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      width: min(640px, 100%);
+      background: linear-gradient(160deg, #1a3d6e 0%, #0f2848 100%);
+      border: 3px solid var(--gold);
+      border-radius: 12px;
+      padding: 2rem 1.75rem;
+      text-align: center;
+      transform: scale(0.92);
+      transition: transform 0.25s;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .overlay.open .modal { transform: scale(1); }
+
+    .modal .category-tag {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .modal .value-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .modal .question {
+      font-size: clamp(1.15rem, 3.5vw, 1.45rem);
+      line-height: 1.45;
+      margin-bottom: 1.5rem;
+      min-height: 4rem;
+    }
+
+    .modal .answer {
+      display: none;
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      line-height: 1.4;
+    }
+
+    .modal .answer.visible { display: block; }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+    }
+
+    .modal-actions button {
+      font: inherit;
+      font-weight: 600;
+      padding: 0.6rem 1.1rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: filter 0.15s;
+    }
+
+    .modal-actions button:hover { filter: brightness(1.1); }
+
+    #btnShowAnswer {
+      background: var(--gold);
+      color: var(--bg-deep);
+    }
+
+    #btnCorrect {
+      background: #27ae60;
+      color: #fff;
+    }
+
+    #btnWrong {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    #btnClose {
+      background: rgba(255,255,255,0.12);
+      color: var(--text);
+    }
+
+    .final-screen {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .final-screen h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .final-screen .winner {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .final-screen .standings {
+      list-style: none;
+      margin: 1.5rem auto;
+      max-width: 320px;
+      text-align: left;
+    }
+
+    .final-screen .standings li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 1.1rem;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 520px) {
+      .category { font-size: 0.58rem; min-height: 2.8rem; }
+      .score-bar { gap: 0.5rem; }
+      .team { padding: 0.4rem 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Введение в языкознание</h1>
+    <p class="subtitle">Jeopardy · 5 рубрик · 25 вопросов</p>
+  </header>
+
+  <div class="score-bar" id="scoreBar">
+    <div class="team active" data-team="0">
+      <label>Команда 1</label>
+      <input type="text" value="Команда А" aria-label="Название команды 1">
+      <span class="points" data-score>0</span>
+    </div>
+    <div class="team" data-team="1">
+      <label>Команда 2</label>
+      <input type="text" value="Команда Б" aria-label="Название команды 2">
+      <span class="points" data-score>0</span>
+    </div>
+    <div class="team" data-team="2">
+      <label>Команда 3</label>
+      <input type="text" value="Команда В" aria-label="Название команды 3">
+      <span class="points" data-score>0</span>
+    </div>
+  </div>
+
+  <main class="board-wrap" id="gameArea">
+    <div class="board" id="board" role="grid" aria-label="Игровое поле"></div>
+    <div class="controls">
+      <button type="button" class="ctrl" id="btnReset">Новая игра</button>
+      <button type="button" class="ctrl" id="btnSwitchTeam">Сменить команду</button>
+    </div>
+  </main>
+
+  <section class="final-screen hidden" id="finalScreen">
+    <h2>Игра окончена!</h2>
+    <p class="winner" id="winnerText"></p>
+    <ul class="standings" id="standings"></ul>
+    <button type="button" class="ctrl" id="btnPlayAgain">Играть снова</button>
+  </section>
+
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalQuestion">
+    <div class="modal">
+      <p class="category-tag" id="modalCategory"></p>
+      <p class="value-tag" id="modalValue"></p>
+      <p class="question" id="modalQuestion"></p>
+      <p class="answer" id="modalAnswer"></p>
+      <div class="modal-actions">
+        <button type="button" id="btnShowAnswer">Показать ответ</button>
+        <button type="button" id="btnCorrect" class="hidden">Верно (+)</button>
+        <button type="button" id="btnWrong" class="hidden">Неверно (−)</button>
+        <button type="button" id="btnClose">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CATEGORIES = [
+      'Всюду знаки',
+      'Форма',
+      'Содержание',
+      'Звук',
+      'Письмо'
+    ];
+
+    const VALUES = [100, 200, 300, 400, 500];
+
+    const QUESTIONS = {
+      'Всюду знаки': {
+        100: {
+          q: 'Какой тип знака основан на физическом сходстве?',
+          a: 'Иконический.'
+        },
+        200: {
+          q: 'Какие три компонента образуют семантический треугольник?',
+          a: 'Знак, предмет, значение / знак, денотат, сигнификат.'
+        },
+        300: {
+          q: 'Что такое референт знака?',
+          a: 'Объект, на который указывает знак в реальности.'
+        },
+        400: {
+          q: 'Кто создал язык эсперанто?',
+          a: 'Людвик Лазарь Заменгоф.'
+        },
+        500: {
+          q: 'Назовите свойства знаков',
+          a: 'Материальность, системность, исчислимость, воспроизводимость, асимметричность, линейность, условность.'
+        }
+      },
+      'Форма': {
+        100: {
+          q: 'В паре Ф. де Соссюра «форма» знака — это его ….......',
+          a: 'Означающее — звуковой или графический образ.'
+        },
+        200: {
+          q: 'Что такое внутренняя форма слова? Приведите пример.',
+          a: 'Это образ, лежащий в основе названия и мотивирующий его значение. Пример:  подснежник.'
+        },
+        300: {
+          q: 'Что понимается под синтагматическими и парадигматическими отношениями в языке? Приведите примеры.',
+          a: 'Синтагматические – отношения между единицами в линейной последовательности (в речи). Пример: читать интересную книгу. Парадигматические – отношения между единицами в системе. Склонение существительного в латыни puell-a, puell-ae, puell-ae, puell-am, puell-a, степени сравнения прилагательных в английском языке big, bigg-er, bigg-est.'
+        },
+        400: {
+          q: 'Как называется упрощенный язык, созданный для общения между носителями разных языков?',
+          a: 'Пиджин.'
+        },
+        500: {
+          q: 'Чем отличается флективный строй языка от агглютинативного? Назовите по одному ключевому признаку.',
+          a: 'Для флективного строя характерна полифункциональность аффиксов, для агглютинативного – однозначность аффиксов.'
+        }
+      },
+      'Содержание': {
+        100: {
+          q: 'Какая функция языка является доминирующей в научном докладе?',
+          a: 'Коммуникативная.'
+        },
+        200: {
+          q: 'Восстановите фразу: _______________функция языка -  одна из основных языковых функций, которая позволяет ему быть средством мышления и познания мира.',
+          a: 'Kогнитивная.'
+        },
+        300: {
+          q: 'Сопутствующее, эмоционально-оценочное или культурное значение слова.',
+          a: 'Коннотация.'
+        },
+        400: {
+          q: 'Что такое фатическая функция языка?',
+          a: 'Фатическое общение – это общение ради общения, оно направлено просто на поддержание контакта с собеседником.'
+        },
+        500: {
+          q: 'К какой языковой семье относится арабский язык?',
+          a: 'Афразийская (семито-хамитская)'
+        }
+      },
+      'Звук': {
+        100: {
+          q: 'Физическая сторона речи — акустические колебания; в лингвистике её изучает …',
+          a: 'Фонетика (в отличие от фонологии, изучающей фонемы).'
+        },
+        200: {
+          q: 'Что такое фонема?',
+          a: 'Смыслоразличительная единица языка — минимальный звуковой образ, который позволяет отличить «дом» от «том» или «сом».'
+        },
+        300: {
+          q: 'Фонетический процесс, при котором глухой согласный перед звонким шумным (например, «с» перед «б» в слове «сбить») сам становится звонким.',
+          a: 'Прогрессивная ассимиляция.'
+        },
+        400: {
+          q: 'Какой фонетический процесс обусловил произношение слова ПРАЗНИК, вместо ПРАЗДНИК?',
+          a: 'Диэреза.'
+        },
+        500: {
+          q: 'Какой фонетический процесс обусловил произношение слова НИВАЛИД вместо ИНВАЛИД?',
+          a: 'Метатеза.'
+        }
+      },
+      'Письмо': {
+        100: {
+          q: 'Минимальная смыслоразличительная единица письменной речи, соответствующая фонеме на письменном уровне.',
+          a: 'Графема.'
+        },
+        200: {
+          q: 'Как называется запись, которая фиксирует звук речи?',
+          a: 'Транскрипция.'
+        },
+        300: {
+          q: 'Восстановите фразу: ____________________ принцип - принцип письма, при котором знак передаёт не понятие, а звучание слова, является основой для алфавитных систем.',
+          a: 'Фонетический.'
+        },
+        400: {
+          q: 'Эта система письма, где один знак соответствует целому слову или понятию, используется в китайском языке и была распространена в древнем Египте (в иероглифике).',
+          a: 'Идеографическое письмо.'
+        },
+        500: {
+          q: 'Хотя этот тип письма часто считают промежуточным этапом, он до сих пор успешно существует в ряде современных языков. Например, в японской хирагане или катакане.',
+          a: 'Силлабическое или слоговое письмо.'
+        }
+      }
+    };
+
+    let scores = [0, 0, 0];
+    let activeTeam = 0;
+    let usedCells = new Set();
+    let currentCell = null;
+
+    const boardEl = document.getElementById('board');
+    const overlay = document.getElementById('overlay');
+    const gameArea = document.getElementById('gameArea');
+    const finalScreen = document.getElementById('finalScreen');
+    const teamEls = document.querySelectorAll('.team');
+
+    function cellKey(cat, val) {
+      return `${cat}::${val}`;
+    }
+
+    function buildBoard() {
+      boardEl.innerHTML = '';
+      CATEGORIES.forEach(cat => {
+        const h = document.createElement('div');
+        h.className = 'category';
+        h.textContent = cat;
+        boardEl.appendChild(h);
+      });
+      VALUES.forEach(val => {
+        CATEGORIES.forEach(cat => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'cell';
+          btn.textContent = val;
+          btn.dataset.category = cat;
+          btn.dataset.value = val;
+          btn.setAttribute('aria-label', `${cat}, ${val} очков`);
+          btn.addEventListener('click', () => openQuestion(cat, val, btn));
+          boardEl.appendChild(btn);
+        });
+      });
+    }
+
+    function updateScores() {
+      teamEls.forEach((el, i) => {
+        el.querySelector('[data-score]').textContent = scores[i];
+        el.classList.toggle('active', i === activeTeam);
+      });
+    }
+
+    function openQuestion(cat, val, btn) {
+      if (usedCells.has(cellKey(cat, val))) return;
+      currentCell = { cat, val, btn };
+      const data = QUESTIONS[cat][val];
+      document.getElementById('modalCategory').textContent = cat;
+      document.getElementById('modalValue').textContent = val;
+      document.getElementById('modalQuestion').textContent = data.q;
+      const ans = document.getElementById('modalAnswer');
+      ans.textContent = data.a;
+      ans.classList.remove('visible');
+      document.getElementById('btnShowAnswer').classList.remove('hidden');
+      document.getElementById('btnCorrect').classList.add('hidden');
+      document.getElementById('btnWrong').classList.add('hidden');
+      overlay.classList.add('open');
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      currentCell = null;
+      checkGameEnd();
+    }
+
+    function markUsed() {
+      if (!currentCell) return;
+      const key = cellKey(currentCell.cat, currentCell.val);
+      usedCells.add(key);
+      currentCell.btn.disabled = true;
+    }
+
+    function adjustScore(delta) {
+      scores[activeTeam] += delta;
+      updateScores();
+    }
+
+    function checkGameEnd() {
+      const total = CATEGORIES.length * VALUES.length;
+      if (usedCells.size >= total) {
+        gameArea.classList.add('hidden');
+        finalScreen.classList.remove('hidden');
+        const names = [...teamEls].map(el => el.querySelector('input').value.trim() || 'Команда');
+        const ranked = scores
+          .map((s, i) => ({ name: names[i], score: s }))
+          .sort((a, b) => b.score - a.score);
+        document.getElementById('winnerText').textContent =
+          ranked[0].score === ranked[1]?.score && ranked.length > 1
+            ? 'Ничья!'
+            : `Победитель: ${ranked[0].name} (${ranked[0].score} очков)`;
+        document.getElementById('standings').innerHTML = ranked
+          .map((r, i) => `<li><span>${i + 1}. ${r.name}</span><span>${r.score}</span></li>`)
+          .join('');
+      }
+    }
+
+    function resetGame() {
+      scores = [0, 0, 0];
+      activeTeam = 0;
+      usedCells = new Set();
+      currentCell = null;
+      updateScores();
+      buildBoard();
+      gameArea.classList.remove('hidden');
+      finalScreen.classList.add('hidden');
+      closeModal();
+    }
+
+    document.getElementById('btnShowAnswer').addEventListener('click', () => {
+      document.getElementById('modalAnswer').classList.add('visible');
+      document.getElementById('btnShowAnswer').classList.add('hidden');
+      document.getElementById('btnCorrect').classList.remove('hidden');
+      document.getElementById('btnWrong').classList.remove('hidden');
+    });
+
+    document.getElementById('btnCorrect').addEventListener('click', () => {
+      if (currentCell) adjustScore(Number(currentCell.val));
+      markUsed();
+      closeModal();
+    });
+
+    document.getElementById('btnWrong').addEventListener('click', () => {
+      if (currentCell) adjustScore(-Number(currentCell.val));
+      markUsed();
+      closeModal();
+    });
+
+    document.getElementById('btnClose').addEventListener('click', () => {
+      markUsed();
+      closeModal();
+    });
+
+    document.getElementById('btnReset').addEventListener('click', resetGame);
+    document.getElementById('btnPlayAgain').addEventListener('click', resetGame);
+
+    document.getElementById('btnSwitchTeam').addEventListener('click', () => {
+      activeTeam = (activeTeam + 1) % 3;
+      updateScores();
+    });
+
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        markUsed();
+        closeModal();
+      }
+    });
+
+    buildBoard();
+    updateScores();
+  </script>
+</body>
+</html>
