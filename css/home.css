@@ -460,7 +460,7 @@ ul { list-style: none; }
 }
 
 .hero-title {
-  font-size: clamp(2.5rem, 6vw, 4.75rem);
+  font-size: clamp(2rem, 4vw, 4rem);
   letter-spacing: -0.02em;
 }
 
