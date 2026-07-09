@@ -335,7 +335,7 @@ ul { list-style: none; }
   padding: 0.875rem 2rem;
   font-size: 1rem;
   color: #fff;
-  background: linear-gradient(to left, #f57b11, #fa5705, #fa4728);
+  background: linear-gradient(to right, #dd1637, #c72002, #d11375);
 }
 
 .btn-primary--sm { padding: 0.5rem 1.25rem; font-size: 0.875rem; border-radius: 0.5rem; }
@@ -988,7 +988,7 @@ ul { list-style: none; }
 }
 
 .quote-icon {
-  color: rgba(59, 130, 246, 0.3);
+  color: #dd1637;
   margin: 0 auto 1.5rem;
 }
 
@@ -1121,6 +1121,10 @@ textarea.form-input { resize: none; min-height: 6rem; }
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 700;
+}
+
+.footer-icon {
+  border-radius: 0.5rem;
 }
 
 .footer-copy { font-size: 0.875rem; color: var(--dim); }
