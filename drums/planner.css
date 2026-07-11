@@ -1,0 +1,658 @@
+/* Planner — extends drums.css */
+
+.planner-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.planner-nav a {
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1f4a7a;
+  background: white;
+  border: 1px solid #dce3ef;
+  border-radius: 999px;
+  padding: 0.45rem 1.1rem;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.planner-nav a:hover {
+  background: #eaf0fa;
+  box-shadow: 0 2px 8px rgba(0, 20, 40, 0.06);
+}
+
+.planner-nav a.active {
+  background: #1f4a7a;
+  color: white;
+  border-color: #1f4a7a;
+}
+
+/* Layout */
+.planner-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .planner-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Panels */
+.panel {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 20, 40, 0.06);
+  border: 1px solid #e9edf4;
+  padding: 1.5rem 1.4rem 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.panel h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.panel .panel-sub {
+  font-size: 0.88rem;
+  color: #4c5b73;
+  margin-bottom: 1.2rem;
+  font-style: italic;
+}
+
+/* Goal cards */
+.goal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 700px) {
+  .goal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.goal-card {
+  background: #f5f8fe;
+  border-radius: 18px;
+  padding: 1rem 1.1rem;
+  border-left: 5px solid #8aa3c9;
+}
+
+.goal-card.coordination {
+  border-left-color: #6a9b8a;
+}
+
+.goal-card h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #1d2b42;
+}
+
+.goal-card .comp-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #1f2a3f;
+  color: white;
+  padding: 0.15rem 0.55rem;
+  border-radius: 30px;
+  margin-bottom: 0.5rem;
+}
+
+.goal-card p {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #2f3e58;
+  margin: 0;
+}
+
+/* Self-evaluation */
+.eval-section {
+  margin-bottom: 1.4rem;
+}
+
+.eval-section:last-child {
+  margin-bottom: 0;
+}
+
+.eval-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.eval-header h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1f2a3f;
+}
+
+.eval-levels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+}
+
+@media (max-width: 600px) {
+  .eval-levels {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.eval-level {
+  position: relative;
+}
+
+.eval-level input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.eval-level label {
+  display: flex;
+  flex-direction: column;
+  background: #f0f3f9;
+  border-radius: 12px;
+  padding: 0.45rem 0.5rem;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: #1f2a3f;
+  border-left: 3px solid #b8c9e0;
+  cursor: pointer;
+  min-height: 58px;
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+.eval-level label strong {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #3d506e;
+  margin-bottom: 0.15rem;
+}
+
+.eval-level input:checked + label {
+  background: #dce8f8;
+  border-left-color: #1f4a7a;
+  box-shadow: 0 0 0 2px #1f4a7a33;
+}
+
+.eval-level input:focus-visible + label {
+  outline: 2px solid #1f4a7a;
+  outline-offset: 2px;
+}
+
+/* Month tabs */
+.month-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.month-tab {
+  border: 1px solid #dce3ef;
+  background: #f0f3f9;
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #3d506e;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.month-tab:hover {
+  background: #e4ebf6;
+}
+
+.month-tab.active {
+  background: #1f4a7a;
+  color: white;
+  border-color: #1f4a7a;
+}
+
+.month-tab.done {
+  border-color: #6a9b8a;
+}
+
+.month-tab.done::after {
+  content: " ✓";
+  opacity: 0.85;
+}
+
+/* Track tabs */
+.track-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.track-tab {
+  flex: 1;
+  border: 1px solid #dce3ef;
+  background: white;
+  border-radius: 14px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #3d506e;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.track-tab:hover {
+  background: #f0f3f9;
+}
+
+.track-tab.active {
+  background: #eaf0fa;
+  border-color: #1f4a7a;
+  color: #1f4a7a;
+}
+
+.track-tab.rudiments.active {
+  border-color: #3f6a9b;
+  background: #eaf0fa;
+  color: #1f4a7a;
+}
+
+.track-tab.coordination.active {
+  border-color: #6a9b8a;
+  background: #eaf5f0;
+  color: #2d5a4a;
+}
+
+/* Week cards */
+.week-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.week-card {
+  background: #f8fafd;
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e9edf4;
+}
+
+.week-card h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2a3f;
+  margin-bottom: 0.35rem;
+}
+
+.week-card .week-focus {
+  font-size: 0.8rem;
+  color: #4c5b73;
+  margin-bottom: 0.65rem;
+  line-height: 1.4;
+}
+
+.week-card .week-focus strong {
+  color: #1f2a3f;
+}
+
+.milestone-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: #eaf0fa;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  margin-top: 0.75rem;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.milestone-row input[type="checkbox"] {
+  margin-top: 0.15rem;
+  width: 1rem;
+  height: 1rem;
+  accent-color: #1f4a7a;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.milestone-row label {
+  cursor: pointer;
+  color: #1f2a3f;
+}
+
+/* Checklist items */
+.checklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #28344a;
+}
+
+.checklist input[type="checkbox"] {
+  margin-top: 0.12rem;
+  width: 0.95rem;
+  height: 0.95rem;
+  accent-color: #3f6a9b;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.checklist label {
+  cursor: pointer;
+}
+
+.checklist li.done label {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+
+.month-summary {
+  font-size: 0.85rem;
+  color: #4c5b73;
+  background: #f0f3f9;
+  border-radius: 12px;
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.45;
+}
+
+.month-summary strong {
+  color: #1f2a3f;
+}
+
+/* Calendar */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.calendar-nav-btn {
+  background: #f0f3f9;
+  border: 1px solid #dce3ef;
+  border-radius: 10px;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #1f4a7a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s;
+}
+
+.calendar-nav-btn:hover {
+  background: #e4ebf6;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+.cal-dow {
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7a90;
+  padding: 0.25rem 0;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  min-height: 2.4rem;
+  border: 1px solid #e9edf4;
+  border-radius: 10px;
+  background: #fafbfd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #3d506e;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.12s, border-color 0.12s;
+  padding: 0.15rem;
+}
+
+.cal-day.empty {
+  background: transparent;
+  border-color: transparent;
+  cursor: default;
+}
+
+.cal-day:not(.empty):hover {
+  background: #f0f3f9;
+  border-color: #b8c9e0;
+}
+
+.cal-day.today {
+  border-color: #1f4a7a;
+  font-weight: 700;
+  color: #1f4a7a;
+}
+
+.cal-day.selected {
+  background: #dce8f8;
+  border-color: #1f4a7a;
+}
+
+.cal-day.practiced {
+  background: #eaf5f0;
+  border-color: #6a9b8a;
+}
+
+.cal-day.practiced-rudiments {
+  background: #eaf0fa;
+  border-color: #3f6a9b;
+}
+
+.cal-day.practiced-both {
+  background: linear-gradient(135deg, #eaf0fa 50%, #eaf5f0 50%);
+  border-color: #1f4a7a;
+}
+
+.cal-dots {
+  display: flex;
+  gap: 2px;
+  margin-top: 1px;
+}
+
+.cal-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
+.cal-dot.r { background: #3f6a9b; }
+.cal-dot.c { background: #6a9b8a; }
+
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.2rem;
+  font-size: 0.72rem;
+  color: #4c5b73;
+  margin-bottom: 1rem;
+}
+
+.cal-legend span {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cal-legend .swatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #dce3ef;
+}
+
+/* Day detail */
+.day-detail {
+  border-top: 1px solid #e9edf4;
+  padding-top: 1rem;
+}
+
+.day-detail h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  color: #1f2a3f;
+}
+
+.practice-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.practice-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  background: #f0f3f9;
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.practice-toggle:has(input:checked) {
+  border-color: #1f4a7a;
+  background: #dce8f8;
+}
+
+.practice-toggle.coord:has(input:checked) {
+  border-color: #6a9b8a;
+  background: #dceee4;
+}
+
+.practice-toggle input {
+  accent-color: #1f4a7a;
+  cursor: pointer;
+}
+
+.notes-field label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #3d506e;
+  margin-bottom: 0.35rem;
+}
+
+.notes-field textarea {
+  width: 100%;
+  min-height: 5.5rem;
+  border: 1px solid #dce3ef;
+  border-radius: 12px;
+  padding: 0.65rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #1a2639;
+  resize: vertical;
+  background: #fafbfd;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+.notes-field textarea:focus {
+  outline: none;
+  border-color: #1f4a7a;
+  box-shadow: 0 0 0 3px #1f4a7a22;
+}
+
+/* Progress bar */
+.progress-bar-wrap {
+  margin-bottom: 1rem;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: #4c5b73;
+  margin-bottom: 0.35rem;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e9edf4;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3f6a9b, #6a9b8a);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Month notes */
+.month-notes textarea {
+  min-height: 4rem;
+}
+
+.save-hint {
+  font-size: 0.72rem;
+  color: #6b7a90;
+  text-align: right;
+  margin-top: 0.5rem;
+}
+
+.sticky-sidebar {
+  position: sticky;
+  top: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  .sticky-sidebar {
+    position: static;
+  }
+}

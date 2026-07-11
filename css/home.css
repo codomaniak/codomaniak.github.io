@@ -718,6 +718,19 @@ ul { list-style: none; }
   margin-bottom: 0.75rem;
 }
 
+.skill-card a {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.skill-card a:hover {
+  transform: scale(1.05);
+   color: var(--text);
+}
+
 .skill-card p {
   font-size: 0.875rem;
   color: var(--muted);

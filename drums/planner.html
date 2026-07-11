@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drum Practice Planner · Rudiments & Coordination</title>
+  <link rel="stylesheet" href="drums.css">
+  <link rel="stylesheet" href="planner.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>🥁 Practice <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">planner</span></h1>
+    <div class="subhead">6-month program · Rudimental Vocabulary &amp; Independence &amp; Coordination · novice →
+      advanced</div>
+
+    <nav class="planner-nav">
+      <a href="english.html">Competency map</a>
+      <a href="planner.html" class="active">Planner</a>
+      <a href="rudiments.md">Rudiments plan (md)</a>
+      <a href="coordination.md">Coordination plan (md)</a>
+    </nav>
+
+    <!-- Goals linked to competency map -->
+    <div class="goal-grid">
+      <div class="goal-card rudiments">
+        <span class="comp-tag">Technical Execution</span>
+        <h3>Rudimental Vocabulary</h3>
+        <p>Know all 26 American rudiments, apply them on the kit, learn Swiss &amp; hybrid rudiments, and use them as
+          melodic phrases — not just exercises.</p>
+      </div>
+      <div class="goal-card coordination">
+        <span class="comp-tag">Technical Execution</span>
+        <h3>Independence &amp; Coordination</h3>
+        <p>Move from basic rock beats to 4-way independence, foot ostinatos with hand improvisation, polyrhythms (2:3,
+          3:4), broken-time grooves, and Latin coordination.</p>
+      </div>
+    </div>
+
+    <div class="planner-layout">
+      <!-- Main column: curriculum + self-eval -->
+      <div class="main-column">
+
+        <!-- Self-evaluation -->
+        <div class="panel">
+          <h2>Self-evaluation</h2>
+          <p class="panel-sub">Mark your current level on the competency map. Goal: move from <strong>novice</strong> →
+            <strong>advanced</strong> in 6 months.</p>
+
+          <div class="eval-section" data-competency="rudiments">
+            <div class="eval-header">
+              <h4>Rudimental Vocabulary</h4>
+              <span class="badge">competency map</span>
+            </div>
+            <div class="eval-levels">
+              <div class="eval-level">
+                <input type="radio" name="eval-rudiments" id="eval-rudiments-0" value="0">
+                <label for="eval-rudiments-0"><strong>novice</strong><span class="desc">5 basic rudiments</span></label>
+              </div>
+              <div class="eval-level">
+                <input type="radio" name="eval-rudiments" id="eval-rudiments-1" value="1">
+                <label for="eval-rudiments-1"><strong>intermediate</strong><span class="desc">26 rudiments, applied on
+                    set</span></label>
+              </div>
+              <div class="eval-level">
+                <input type="radio" name="eval-rudiments" id="eval-rudiments-2" value="2">
+                <label for="eval-rudiments-2"><strong>advanced</strong><span class="desc">Swiss rudiments, melodic
+                    phrasing</span></label>
+              </div>
+              <div class="eval-level">
+                <input type="radio" name="eval-rudiments" id="eval-rudiments-3" value="3">
+                <label for="eval-rudiments-3"><strong>expert</strong><span class="desc">Hybrid rudiments, seamless at
+                    speed</span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="eval-section" data-competency="coordination">
+            <div class="eval-header">
+              <h4>Independence &amp; Coordination</h4>
+              <span class="badge">competency map</span>
+            </div>
+            <div class="eval-levels">
+              <div class="eval-level">
+                <input type="radio" name="eval-coordination" id="eval-coordination-0" value="0">
+                <label for="eval-coordination-0"><strong>novice</strong><span class="desc">Basic rock beat (kick 1&amp;3,
+                    snare 2&amp;4)</span></label>
+              </div>
+              <div class="eval-level">
+                <input type="radio" name="eval-coordination" id="eval-coordination-1" value="1">
+                <label for="eval-coordination-1"><strong>intermediate</strong><span class="desc">Limb separation,
+                    polyrhythms (2:3)</span></label>
+              </div>
+              <div class="eval-level">
+                <input type="radio" name="eval-coordination" id="eval-coordination-2" value="2">
+                <label for="eval-coordination-2"><strong>advanced</strong><span class="desc">4-way independence, broken
+                    time, Latin feet</span></label>
+              </div>
+              <div class="eval-level">
+                <input type="radio" name="eval-coordination" id="eval-coordination-3" value="3">
+                <label for="eval-coordination-3"><strong>expert</strong><span class="desc">Complete limb autonomy, metric
+                    modulation</span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Curriculum -->
+        <div class="panel">
+          <h2>6-month curriculum</h2>
+          <p class="panel-sub">Check off daily practice items and monthly milestones as you go.</p>
+
+          <div class="progress-bar-wrap">
+            <div class="progress-label">
+              <span>Overall progress</span>
+              <span id="progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="month-tabs" id="month-tabs"></div>
+
+          <div class="track-tabs">
+            <button type="button" class="track-tab rudiments active" data-track="rudiments">Rudiments</button>
+            <button type="button" class="track-tab coordination" data-track="coordination">Coordination</button>
+          </div>
+
+          <div id="month-content"></div>
+
+          <div class="notes-field month-notes" style="margin-top: 1rem;">
+            <label for="month-notes">Month notes</label>
+            <textarea id="month-notes" placeholder="Struggles, breakthroughs, tempo targets…"></textarea>
+          </div>
+          <div class="save-hint">Saved automatically in your browser</div>
+        </div>
+      </div>
+
+      <!-- Sidebar: calendar -->
+      <div class="sticky-sidebar">
+        <div class="panel">
+          <h2>Practice calendar</h2>
+          <p class="panel-sub">Track daily sessions. Click a day to log practice and notes.</p>
+
+          <div class="calendar-header">
+            <button type="button" class="calendar-nav-btn" id="cal-prev" aria-label="Previous month">‹</button>
+            <h3 id="cal-title"></h3>
+            <button type="button" class="calendar-nav-btn" id="cal-next" aria-label="Next month">›</button>
+          </div>
+
+          <div class="cal-legend">
+            <span><span class="swatch" style="background:#eaf0fa;border-color:#3f6a9b"></span> Rudiments</span>
+            <span><span class="swatch" style="background:#eaf5f0;border-color:#6a9b8a"></span> Coordination</span>
+            <span><span class="swatch" style="background:linear-gradient(135deg,#eaf0fa 50%,#eaf5f0 50%)"></span>
+              Both</span>
+          </div>
+
+          <div class="calendar-grid" id="calendar-grid"></div>
+
+          <div class="day-detail" id="day-detail">
+            <h4 id="day-detail-title">Select a day</h4>
+            <div class="practice-toggles">
+              <label class="practice-toggle">
+                <input type="checkbox" id="day-rudiments"> Rudiments
+              </label>
+              <label class="practice-toggle coord">
+                <input type="checkbox" id="day-coordination"> Coordination
+              </label>
+            </div>
+            <div class="notes-field">
+              <label for="day-notes">Day notes</label>
+              <textarea id="day-notes" placeholder="What did you work on? BPM? How did it feel?"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">⏳ Practice planner · linked to competency map · data stored locally</div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'drums-planner-v1';
+
+    const PLANS = {
+      rudiments: [
+        {
+          month: 1,
+          title: 'The Foundation — 5 Core Rudiments',
+          focus: 'Build proper grip, stroke technique, and evenness.',
+          milestone: 'Play all 5 rudiments cleanly at 80–100 BPM with even dynamics and proper stick control.',
+          weeks: [
+            { week: 1, topic: 'Single Stroke Roll', items: ['Single strokes at 60 BPM (8ths) — 5 min', 'Increase to 80 BPM — 5 min', 'Accented singles (accent on 1) — 5 min'] },
+            { week: 2, topic: 'Double Stroke Roll', items: ['Double strokes at 60 BPM — 5 min', 'Increase to 80 BPM — 5 min', 'Open roll (RRLL) at 100 BPM — 5 min'] },
+            { week: 3, topic: 'Paradiddle', items: ['Paradiddle slow (60 BPM) — 5 min', 'Accented paradiddle (accent on R) — 5 min', 'Accent on L — 5 min'] },
+            { week: 4, topic: 'Flam & Drag', items: ['Flams (alternating hands) — 5 min', 'Drags (alternating hands) — 5 min', 'Combine Flams + Drags in 4-bar pattern — 5 min'] }
+          ]
+        },
+        {
+          month: 2,
+          title: 'Expand to 13 Essential Rudiments',
+          focus: 'Stick height control and rudimental phrasing in musical groups.',
+          milestone: 'Play 13 rudiments cleanly at 80–100 BPM with controlled stick heights and dynamic accents.',
+          weeks: [
+            { week: 1, topic: 'Single Paradiddle-Diddle', items: ['Paradiddle-diddle slow (60 BPM) — 5 min', 'Speed up gradually (70–90 BPM) — 10 min', 'Move accents to different notes — 5 min'] },
+            { week: 2, topic: 'Double Paradiddle', items: ['Double paradiddle slow — 5 min', 'Speed up to 80 BPM — 10 min', 'Accents on first note of each group — 5 min'] },
+            { week: 3, topic: 'Flam Accent & Flam Tap', items: ['Flam accent (alternating hands) — 5 min', 'Flam tap — 5 min', 'Combine both into 4-bar phrase — 10 min'] },
+            { week: 4, topic: 'Drag Paradiddle & Single Ratamacue', items: ['Drag paradiddle (slow) — 5 min', 'Single ratamacue — 10 min', 'Play both in sequence — 5 min'] }
+          ]
+        },
+        {
+          month: 3,
+          title: 'All 26 Rudiments — Part 1 (Rolls & Diddles)',
+          focus: 'Roll-based and diddle-based rudiments with even volume and alternating sticking.',
+          milestone: 'Play all roll-based rudiments with consistent volume, proper alternating sticking, and controlled acceleration.',
+          weeks: [
+            { week: 1, topic: '5-, 7-, 9-Stroke Rolls', items: ['5-stroke roll — 5 min', '7-stroke roll — 5 min', '9-stroke roll — 10 min', 'Play all in sequence — 5 min'] },
+            { week: 2, topic: '10-, 11-, 13-Stroke Rolls', items: ['10-stroke roll — 5 min', '11-stroke roll — 5 min', '13-stroke roll — 10 min', 'Sequence all rolls — 5 min'] },
+            { week: 3, topic: '15- & 17-Stroke Rolls', items: ['15-stroke roll — 5 min', '17-stroke roll — 5 min', 'Alternate between rolls — 10 min', 'Full roll sequence — 5 min'] },
+            { week: 4, topic: 'Review roll-based rudiments', items: ['Warm-up: singles + doubles — 10 min', 'All rolls slowly (60–80 BPM) — 15 min', 'Increase speed gradually — 5 min'] }
+          ]
+        },
+        {
+          month: 4,
+          title: 'All 26 Rudiments — Part 2 (Flam & Drag Families)',
+          focus: 'Complete remaining flam-based and drag-based patterns.',
+          milestone: 'All 26 standard American rudiments at 80–100 BPM with proper dynamics and sticking.',
+          weeks: [
+            { week: 1, topic: 'Flam Paradiddle & Flam Paradiddle-Diddle', items: ['Flam paradiddle — 5 min', 'Flam paradiddle-diddle — 10 min', 'Alternate between both — 5 min'] },
+            { week: 2, topic: 'Flam Drag & Flamacue', items: ['Flam drag — 5 min', 'Flamacue — 10 min', 'Both in sequence with accents — 10 min'] },
+            { week: 3, topic: 'Drag Paradiddle #1 & #2', items: ['Drag paradiddle #1 — 5 min', 'Drag paradiddle #2 — 10 min', 'Alternate between both — 10 min'] },
+            { week: 4, topic: 'Single, Double, Triple Ratamacue', items: ['Single ratamacue — 5 min', 'Double ratamacue — 5 min', 'Triple ratamacue — 10 min', 'All three in sequence — 5 min'] }
+          ]
+        },
+        {
+          month: 5,
+          title: 'Applying Rudiments to the Drum Set',
+          focus: 'Orchestrate rudiments around toms, cymbals, and snare within grooves.',
+          milestone: 'Move rudiments fluidly around the kit and use them as fills or phrases in a groove context.',
+          weeks: [
+            { week: 1, topic: 'Rudiments around the kit', items: ['Single strokes around the kit — 5 min', 'Paradiddles snare → toms — 10 min', 'Double stroke rolls on different surfaces — 5 min'] },
+            { week: 2, topic: 'Rudiments as fills', items: ['Groove + roll fill — 5 min', 'Groove + paradiddle fill — 10 min', 'Groove + flam/drag fill — 5 min'] },
+            { week: 3, topic: 'Rudiments with feet', items: ['Feet-only groove — 5 min', 'Add hand rudiments over groove — 10 min', 'Add flams and drags — 5 min'] },
+            { week: 4, topic: 'Rudimental phrasing', items: ['Warm-up with singles — 5 min', 'Create 8-bar phrases (3–4 rudiments) — 15 min', 'Record and evaluate — 5 min'] }
+          ]
+        },
+        {
+          month: 6,
+          title: 'Advanced — Swiss Rudiments & Hybrids',
+          focus: 'Swiss and hybrid rudiments applied melodically and improvisationally.',
+          milestone: 'Play Swiss and hybrid rudiments with speed and control; use them melodically in improvisation.',
+          weeks: [
+            { week: 1, topic: 'Swiss Army Triplet', items: ['Swiss triplet slow (60 BPM) — 5 min', 'Increase to 80 BPM — 10 min', 'Move around the kit — 10 min'] },
+            { week: 2, topic: 'Swiss Paradiddle & Swiss Flam', items: ['Swiss paradiddle — 5 min', 'Swiss flam — 10 min', 'Combine into 4-bar phrase — 10 min'] },
+            { week: 3, topic: 'Hybrid Rudiments', items: ['Herta — 5 min', 'Book Report — 5 min', 'Cheese — 10 min', 'Pataflafla — 5 min'] },
+            { week: 4, topic: 'Melodic rudimental soloing', items: ['Compose structured solo — 10 min', 'Improvise with rudiments — 15 min', 'Record, listen, refine — 5 min'] }
+          ]
+        }
+      ],
+      coordination: [
+        {
+          month: 1,
+          title: 'Foundation & Limb Separation',
+          focus: 'Isolate each limb, build basic coordination, establish a strong pulse.',
+          milestone: 'Play a basic rock beat with all 4 limbs and add simple bass drum syncopation without breaking the groove.',
+          weeks: [
+            { week: 1, topic: 'Stick control with metronome', items: ['Quarter notes on kick — 5 min', 'Hi-hat 8ths + snare 2&4 — 5 min', 'Combine: kick 1&3, snare 2&4, hi-hat 8ths — 5 min'] },
+            { week: 2, topic: 'Add the hi-hat foot', items: ['Hands only (snare + hi-hat) — 5 min', 'Add kick drum — 5 min', 'Add hi-hat foot on 2&4 — 5 min'] },
+            { week: 3, topic: 'Money beat — all 4 limbs', items: ['Slow tempo (60 BPM) — 10 min', 'Increase to 80 BPM — 5 min', 'Swap hi-hat foot to quarters — 5 min'] },
+            { week: 4, topic: 'Bass drum variations', items: ['Rock beat with kick variation — 5 min', 'Repeat each variation 4× without stopping — 10 min', 'Play without metronome — 5 min'] }
+          ]
+        },
+        {
+          month: 2,
+          title: 'Ostinato & Hand Independence',
+          focus: 'Steady foot foundation while hands play different rhythms.',
+          milestone: 'Maintain a consistent foot ostinato while playing syncopated and varied hand patterns.',
+          weeks: [
+            { week: 1, topic: 'Foot ostinato (samba/bossa)', items: ['Feet only — get ostinato solid — 5 min', 'Add hands: 8th notes on ride — 10 min', 'Add snare backbeats on 2&4 — 5 min'] },
+            { week: 2, topic: 'Syncopated hands over feet', items: ['Feet ostinato (70 BPM) — 5 min', 'Hands: syncopated patterns — 10 min', 'Increase tempo to 90 BPM — 5 min'] },
+            { week: 3, topic: 'Snare drum independence', items: ['Feet only — 5 min', 'Hands: 2 bars ride, 2 bars snare — 10 min', 'Hands improvise between ride, snare, toms — 5 min'] },
+            { week: 4, topic: 'Melody with hands, time with feet', items: ['Feet only — 5 min', 'Paradiddle over foot ostinato — 10 min', 'Invent 4-bar hand pattern — 5 min'] }
+          ]
+        },
+        {
+          month: 3,
+          title: 'Polyrhythmic Foundation (2:3 & 3:2)',
+          focus: 'Playing 2 against 3 and 3 against 2 between hands and feet.',
+          milestone: 'Play 2:3 and 3:2 polyrhythms confidently, isolated and within a groove.',
+          weeks: [
+            { week: 1, topic: '2:3 Polyrhythm', items: ['Isolate each part — 5 min', 'Combine at 60 BPM — 10 min', 'Increase to 70–80 BPM — 5 min'] },
+            { week: 2, topic: '3:2 Polyrhythm', items: ['Hands only: triplets — 5 min', 'Feet only: 8ths — 5 min', 'Combine at 60 BPM — 10 min', 'Alternate 4 bars each — 5 min'] },
+            { week: 3, topic: 'Polyrhythms in a groove', items: ['2 bars groove + 2 bars polyrhythm — 10 min', '1 bar groove + 1 bar polyrhythm — 10 min'] },
+            { week: 4, topic: 'Polyrhythm with 4 limbs', items: ['Each limb separately — 5 min', 'Combine 2 limbs at a time — 10 min', 'All 4 limbs slowly (50–60 BPM) — 10 min'] }
+          ]
+        },
+        {
+          month: 4,
+          title: 'Broken Time & Syncopation',
+          focus: 'Syncopated accents, displaced backbeats, and broken grooves.',
+          milestone: 'Play syncopated broken grooves with displaced accents while maintaining internal pulse.',
+          weeks: [
+            { week: 1, topic: 'Displaced snare drum', items: ['Standard rock beat — 5 min', 'Snare on & of 1 and 3 — 10 min', 'Snare on 3 or & of 4 — 5 min'] },
+            { week: 2, topic: 'Syncopated bass drum', items: ['Kick syncopation alone — 5 min', 'Add hi-hat + snare ghost notes — 10 min', 'Add backbeats on 2&4 — 5 min'] },
+            { week: 3, topic: 'Broken hi-hat pattern', items: ['Hi-hat pattern alone — 5 min', 'Add kick and snare — 10 min', 'Trade broken vs steady hi-hat — 5 min'] },
+            { week: 4, topic: 'Combine broken elements', items: ['Build the groove slowly — 10 min', 'With metronome (80 BPM) — 10 min', 'Without metronome, feel the pocket — 5 min'] }
+          ]
+        },
+        {
+          month: 5,
+          title: 'Latin & Afro-Cuban Coordination',
+          focus: 'Clave, cascara, son, rumba — the other coordination.',
+          milestone: 'Play Latin grooves with correct clave and cascara while maintaining foot independence.',
+          weeks: [
+            { week: 1, topic: 'Son Clave coordination', items: ['Feet only: bass drum pattern — 5 min', 'Hands only: son clave — 10 min', 'Combine hands and feet (70 BPM) — 10 min'] },
+            { week: 2, topic: 'Cascara pattern', items: ['Cascara hands only — 5 min', 'Add feet (kick on 2&, 4) — 10 min', 'Add hi-hat foot on clave beats — 10 min'] },
+            { week: 3, topic: 'Rumba / Afro-Cuban feel', items: ['Hands-only rumba — 5 min', 'Feet only (clave on kick) — 10 min', 'Combine all 4 limbs — 10 min'] },
+            { week: 4, topic: 'Bossa Nova / Samba feet', items: ['Feet only (samba ostinato) — 5 min', 'Hands: simple patterns — 10 min', 'Hands improvise over feet — 10 min'] }
+          ]
+        },
+        {
+          month: 6,
+          title: 'Advanced — Polyrhythmic & Metric Modulation',
+          focus: 'Layer complex polyrhythms, metric modulation, complete limb autonomy.',
+          milestone: 'Play complex polyrhythms, shift time feels, and improvise with complete limb independence.',
+          weeks: [
+            { week: 1, topic: 'Layer polyrhythms', items: ['Feet polyrhythm (4:3) — 5 min', 'Hands polyrhythm (5:4) — 5 min', 'Combine slowly (50 BPM) — 10 min', 'Increase tempo — 5 min'] },
+            { week: 2, topic: 'Metric modulation', items: ['4/4 groove — 5 min', 'Shift to triplet feel (3/4) — 10 min', 'Alternate every 4 bars — 10 min'] },
+            { week: 3, topic: 'Complete limb autonomy', items: ['Each limb separately — 5 min', 'Combine 2, then 3, then 4 limbs — 10 min', '16-bar phrase with changing patterns — 10 min'] },
+            { week: 4, topic: 'Soloing & improvisation', items: ['Compose structured solo — 10 min', 'Improvise freely — 15 min', 'Record and evaluate — 5 min'] }
+          ]
+        }
+      ]
+    };
+
+    let state = loadState();
+    let currentMonth = 1;
+    let currentTrack = 'rudiments';
+    let calYear = new Date().getFullYear();
+    let calMonth = new Date().getMonth();
+    let selectedDate = formatDate(new Date());
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (_) { /* ignore */ }
+      return { checks: {}, eval: {}, days: {}, monthNotes: {} };
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateProgress();
+    }
+
+    function ck(track, month, week, item) {
+      return `${track}-m${month}-w${week}-i${item}`;
+    }
+
+    function mk(track, month) {
+      return `${track}-m${month}`;
+    }
+
+    function formatDate(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function parseDate(str) {
+      const [y, m, d] = str.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    function isChecked(key) {
+      return !!state.checks[key];
+    }
+
+    function setChecked(key, val) {
+      if (val) state.checks[key] = true;
+      else delete state.checks[key];
+      saveState();
+    }
+
+    function totalCheckables() {
+      let n = 0;
+      for (const track of ['rudiments', 'coordination']) {
+        for (const month of PLANS[track]) {
+          n += 1; // milestone
+          for (const week of month.weeks) {
+            n += week.items.length;
+          }
+        }
+      }
+      return n;
+    }
+
+    function countChecked() {
+      return Object.keys(state.checks).filter(k => state.checks[k]).length;
+    }
+
+    function updateProgress() {
+      const total = totalCheckables();
+      const done = countChecked();
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      document.getElementById('progress-text').textContent = `${pct}% (${done}/${total})`;
+      document.getElementById('progress-fill').style.width = `${pct}%`;
+    }
+
+    function monthComplete(track, monthNum) {
+      const plan = PLANS[track].find(m => m.month === monthNum);
+      if (!plan) return false;
+      if (!isChecked(mk(track, monthNum))) return false;
+      for (const week of plan.weeks) {
+        for (let i = 0; i < week.items.length; i++) {
+          if (!isChecked(ck(track, monthNum, week.week, i))) return false;
+        }
+      }
+      return true;
+    }
+
+    function renderMonthTabs() {
+      const el = document.getElementById('month-tabs');
+      el.innerHTML = '';
+      for (let m = 1; m <= 6; m++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'month-tab' + (m === currentMonth ? ' active' : '');
+        const rDone = monthComplete('rudiments', m);
+        const cDone = monthComplete('coordination', m);
+        if (rDone && cDone) btn.classList.add('done');
+        btn.textContent = `Month ${m}`;
+        btn.addEventListener('click', () => {
+          currentMonth = m;
+          renderMonthTabs();
+          renderMonthContent();
+          loadMonthNotes();
+        });
+        el.appendChild(btn);
+      }
+    }
+
+    function renderMonthContent() {
+      const plan = PLANS[currentTrack].find(m => m.month === currentMonth);
+      const el = document.getElementById('month-content');
+      if (!plan) { el.innerHTML = ''; return; }
+
+      const milestoneKey = mk(currentTrack, currentMonth);
+
+      el.innerHTML = `
+        <div class="month-summary"><strong>Month ${plan.month}:</strong> ${plan.title}<br>${plan.focus}</div>
+        <div class="week-list">
+          ${plan.weeks.map(w => `
+            <div class="week-card">
+              <h4>Week ${w.week} · ${w.topic}</h4>
+              <ul class="checklist">
+                ${w.items.map((item, i) => {
+                  const key = ck(currentTrack, currentMonth, w.week, i);
+                  const checked = isChecked(key);
+                  const id = `chk-${key}`;
+                  return `<li class="${checked ? 'done' : ''}">
+                    <input type="checkbox" id="${id}" data-key="${key}" ${checked ? 'checked' : ''}>
+                    <label for="${id}">${item}</label>
+                  </li>`;
+                }).join('')}
+              </ul>
+            </div>
+          `).join('')}
+          <div class="milestone-row">
+            <input type="checkbox" id="milestone-chk" data-key="${milestoneKey}" ${isChecked(milestoneKey) ? 'checked' : ''}>
+            <label for="milestone-chk"><strong>🎯 Milestone:</strong> ${plan.milestone}</label>
+          </div>
+        </div>
+      `;
+
+      el.querySelectorAll('input[type="checkbox"]').forEach(input => {
+        input.addEventListener('change', () => {
+          setChecked(input.dataset.key, input.checked);
+          const li = input.closest('li');
+          if (li) li.classList.toggle('done', input.checked);
+          renderMonthTabs();
+        });
+      });
+    }
+
+    function loadMonthNotes() {
+      const key = `notes-m${currentMonth}-${currentTrack}`;
+      document.getElementById('month-notes').value = state.monthNotes[key] || '';
+    }
+
+    function saveMonthNotes() {
+      const key = `notes-m${currentMonth}-${currentTrack}`;
+      state.monthNotes[key] = document.getElementById('month-notes').value;
+      saveState();
+    }
+
+    function loadEval() {
+      ['rudiments', 'coordination'].forEach(comp => {
+        const val = state.eval[comp];
+        if (val !== undefined) {
+          const el = document.getElementById(`eval-${comp}-${val}`);
+          if (el) el.checked = true;
+        }
+      });
+    }
+
+    function saveEval(comp, val) {
+      state.eval[comp] = parseInt(val, 10);
+      saveState();
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById('calendar-grid');
+      const title = document.getElementById('cal-title');
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      title.textContent = `${monthNames[calMonth]} ${calYear}`;
+
+      const dows = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      grid.innerHTML = dows.map(d => `<div class="cal-dow">${d}</div>`).join('');
+
+      const first = new Date(calYear, calMonth, 1);
+      let startDow = first.getDay() - 1;
+      if (startDow < 0) startDow = 6;
+
+      const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+      const todayStr = formatDate(new Date());
+
+      for (let i = 0; i < startDow; i++) {
+        grid.innerHTML += '<div class="cal-day empty"></div>';
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(calYear, calMonth, day);
+        const dateStr = formatDate(date);
+        const dayData = state.days[dateStr] || {};
+        const r = !!dayData.rudiments;
+        const c = !!dayData.coordination;
+
+        let cls = 'cal-day';
+        if (dateStr === todayStr) cls += ' today';
+        if (dateStr === selectedDate) cls += ' selected';
+        if (r && c) cls += ' practiced-both';
+        else if (r) cls += ' practiced-rudiments';
+        else if (c) cls += ' practiced';
+
+        let dots = '';
+        if (r || c) {
+          dots = '<div class="cal-dots">';
+          if (r) dots += '<span class="cal-dot r"></span>';
+          if (c) dots += '<span class="cal-dot c"></span>';
+          dots += '</div>';
+        }
+
+        grid.innerHTML += `<div class="${cls}" data-date="${dateStr}">${day}${dots}</div>`;
+      }
+
+      grid.querySelectorAll('.cal-day:not(.empty)').forEach(cell => {
+        cell.addEventListener('click', () => selectDay(cell.dataset.date));
+      });
+    }
+
+    function selectDay(dateStr) {
+      selectedDate = dateStr;
+      renderCalendar();
+      const d = parseDate(dateStr);
+      const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('day-detail-title').textContent = d.toLocaleDateString('en-US', opts);
+
+      const dayData = state.days[dateStr] || {};
+      document.getElementById('day-rudiments').checked = !!dayData.rudiments;
+      document.getElementById('day-coordination').checked = !!dayData.coordination;
+      document.getElementById('day-notes').value = dayData.notes || '';
+    }
+
+    function saveDay() {
+      if (!selectedDate) return;
+      state.days[selectedDate] = {
+        rudiments: document.getElementById('day-rudiments').checked,
+        coordination: document.getElementById('day-coordination').checked,
+        notes: document.getElementById('day-notes').value
+      };
+      if (!state.days[selectedDate].rudiments && !state.days[selectedDate].coordination && !state.days[selectedDate].notes) {
+        delete state.days[selectedDate];
+      }
+      saveState();
+      renderCalendar();
+    }
+
+    // Event listeners
+    document.querySelectorAll('.track-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        currentTrack = tab.dataset.track;
+        document.querySelectorAll('.track-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        renderMonthContent();
+        loadMonthNotes();
+      });
+    });
+
+    document.querySelectorAll('[name^="eval-"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const comp = radio.name.replace('eval-', '');
+        saveEval(comp, radio.value);
+      });
+    });
+
+    document.getElementById('month-notes').addEventListener('input', saveMonthNotes);
+
+    document.getElementById('day-rudiments').addEventListener('change', saveDay);
+    document.getElementById('day-coordination').addEventListener('change', saveDay);
+    document.getElementById('day-notes').addEventListener('input', debounce(saveDay, 300));
+
+    document.getElementById('cal-prev').addEventListener('click', () => {
+      calMonth--;
+      if (calMonth < 0) { calMonth = 11; calYear--; }
+      renderCalendar();
+    });
+
+    document.getElementById('cal-next').addEventListener('click', () => {
+      calMonth++;
+      if (calMonth > 11) { calMonth = 0; calYear++; }
+      renderCalendar();
+    });
+
+    function debounce(fn, ms) {
+      let t;
+      return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn(...args), ms);
+      };
+    }
+
+    // Init
+    loadEval();
+    renderMonthTabs();
+    renderMonthContent();
+    loadMonthNotes();
+    renderCalendar();
+    selectDay(selectedDate);
+    updateProgress();
+  </script>
+</body>
+
+</html>
