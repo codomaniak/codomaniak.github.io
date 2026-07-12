@@ -1,0 +1,122 @@
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f4f7fb;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+      padding: 2rem 1.5rem;
+      color: #1a2639;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .subhead {
+      font-size: 1.1rem;
+      color: #3e4a5e;
+      margin-bottom: 2rem;
+      border-left: 4px solid #b0c4de;
+      padding-left: 1rem;
+      font-weight: 400;
+    }
+
+    .domain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .domain-card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 8px 24px rgba(0, 20, 40, 0.06);
+      padding: 1.5rem 1.2rem 1.8rem;
+      transition: 0.2s ease;
+      border: 1px solid #e9edf4;
+    }
+
+    .domain-card:hover {
+      box-shadow: 0 12px 32px rgba(0, 20, 40, 0.10);
+    }
+
+    .domain-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 2px solid #dce3ef;
+      padding-bottom: 0.4rem;
+    }
+
+    .domain-sub {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #4c5b73;
+      margin-bottom: 1.2rem;
+      margin-top: 0.3rem;
+      font-style: italic;
+    }
+
+    .level-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.4rem;
+    }
+
+    @media (max-width: 600px) {
+      .level-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .level-cell {
+      background: #f0f3f9;
+      border-radius: 12px;
+      padding: 0.5rem 0.55rem;
+      font-size: 0.72rem;
+      line-height: 1.35;
+      border-left: 3px solid #b8c9e0;
+    }
+
+    .level-cell strong {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: #3d506e;
+      margin-bottom: 0.15rem;
+    }
+
+    .level-cell.beginner { border-left-color: #6a9b8a; }
+    .level-cell.intermediate { border-left-color: #3f6a9b; }
+    .level-cell.advanced { border-left-color: #9b7a6a; }
+    .level-cell.expert { border-left-color: #7a6a9b; }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.82rem;
+      color: #6b7a90;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e9edf4;
+    }

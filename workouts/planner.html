@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Planner · Week Generator</title>
+  <link rel="stylesheet" href="workouts.css">
+  <link rel="stylesheet" href="planner.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>🏋️ Workout <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">planner</span></h1>
+    <div class="subhead">Weekly plans · back, arms, chest, legs &amp; core · 3–4 sessions · 60–90 min · based on your level</div>
+
+    <nav class="planner-nav">
+      <a href="index.html">Competency map</a>
+      <a href="planner.html" class="active">Planner</a>
+      <button type="button" class="planner-action-btn planner-export-btn" id="export-csv" title="Download planner data as CSV">↓ Download CSV</button>
+    </nav>
+
+    <div class="goal-grid" id="goal-grid"></div>
+
+    <div class="planner-layout">
+      <div class="main-column">
+
+        <div class="panel">
+          <h2>Self-evaluation</h2>
+          <p class="panel-sub">Rate your current level in each area. The generator uses your overall level to pick workouts and scale volume.</p>
+          <div id="eval-sections"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Week generator</h2>
+          <p class="panel-sub">Generate a weekly plan from your workout library. Each week covers back, arms, chest, legs and core across 3–4 sessions.</p>
+
+          <div class="generator-controls">
+            <div class="control-group">
+              <label for="level-select">Overall level</label>
+              <select id="level-select"></select>
+            </div>
+            <div class="control-group">
+              <label for="week-select">Program week</label>
+              <input type="number" id="week-select" min="1" max="52" value="1">
+            </div>
+            <div class="control-group">
+              <label for="sessions-select">Sessions / week</label>
+              <select id="sessions-select">
+                <option value="3">3 sessions</option>
+                <option value="4" selected>4 sessions</option>
+              </select>
+            </div>
+            <button type="button" class="btn-primary" id="generate-btn">Generate week</button>
+            <button type="button" class="btn-secondary" id="regenerate-btn">↻ Regenerate</button>
+          </div>
+
+          <div class="progress-bar-wrap">
+            <div class="progress-label">
+              <span>Week progress</span>
+              <span id="progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="week-tabs" id="week-tabs"></div>
+          <div class="session-tabs" id="session-tabs"></div>
+          <div id="session-content"></div>
+
+          <div class="notes-field" style="margin-top: 1rem;">
+            <label for="week-notes">Week notes</label>
+            <textarea id="week-notes" placeholder="Weights used, how sessions felt, what to adjust next week…"></textarea>
+          </div>
+          <div class="save-hint">Saved automatically in your browser</div>
+        </div>
+      </div>
+
+      <div class="sticky-sidebar">
+        <div class="panel">
+          <h2>Workout calendar</h2>
+          <p class="panel-sub">Log completed sessions. Click a day to mark workouts and add notes.</p>
+
+          <div class="calendar-header">
+            <button type="button" class="calendar-nav-btn" id="cal-prev" aria-label="Previous month">‹</button>
+            <h3 id="cal-title"></h3>
+            <button type="button" class="calendar-nav-btn" id="cal-next" aria-label="Next month">›</button>
+          </div>
+
+          <div class="calendar-grid" id="calendar-grid"></div>
+
+          <div class="day-detail" id="day-detail">
+            <h4 id="day-detail-title">Select a day</h4>
+            <div class="workout-toggles" id="workout-toggles"></div>
+            <div class="notes-field">
+              <label for="day-notes">Day notes</label>
+              <textarea id="day-notes" placeholder="Session done? Weights? Energy level?"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">⏳ Workout planner · data from your workout library · stored locally</div>
+  </div>
+
+  <script src="workout-data.js"></script>
+  <script>
+    const STORAGE_KEY = 'workout-planner-v1';
+
+    let state = loadState();
+    let currentWeek = state.currentWeek || 1;
+    let currentSessionIdx = 0;
+    let weekPlan = state.plans[currentWeek] || null;
+    let calYear = new Date().getFullYear();
+    let calMonth = new Date().getMonth();
+    let selectedDate = formatDate(new Date());
+
+    const SESSION_COLORS = {
+      back_arms: { color: '#3f6a9b', bg: '#eaf0fa' },
+      chest_arms_core: { color: '#9b6a7a', bg: '#f8eaef' },
+      legs_core: { color: '#6a9b8a', bg: '#eaf5f0' },
+      full_body: { color: '#7a6a9b', bg: '#f0eaf8' }
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (_) { /* ignore */ }
+      return {
+        eval: {},
+        overallLevel: 'intermediate',
+        sessionsPerWeek: 4,
+        currentWeek: 1,
+        plans: {},
+        checks: {},
+        sessionStatus: {},
+        weekNotes: {},
+        days: {}
+      };
+    }
+
+    function saveState() {
+      state.currentWeek = currentWeek;
+      if (weekPlan) state.plans[currentWeek] = weekPlan;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateProgress();
+    }
+
+    function formatDate(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function parseDate(str) {
+      const [y, m, d] = str.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    function inferOverallLevel() {
+      const vals = EVAL_AREAS.map(a => state.eval[a.id]).filter(v => v !== undefined);
+      if (!vals.length) return state.overallLevel || 'intermediate';
+      const avg = vals.reduce((s, v) => s + v, 0) / vals.length;
+      if (avg < 0.75) return 'beginner';
+      if (avg < 1.75) return 'intermediate';
+      if (avg < 2.75) return 'advanced';
+      return 'expert';
+    }
+
+    function renderGoals() {
+      document.getElementById('goal-grid').innerHTML = EVAL_AREAS.map(a => {
+        const meta = MUSCLE_GROUPS[a.id];
+        return `
+          <div class="goal-card ${a.id}">
+            <span class="domain-tag">${a.domain}</span>
+            <h3>${meta ? meta.icon + ' ' : ''}${a.title}</h3>
+            <p>${a.levels[2].desc}</p>
+          </div>`;
+      }).join('');
+    }
+
+    function renderEval() {
+      let html = '';
+      let lastDomain = '';
+      for (const area of EVAL_AREAS) {
+        if (area.domain !== lastDomain) {
+          html += `<div class="eval-domain-label">${area.domain}</div>`;
+          lastDomain = area.domain;
+        }
+        html += `
+          <div class="eval-section" data-area="${area.id}">
+            <div class="eval-header"><h4>${area.title}</h4></div>
+            <div class="eval-levels">
+              ${area.levels.map((lv, i) => `
+                <div class="eval-level">
+                  <input type="radio" name="eval-${area.id}" id="eval-${area.id}-${i}" value="${i}">
+                  <label for="eval-${area.id}-${i}"><strong>${lv.label}</strong><span class="desc">${lv.desc}</span></label>
+                </div>
+              `).join('')}
+            </div>
+          </div>`;
+      }
+      document.getElementById('eval-sections').innerHTML = html;
+
+      for (const area of EVAL_AREAS) {
+        const val = state.eval[area.id];
+        if (val !== undefined) {
+          const el = document.getElementById(`eval-${area.id}-${val}`);
+          if (el) el.checked = true;
+        }
+      }
+
+      document.querySelectorAll('[name^="eval-"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+          const area = radio.name.replace('eval-', '');
+          state.eval[area] = parseInt(radio.value, 10);
+          const level = inferOverallLevel();
+          state.overallLevel = level;
+          document.getElementById('level-select').value = level;
+          saveState();
+        });
+      });
+    }
+
+    function initControls() {
+      const levelSel = document.getElementById('level-select');
+      levelSel.innerHTML = LEVELS.map(l =>
+        `<option value="${l.id}">${l.label} — ${l.desc.split(',')[0]}</option>`
+      ).join('');
+      levelSel.value = state.overallLevel || inferOverallLevel();
+
+      document.getElementById('week-select').value = currentWeek;
+      document.getElementById('sessions-select').value = state.sessionsPerWeek || 4;
+
+      levelSel.addEventListener('change', () => {
+        state.overallLevel = levelSel.value;
+        saveState();
+      });
+
+      document.getElementById('sessions-select').addEventListener('change', e => {
+        state.sessionsPerWeek = parseInt(e.target.value, 10);
+        saveState();
+      });
+    }
+
+    function doGenerate(regenerate) {
+      const level = document.getElementById('level-select').value;
+      currentWeek = parseInt(document.getElementById('week-select').value, 10) || 1;
+      const sessions = parseInt(document.getElementById('sessions-select').value, 10);
+      state.overallLevel = level;
+      state.sessionsPerWeek = sessions;
+
+      if (regenerate || !state.plans[currentWeek]) {
+        const seed = regenerate ? Date.now() : currentWeek;
+        weekPlan = generateWeekPlan(level, seed, sessions);
+        weekPlan.week = currentWeek;
+        state.plans[currentWeek] = weekPlan;
+      } else {
+        weekPlan = state.plans[currentWeek];
+      }
+
+      currentSessionIdx = 0;
+      saveState();
+      renderWeekTabs();
+      renderSessionTabs();
+      renderSessionContent();
+      loadWeekNotes();
+    }
+
+    function renderWeekTabs() {
+      const weeks = Object.keys(state.plans).map(Number).sort((a, b) => a - b);
+      if (!weeks.includes(currentWeek)) weeks.push(currentWeek);
+      weeks.sort((a, b) => a - b);
+
+      const el = document.getElementById('week-tabs');
+      el.innerHTML = weeks.map(w => {
+        const plan = state.plans[w];
+        const total = plan ? plan.sessions.reduce((n, s) => n + s.blocks.length, 0) : 0;
+        const done = plan ? plan.sessions.reduce((n, s) =>
+          n + s.blocks.filter(b => state.checks[blockCheckKey(w, s.id, b.id)]).length, 0) : 0;
+        const complete = total && done === total;
+        return `<button type="button" class="week-tab${w === currentWeek ? ' active' : ''}${complete ? ' done' : ''}" data-week="${w}">Week ${w}</button>`;
+      }).join('');
+
+      el.querySelectorAll('.week-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentWeek = parseInt(btn.dataset.week, 10);
+          document.getElementById('week-select').value = currentWeek;
+          weekPlan = state.plans[currentWeek] || null;
+          currentSessionIdx = 0;
+          renderWeekTabs();
+          renderSessionTabs();
+          renderSessionContent();
+          loadWeekNotes();
+        });
+      });
+    }
+
+    function getSessionStatus(sessionId) {
+      return state.sessionStatus[sessionStatusKey(currentWeek, sessionId)] || '';
+    }
+
+    function renderSessionTabs() {
+      const el = document.getElementById('session-tabs');
+      if (!weekPlan) {
+        el.innerHTML = '';
+        document.getElementById('session-content').innerHTML = `
+          <div class="empty-state">
+            <p>No plan generated yet for week ${currentWeek}.</p>
+            <button type="button" class="btn-primary" id="empty-generate">Generate week ${currentWeek}</button>
+          </div>`;
+        document.getElementById('empty-generate')?.addEventListener('click', () => doGenerate(false));
+        return;
+      }
+
+      el.innerHTML = weekPlan.sessions.map((s, i) => {
+        const st = getSessionStatus(s.id);
+        return `<button type="button" class="session-tab${i === currentSessionIdx ? ' active' : ''}${st ? ' status-' + st : ''}"
+          data-idx="${i}" data-type="${s.type}">Day ${s.daySlot}<br><span style="font-weight:400;font-size:0.68rem">${s.label}</span></button>`;
+      }).join('');
+
+      el.querySelectorAll('.session-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentSessionIdx = parseInt(btn.dataset.idx, 10);
+          renderSessionTabs();
+          renderSessionContent();
+        });
+      });
+    }
+
+    function bindStatusPickers(root, sessionId) {
+      root.querySelectorAll('.status-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = sessionStatusKey(currentWeek, sessionId);
+          const next = state.sessionStatus[key] === btn.dataset.status ? null : btn.dataset.status;
+          if (next) state.sessionStatus[key] = next;
+          else delete state.sessionStatus[key];
+          saveState();
+          renderSessionTabs();
+          const hint = document.getElementById('session-status-hint');
+          if (hint) {
+            const st = STATUS_TYPES.find(s => s.id === next);
+            hint.textContent = st ? st.desc : 'Rate this session once you finish or have a clear picture.';
+          }
+          root.querySelectorAll('.status-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.status === next);
+          });
+        });
+      });
+    }
+
+    function renderSessionContent() {
+      const el = document.getElementById('session-content');
+      if (!weekPlan || !weekPlan.sessions[currentSessionIdx]) {
+        if (weekPlan) el.innerHTML = '';
+        return;
+      }
+
+      const session = weekPlan.sessions[currentSessionIdx];
+      const colors = SESSION_COLORS[session.type] || SESSION_COLORS.back_arms;
+      const st = getSessionStatus(session.id);
+      const statusHint = STATUS_TYPES.find(s => s.id === st);
+      const doneCount = session.blocks.filter(b => state.checks[blockCheckKey(currentWeek, session.id, b.id)]).length;
+
+      el.innerHTML = `
+        <div class="session-status-row">
+          <span class="status-label">Session status</span>
+          <div class="status-picker">
+            ${STATUS_TYPES.map(s => `
+              <button type="button" class="status-btn status-${s.id}${st === s.id ? ' active' : ''}"
+                data-status="${s.id}" title="${s.desc}">${s.icon}</button>
+            `).join('')}
+          </div>
+          <span class="month-status-hint" id="session-status-hint">${statusHint ? statusHint.desc : 'Rate this session once you finish or have a clear picture.'}</span>
+        </div>
+        <div class="session-summary">
+          <strong>${session.label}</strong> · ~${session.durationMin} min · ${doneCount}/${session.blocks.length} blocks done<br>
+          Source: ${session.source}
+        </div>
+        <div class="session-meta">
+          <span class="meta-tag duration">~${session.durationMin} min</span>
+          <div class="focus-tags">
+            ${session.focus.map(f => `<span class="focus-tag ${f}">${MUSCLE_GROUPS[f]?.label || f}</span>`).join('')}
+          </div>
+        </div>
+        <div class="block-list">
+          ${session.blocks.map(block => {
+            const key = blockCheckKey(currentWeek, session.id, block.id);
+            const checked = !!state.checks[key];
+            return `
+              <div class="block-card${checked ? ' done' : ''}">
+                <div class="block-header">
+                  <input type="checkbox" id="${key}" data-key="${key}" ${checked ? 'checked' : ''}>
+                  <label for="${key}" class="block-text">${escapeHtml(block.text)}</label>
+                  <span class="block-type ${block.type}">${block.type}</span>
+                </div>
+                <div class="block-groups">
+                  ${block.groups.filter(g => g !== 'general').map(g =>
+                    `<span class="focus-tag ${g}">${MUSCLE_GROUPS[g]?.short || g}</span>`
+                  ).join('')}
+                </div>
+              </div>`;
+          }).join('')}
+        </div>
+      `;
+
+      bindStatusPickers(el, session.id);
+
+      el.querySelectorAll('input[type="checkbox"]').forEach(input => {
+        input.addEventListener('change', () => {
+          if (input.checked) state.checks[input.dataset.key] = true;
+          else delete state.checks[input.dataset.key];
+          saveState();
+          input.closest('.block-card')?.classList.toggle('done', input.checked);
+          renderSessionTabs();
+          renderSessionContent();
+        });
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function totalCheckables() {
+      let n = 0;
+      for (const w of Object.keys(state.plans)) {
+        const plan = state.plans[w];
+        if (!plan) continue;
+        for (const s of plan.sessions) n += s.blocks.length;
+      }
+      return n;
+    }
+
+    function countChecked() {
+      return Object.keys(state.checks).filter(k => state.checks[k]).length;
+    }
+
+    function updateProgress() {
+      if (!weekPlan) {
+        document.getElementById('progress-text').textContent = '0%';
+        document.getElementById('progress-fill').style.width = '0%';
+        return;
+      }
+      const total = weekPlan.sessions.reduce((n, s) => n + s.blocks.length, 0);
+      const done = weekPlan.sessions.reduce((n, s) =>
+        n + s.blocks.filter(b => state.checks[blockCheckKey(currentWeek, s.id, b.id)]).length, 0);
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      document.getElementById('progress-text').textContent = `${pct}% (${done}/${total})`;
+      document.getElementById('progress-fill').style.width = `${pct}%`;
+    }
+
+    function loadWeekNotes() {
+      document.getElementById('week-notes').value = state.weekNotes[currentWeek] || '';
+    }
+
+    function saveWeekNotes() {
+      state.weekNotes[currentWeek] = document.getElementById('week-notes').value;
+      saveState();
+    }
+
+    function renderWorkoutToggles() {
+      const el = document.getElementById('workout-toggles');
+      el.innerHTML = Object.entries(SESSION_TYPES).map(([id, meta]) => {
+        const c = SESSION_COLORS[id] || { color: '#1f4a7a', bg: '#dce8f8' };
+        return `
+          <label class="workout-toggle" style="--session-color:${c.color};--session-bg:${c.bg}">
+            <input type="checkbox" id="day-${id}" data-type="${id}"> ${meta.label}
+          </label>`;
+      }).join('');
+
+      Object.keys(SESSION_TYPES).forEach(id => {
+        document.getElementById(`day-${id}`).addEventListener('change', saveDay);
+      });
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById('calendar-grid');
+      const title = document.getElementById('cal-title');
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      title.textContent = `${monthNames[calMonth]} ${calYear}`;
+
+      grid.innerHTML = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        .map(d => `<div class="cal-dow">${d}</div>`).join('');
+
+      const first = new Date(calYear, calMonth, 1);
+      let startDow = first.getDay() - 1;
+      if (startDow < 0) startDow = 6;
+
+      const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+      const todayStr = formatDate(new Date());
+
+      for (let i = 0; i < startDow; i++) grid.innerHTML += '<div class="cal-day empty"></div>';
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = formatDate(new Date(calYear, calMonth, day));
+        const dayData = state.days[dateStr] || {};
+        const types = Object.keys(SESSION_TYPES).filter(t => dayData[t]);
+        let cls = 'cal-day';
+        if (dateStr === todayStr) cls += ' today';
+        if (dateStr === selectedDate) cls += ' selected';
+        if (types.length) cls += ' has-workout';
+        const dots = types.length
+          ? `<div class="cal-dots">${types.map(t => `<span class="cal-dot ${t}"></span>`).join('')}</div>`
+          : '';
+        grid.innerHTML += `<div class="${cls}" data-date="${dateStr}">${day}${dots}</div>`;
+      }
+
+      grid.querySelectorAll('.cal-day:not(.empty)').forEach(cell => {
+        cell.addEventListener('click', () => selectDay(cell.dataset.date));
+      });
+    }
+
+    function selectDay(dateStr) {
+      selectedDate = dateStr;
+      renderCalendar();
+      const d = parseDate(dateStr);
+      document.getElementById('day-detail-title').textContent =
+        d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const dayData = state.days[dateStr] || {};
+      Object.keys(SESSION_TYPES).forEach(id => {
+        const el = document.getElementById(`day-${id}`);
+        if (el) el.checked = !!dayData[id];
+      });
+      document.getElementById('day-notes').value = dayData.notes || '';
+    }
+
+    function saveDay() {
+      if (!selectedDate) return;
+      const entry = { notes: document.getElementById('day-notes').value };
+      let any = false;
+      Object.keys(SESSION_TYPES).forEach(id => {
+        if (document.getElementById(`day-${id}`).checked) {
+          entry[id] = true;
+          any = true;
+        }
+      });
+      if (any || entry.notes) state.days[selectedDate] = entry;
+      else delete state.days[selectedDate];
+      saveState();
+      renderCalendar();
+    }
+
+    function debounce(fn, ms) {
+      let t;
+      return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+    }
+
+    function buildCsv() {
+      saveWeekNotes();
+      saveDay();
+      const header = ['section', 'week', 'session', 'type', 'block', 'completed', 'status', 'date', 'notes'];
+      const lines = [header.join(',')];
+
+      for (const [w, plan] of Object.entries(state.plans)) {
+        if (!plan) continue;
+        lines.push(['week_note', w, '', '', '', '', '', '', (state.weekNotes[w] || '').replace(/"/g, '""')].map(csvCell).join(','));
+        for (const s of plan.sessions) {
+          const st = getSessionStatusForWeek(w, s.id);
+          for (const b of s.blocks) {
+            const key = blockCheckKey(w, s.id, b.id);
+            lines.push(['block', w, s.label, s.type, b.text.replace(/"/g, '""'),
+              state.checks[key] ? 'yes' : 'no', st, '', ''].map(csvCell).join(','));
+          }
+        }
+      }
+
+      for (const [date, day] of Object.entries(state.days || {}).sort()) {
+        const types = Object.keys(SESSION_TYPES).filter(t => day[t]).join('; ');
+        lines.push(['calendar', '', types, '', '', '', '', date, (day.notes || '').replace(/"/g, '""')].map(csvCell).join(','));
+      }
+
+      return lines.join('\n');
+    }
+
+    function getSessionStatusForWeek(week, sessionId) {
+      return state.sessionStatus[sessionStatusKey(week, sessionId)] || '';
+    }
+
+    function csvCell(v) {
+      if (v == null || v === '') return '';
+      const t = String(v);
+      return /[",\n\r]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
+    }
+
+    function downloadCsv() {
+      const blob = new Blob(['\ufeff' + buildCsv()], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `workout-planner-${formatDate(new Date())}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('generate-btn').addEventListener('click', () => doGenerate(false));
+    document.getElementById('regenerate-btn').addEventListener('click', () => doGenerate(true));
+    document.getElementById('export-csv').addEventListener('click', downloadCsv);
+    document.getElementById('week-notes').addEventListener('input', saveWeekNotes);
+    document.getElementById('day-notes').addEventListener('input', debounce(saveDay, 300));
+    document.getElementById('cal-prev').addEventListener('click', () => {
+      calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar();
+    });
+    document.getElementById('cal-next').addEventListener('click', () => {
+      calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar();
+    });
+
+    renderGoals();
+    renderEval();
+    initControls();
+    if (state.plans[currentWeek]) {
+      weekPlan = state.plans[currentWeek];
+      renderWeekTabs();
+      renderSessionTabs();
+      renderSessionContent();
+      loadWeekNotes();
+    } else {
+      renderWeekTabs();
+      renderSessionTabs();
+    }
+    renderWorkoutToggles();
+    renderCalendar();
+    selectDay(selectedDate);
+    updateProgress();
+  </script>
+</body>
+
+</html>

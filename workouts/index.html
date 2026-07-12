@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Competency Map</title>
+  <link rel="stylesheet" href="workouts.css">
+  <style>
+    .map-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .map-nav a {
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1f4a7a;
+      background: white;
+      border: 1px solid #dce3ef;
+      border-radius: 999px;
+      padding: 0.45rem 1.1rem;
+      transition: background 0.15s;
+    }
+    .map-nav a:hover { background: #eaf0fa; }
+    .map-nav a.active {
+      background: #1f4a7a;
+      color: white;
+      border-color: #1f4a7a;
+    }
+    .domain-card.back { border-top: 4px solid #3f6a9b; }
+    .domain-card.arms { border-top: 4px solid #7a6a9b; }
+    .domain-card.chest { border-top: 4px solid #9b6a7a; }
+    .domain-card.legs { border-top: 4px solid #6a9b8a; }
+    .domain-card.core { border-top: 4px solid #9b8a6a; }
+    .cta-panel {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 8px 24px rgba(0, 20, 40, 0.06);
+      border: 1px solid #e9edf4;
+      padding: 1.5rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .cta-panel p {
+      color: #4c5b73;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .cta-btn {
+      display: inline-block;
+      text-decoration: none;
+      font-weight: 600;
+      color: white;
+      background: #1f4a7a;
+      border-radius: 999px;
+      padding: 0.65rem 1.5rem;
+      transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #163a62; }
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      flex: 1;
+      min-width: 140px;
+      background: white;
+      border-radius: 16px;
+      padding: 1rem 1.2rem;
+      border: 1px solid #e9edf4;
+      text-align: center;
+    }
+    .stat-card .num {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1f4a7a;
+    }
+    .stat-card .lbl {
+      font-size: 0.78rem;
+      color: #6b7a90;
+      margin-top: 0.2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>🏋️ Workout <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">competency map</span></h1>
+    <div class="subhead">Five training areas · beginner → expert · weekly plans from your personal workout library</div>
+
+    <nav class="map-nav">
+      <a href="index.html" class="active">Competency map</a>
+      <a href="planner.html">Planner</a>
+    </nav>
+
+    <div class="stats-row" id="stats-row"></div>
+
+    <div class="domain-grid" id="domain-grid"></div>
+
+    <div class="cta-panel">
+      <p>Ready to plan your week? The generator picks workouts from your library, scales them to your level, and covers back, arms, chest, legs and core across 3–4 sessions.</p>
+      <a href="planner.html" class="cta-btn">Open week planner →</a>
+    </div>
+
+    <div class="footer-note">Built from 29 workout files · cross-training style · supersets, EMOM &amp; for-time blocks</div>
+  </div>
+
+  <script src="workout-data.js"></script>
+  <script>
+    const totalTemplates = Object.values(WORKOUT_LIBRARY).reduce((n, arr) => n + arr.length, 0);
+
+    document.getElementById('stats-row').innerHTML = `
+      <div class="stat-card"><div class="num">${totalTemplates}</div><div class="lbl">Workout templates</div></div>
+      <div class="stat-card"><div class="num">29</div><div class="lbl">Source files</div></div>
+      <div class="stat-card"><div class="num">3–4</div><div class="lbl">Sessions / week</div></div>
+      <div class="stat-card"><div class="num">60–90</div><div class="lbl">Minutes / session</div></div>
+    `;
+
+    document.getElementById('domain-grid').innerHTML = EVAL_AREAS.map(area => {
+      const meta = MUSCLE_GROUPS[area.id];
+      return `
+        <div class="domain-card ${area.id}">
+          <div class="domain-title">
+            <span>${meta.icon} ${area.title}</span>
+          </div>
+          <div class="domain-sub">${area.domain}</div>
+          <div class="level-row">
+            ${area.levels.map((lv, i) => `
+              <div class="level-cell ${lv.label}">
+                <strong>${lv.label}</strong>
+                ${lv.desc}
+              </div>
+            `).join('')}
+          </div>
+        </div>`;
+    }).join('');
+  </script>
+</body>
+
+</html>
