@@ -467,6 +467,24 @@
 .block-type.sets { background: #eaf0fa; color: #3f6a9b; }
 .block-type.block { background: #f0f3f9; color: #6b7a90; }
 
+.pair-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.pair-badge.same { background: #eaf5f0; color: #3d7a5c; }
+.pair-badge.antagonistic { background: #eaf0fa; color: #3f6a9b; }
+.pair-badge.distant { background: #f8f0ea; color: #9b7a6a; }
+.pair-badge.fatburn { background: #fef3e8; color: #b85c2e; }
+.pair-badge.core_relief { background: #eaf5f0; color: #3d7a5c; }
+.pair-badge.upper_cardio { background: #f0eaf8; color: #6a5a9b; }
+
+.focus-tag.cardio { background: #fef6ea; color: #a06a30; }
+
 .block-text {
   font-size: 0.82rem;
   line-height: 1.5;

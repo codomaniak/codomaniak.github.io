@@ -34,7 +34,7 @@
 
         <div class="panel">
           <h2>Week generator</h2>
-          <p class="panel-sub">Generate a weekly plan from your workout library. Each week covers back, arms, chest, legs and core across 3–4 sessions.</p>
+          <p class="panel-sub">Генератор собирает неделю из пула упражнений: без повторов; суперсеты (антагонисты / далёкие / одна группа) и трисеты (жиросжигание, корсет+рельеф, верх+кардио). Уровень масштабирует веса и объём.</p>
 
           <div class="generator-controls">
             <div class="control-group">
@@ -108,7 +108,7 @@
 
   <script src="workout-data.js"></script>
   <script>
-    const STORAGE_KEY = 'workout-planner-v1';
+    const STORAGE_KEY = 'workout-planner-v3';
 
     let state = loadState();
     let currentWeek = state.currentWeek || 1;
@@ -392,11 +392,23 @@
           ${session.blocks.map(block => {
             const key = blockCheckKey(currentWeek, session.id, block.id);
             const checked = !!state.checks[key];
+            const pairLabels = {
+              same: 'одна группа',
+              antagonistic: 'антагонисты',
+              distant: 'далёкие',
+              fatburn: 'трисет · жиросжигание',
+              core_relief: 'трисет · корсет',
+              upper_cardio: 'трисет · верх+кардио'
+            };
+            const pairBadge = block.pairType
+              ? `<span class="pair-badge ${block.pairType}" title="Тип суперсета">${pairLabels[block.pairType] || block.pairType}</span>`
+              : '';
             return `
               <div class="block-card${checked ? ' done' : ''}">
                 <div class="block-header">
                   <input type="checkbox" id="${key}" data-key="${key}" ${checked ? 'checked' : ''}>
                   <label for="${key}" class="block-text">${escapeHtml(block.text)}</label>
+                  ${pairBadge}
                   <span class="block-type ${block.type}">${block.type}</span>
                 </div>
                 <div class="block-groups">
