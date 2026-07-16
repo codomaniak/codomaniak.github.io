@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Word Problems — Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    (function () {
+      const stored = localStorage.getItem("theme");
+      const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+      const theme = stored === "light" || stored === "dark"
+        ? stored
+        : (prefersLight ? "light" : "dark");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+</head>
+<body>
+  <div class="bg-shape bg-shape--1" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape--2" aria-hidden="true"></div>
+
+  <main class="app">
+    <div class="app-toolbar">
+      <span class="badge badge--muted">Browser demo — no install</span>
+      <button
+        type="button"
+        class="theme-toggle"
+        id="theme-toggle"
+        aria-label="Switch to light theme"
+      >
+        <span class="theme-toggle__icon" id="theme-toggle-icon" aria-hidden="true">☀</span>
+        <span class="theme-toggle__label" id="theme-toggle-label">Light</span>
+      </button>
+    </div>
+
+    <header class="hero">
+      <p class="eyebrow">English vocabulary + arithmetic</p>
+      <h1>Math Word Problems</h1>
+      <p class="subtitle">
+        Choose a topic, read the story problem, and check your answer.
+        Numbers in problems appear as words. Answer with digits or words.
+        Works offline in your browser — no server needed.
+      </p>
+    </header>
+
+    <section class="panel" id="topic-panel">
+      <h2 class="panel-title">Choose a topic</h2>
+      <div class="topic-grid" id="topic-grid"></div>
+    </section>
+
+    <section class="panel panel--hidden" id="problem-panel" aria-live="polite">
+      <div class="problem-meta">
+        <span class="badge" id="topic-badge"></span>
+        <span class="badge badge--muted" id="operation-badge"></span>
+      </div>
+
+      <blockquote class="problem-text" id="problem-text"></blockquote>
+
+      <form class="answer-form" id="answer-form">
+        <label for="answer-input" class="sr-only">Your answer</label>
+        <input
+          type="text"
+          inputmode="decimal"
+          id="answer-input"
+          class="answer-input"
+          placeholder="e.g. 12 or twelve"
+          autocomplete="off"
+          required
+        >
+        <button type="submit" class="btn btn--primary" id="check-btn">Check answer</button>
+      </form>
+
+      <div class="feedback feedback--hidden" id="feedback" role="status"></div>
+
+      <div class="actions">
+        <button type="button" class="btn btn--ghost" id="change-topic-btn">Change topic</button>
+        <button type="button" class="btn btn--secondary" id="next-btn">Next problem</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="generator.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
