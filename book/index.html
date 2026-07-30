@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo — Interactive Book (Chapters I–III)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        var t = localStorage.getItem("interactive-book:theme");
+        if (!t && window.matchMedia("(prefers-color-scheme: light)").matches) t = "light";
+        if (t === "light") document.documentElement.dataset.theme = "light";
+      })();
+    </script>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-book-src="./data/book.demo.json" data-demo="true">
+    <div class="demoBanner" role="status">
+      <strong>Demo</strong>
+      <span>Chapters I–III · vocabulary glossary · Cornell notes</span>
+      <a class="demoBanner__link" href="./flashcards.html">Open Flashcards →</a>
+    </div>
+
+    <header class="topbar">
+      <div class="topbar__left">
+        <div class="brand">Interactive Book</div>
+        <div class="book-title" id="bookTitle">Loading…</div>
+      </div>
+      <div class="topbar__right">
+        <button type="button" class="filebtn themeToggle" id="themeToggleBtn" aria-pressed="false" title="Switch theme">
+          Light
+        </button>
+        <a class="filebtn" href="./flashcards.html">Flashcards</a>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="panel">
+          <h2 class="panel__title">Contents</h2>
+          <nav id="toc" class="toc"></nav>
+        </section>
+
+        <section class="panel">
+          <div class="panel__titleRow">
+            <h2 class="panel__title">Glossary</h2>
+            <span id="glossaryCount" class="muted"></span>
+          </div>
+          <input id="glossarySearch" class="search" type="search" placeholder="Search term…" />
+          <div id="glossaryList" class="glossary"></div>
+        </section>
+      </aside>
+
+      <section class="content">
+        <div id="pageHeader" class="pageHeader"></div>
+        <div id="pageBody" class="pageBody"></div>
+      </section>
+    </main>
+
+    <div id="modalOverlay" class="modalOverlay hidden" role="dialog" aria-modal="true">
+      <div class="modal">
+        <div class="modal__header">
+          <div id="modalTitle" class="modal__title">Term</div>
+          <button class="iconBtn" id="modalCloseBtn" aria-label="Close">✕</button>
+        </div>
+        <div class="modal__body" id="modalBody"></div>
+      </div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

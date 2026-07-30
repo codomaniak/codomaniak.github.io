@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo — Vocabulary Flashcards</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        var t = localStorage.getItem("interactive-book:theme");
+        if (!t && window.matchMedia("(prefers-color-scheme: light)").matches) t = "light";
+        if (t === "light") document.documentElement.dataset.theme = "light";
+      })();
+    </script>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./flashcards.css" />
+  </head>
+  <body data-vocab-src="./data/book.demo.json" data-demo="true">
+    <div class="demoBanner" role="status">
+      <strong>Demo</strong>
+      <span>26 glossary terms from Chapters I–III</span>
+      <a class="demoBanner__link" href="./index.html">← Open reading demo</a>
+    </div>
+
+    <header class="topbar">
+      <div class="topbar__left">
+        <div class="brand">Flashcards</div>
+        <div class="book-title" id="deckTitle">Vocabulary drill</div>
+      </div>
+      <div class="topbar__right">
+        <button type="button" class="filebtn themeToggle" id="themeToggleBtn" aria-pressed="false" title="Switch theme">
+          Light
+        </button>
+        <a class="filebtn" href="./index.html">← Reading demo</a>
+      </div>
+    </header>
+
+    <main class="flash-layout">
+      <aside class="flash-sidebar">
+        <section class="panel">
+          <h2 class="panel__title">Deck settings</h2>
+          <label class="field">
+            <span class="field__label">Title</span>
+            <input id="deckTitleInput" class="input" type="text" value="Demo Glossary — Flashcards" />
+          </label>
+          <label class="field">
+            <span class="field__label">Study direction</span>
+            <select id="directionSelect" class="input">
+              <option value="term-to-def">Term → Definition</option>
+              <option value="def-to-term">Definition → Term</option>
+              <option value="both">Both directions</option>
+            </select>
+          </label>
+          <label class="field field--row">
+            <input id="shuffleCards" type="checkbox" checked />
+            <span>Shuffle cards</span>
+          </label>
+        </section>
+
+        <section class="panel">
+          <div class="panel__titleRow">
+            <h2 class="panel__title">Glossary</h2>
+            <span id="vocabCount" class="muted"></span>
+          </div>
+          <input id="vocabSearch" class="search" type="search" placeholder="Filter terms…" />
+          <div id="vocabEditor" class="vocab-editor"></div>
+          <div class="btnRow demo-only-hide">
+            <button class="btn" id="addTermBtn" type="button">Add term</button>
+            <button class="btn" id="exportJsonBtn" type="button">Export JSON</button>
+          </div>
+        </section>
+
+        <section class="panel demo-only-hide">
+          <h2 class="panel__title">H5P export</h2>
+          <label class="field field--row">
+            <input id="exportFlashcards" type="checkbox" checked />
+            <span>Flashcards package</span>
+          </label>
+          <label class="field field--row">
+            <input id="exportQuiz" type="checkbox" checked />
+            <span>Quiz package (Column)</span>
+          </label>
+          <fieldset class="quiz-types">
+            <legend class="small">Quiz types</legend>
+            <label class="field field--row">
+              <input type="checkbox" name="quizType" value="multi-choice" checked />
+              <span>Multiple Choice</span>
+            </label>
+            <label class="field field--row">
+              <input type="checkbox" name="quizType" value="simple-multi-choice" />
+              <span>Simple Multiple Choice</span>
+            </label>
+            <label class="field field--row">
+              <input type="checkbox" name="quizType" value="advanced-blanks" checked />
+              <span>Advanced Blanks</span>
+            </label>
+          </fieldset>
+          <label class="field">
+            <span class="field__label">Max quiz questions</span>
+            <input id="maxQuestions" class="input" type="number" min="1" max="50" value="12" />
+          </label>
+          <div class="btnRow">
+            <button class="btn btn--accent" id="downloadVocabBtn" type="button">Download vocab JSON</button>
+          </div>
+          <pre class="cli-hint" id="cliHint"></pre>
+        </section>
+      </aside>
+
+      <section class="flash-main">
+        <div class="mode-tabs">
+          <button class="mode-tab mode-tab--active" data-mode="drill" type="button">Drill</button>
+          <button class="mode-tab" data-mode="quiz" type="button">Quiz preview</button>
+        </div>
+
+        <div id="drillPanel" class="drill-panel">
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard__inner" id="flashcardInner">
+              <div class="flashcard__face flashcard__face--front">
+                <div class="flashcard__label">Term</div>
+                <div class="flashcard__text" id="cardFront">—</div>
+              </div>
+              <div class="flashcard__face flashcard__face--back">
+                <div class="flashcard__label">Definition</div>
+                <div class="flashcard__text" id="cardBack">—</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="drill-hint muted">Click the card or press <strong>Turn</strong> to flip between term and definition.</p>
+
+          <div class="drill-controls">
+            <button class="btn" id="prevCardBtn" type="button">← Previous</button>
+            <span id="cardProgress" class="muted">0 / 0</span>
+            <button class="btn btn--accent" id="flipCardBtn" type="button">Turn</button>
+            <button class="btn" id="nextCardBtn" type="button">Next →</button>
+          </div>
+
+          <div class="drill-stats">
+            <span id="cardProgressFooter" class="muted"></span>
+            <button class="btn" id="resetDrillBtn" type="button">Reset session</button>
+          </div>
+        </div>
+
+        <div id="quizPanel" class="quiz-panel hidden">
+          <div id="quizBody"></div>
+          <div class="btnRow">
+            <button class="btn btn--accent" id="newQuizBtn" type="button">New quiz</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <input id="jsonFileInput" type="file" accept="application/json" hidden />
+    <script type="module" src="./flashcards.js"></script>
+  </body>
+</html>
