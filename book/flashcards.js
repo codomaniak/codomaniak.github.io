@@ -3,6 +3,33 @@ import { initThemeToggle } from "./theme.js";
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => [...document.querySelectorAll(sel)];
 
+function closeAppMenu() {
+  document.body.classList.remove("menu-open");
+  const toggle = $("#menuToggleBtn");
+  if (toggle) toggle.setAttribute("aria-expanded", "false");
+}
+
+function openAppMenu() {
+  document.body.classList.add("menu-open");
+  const toggle = $("#menuToggleBtn");
+  if (toggle) toggle.setAttribute("aria-expanded", "true");
+}
+
+function toggleAppMenu() {
+  if (document.body.classList.contains("menu-open")) closeAppMenu();
+  else openAppMenu();
+}
+
+function initDemoMenu() {
+  if (document.body?.dataset?.demo !== "true") return;
+  $("#menuToggleBtn")?.addEventListener("click", () => toggleAppMenu());
+  $("#menuBackdrop")?.addEventListener("click", () => closeAppMenu());
+  $("#menuCloseBtn")?.addEventListener("click", () => closeAppMenu());
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeAppMenu();
+  });
+}
+
 function slugify(s) {
   return s
     .toLowerCase()
@@ -381,6 +408,7 @@ function wireEvents() {
 
 async function init() {
   initThemeToggle();
+  initDemoMenu();
   await loadDefaultData();
   wireEvents();
   renderVocabEditor();

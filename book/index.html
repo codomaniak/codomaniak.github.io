@@ -18,33 +18,75 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body data-book-src="./data/book.demo.json" data-demo="true">
-    <div class="demoBanner" role="status">
-      <strong>Demo</strong>
-      <span>Chapters I–III · vocabulary glossary · Cornell notes</span>
-      <a class="demoBanner__link" href="./flashcards.html">Open Flashcards →</a>
+    <div class="bookCover" id="bookCover" role="dialog" aria-label="Book cover">
+      <div class="bookCover__frame">
+        <picture>
+          <source media="(max-width: 640px)" srcset="./images/cover-v.webp" />
+          <source media="(min-width: 1100px)" srcset="./images/cover-h.webp" />
+          <img src="./images/cover-square.webp" alt="Down and Out in Paris and London — cover" />
+        </picture>
+        <div class="bookCover__actions">
+          <button type="button" class="btn btn--accent" id="coverStartBtn">Begin reading</button>
+        </div>
+      </div>
     </div>
 
+    
     <header class="topbar">
       <div class="topbar__left">
         <div class="brand">Interactive Book</div>
         <div class="book-title" id="bookTitle">Loading…</div>
       </div>
       <div class="topbar__right">
-        <button type="button" class="filebtn themeToggle" id="themeToggleBtn" aria-pressed="false" title="Switch theme">
-          Light
+        <button
+          type="button"
+          class="filebtn menuToggle"
+          id="menuToggleBtn"
+          aria-expanded="false"
+          aria-controls="appMenu"
+          aria-label="Open menu"
+        >
+          <span class="menuToggle__bar"></span>
+          <span class="menuToggle__bar"></span>
+          <span class="menuToggle__bar"></span>
         </button>
-        <a class="filebtn" href="./flashcards.html">Flashcards</a>
       </div>
     </header>
 
+    <div class="menuBackdrop" id="menuBackdrop"></div>
+    <aside class="appMenu" id="appMenu" aria-label="Menu">
+      <div class="appMenu__header">
+        <div class="appMenu__title">Menu</div>
+        <button type="button" class="iconBtn" id="menuCloseBtn" aria-label="Close menu">✕</button>
+      </div>
+
+      <section class="appMenu__section">
+        <span class="appMenu__label">Chapters</span>
+        <nav id="menuToc" class="toc"></nav>
+      </section>
+
+      <section class="appMenu__section">
+        <span class="appMenu__label">Design</span>
+        <div class="appMenu__themeRow">
+          <button type="button" class="btn" data-theme-option="light">Light</button>
+          <button type="button" class="btn" data-theme-option="dark">Dark</button>
+        </div>
+      </section>
+
+      <section class="appMenu__section">
+        <span class="appMenu__label">More</span>
+        <a class="btn appMenu__link" href="./flashcards.html">Flashcards</a>
+      </section>
+    </aside>
+
+
     <main class="layout">
-      <aside class="sidebar">
+      <aside class="sidebar" aria-hidden="true">
         <section class="panel">
           <h2 class="panel__title">Contents</h2>
           <nav id="toc" class="toc"></nav>
         </section>
-
-        <section class="panel">
+        <section class="panel sidebarGlossary" id="glossaryPanel">
           <div class="panel__titleRow">
             <h2 class="panel__title">Glossary</h2>
             <span id="glossaryCount" class="muted"></span>
@@ -66,7 +108,7 @@
           <div id="modalTitle" class="modal__title">Term</div>
           <button class="iconBtn" id="modalCloseBtn" aria-label="Close">✕</button>
         </div>
-        <div class="modal__body" id="modalBody"></div>
+        <div id="modalBody" class="modal__body"></div>
       </div>
     </div>
 

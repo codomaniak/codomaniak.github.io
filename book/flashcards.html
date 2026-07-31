@@ -19,28 +19,51 @@
     <link rel="stylesheet" href="./flashcards.css" />
   </head>
   <body data-vocab-src="./data/book.demo.json" data-demo="true">
-    <div class="demoBanner" role="status">
-      <strong>Demo</strong>
-      <span>26 glossary terms from Chapters I–III</span>
-      <a class="demoBanner__link" href="./index.html">← Open reading demo</a>
-    </div>
-
     <header class="topbar">
       <div class="topbar__left">
         <div class="brand">Flashcards</div>
         <div class="book-title" id="deckTitle">Vocabulary drill</div>
       </div>
       <div class="topbar__right">
-        <button type="button" class="filebtn themeToggle" id="themeToggleBtn" aria-pressed="false" title="Switch theme">
-          Light
+        <button
+          type="button"
+          class="filebtn menuToggle"
+          id="menuToggleBtn"
+          aria-expanded="false"
+          aria-controls="appMenu"
+          aria-label="Open menu"
+        >
+          <span class="menuToggle__bar"></span>
+          <span class="menuToggle__bar"></span>
+          <span class="menuToggle__bar"></span>
         </button>
-        <a class="filebtn" href="./index.html">← Reading demo</a>
       </div>
     </header>
 
+    <div class="menuBackdrop" id="menuBackdrop"></div>
+    <aside class="appMenu" id="appMenu" aria-label="Menu">
+      <div class="appMenu__header">
+        <div class="appMenu__title">Menu</div>
+        <button type="button" class="iconBtn" id="menuCloseBtn" aria-label="Close menu">✕</button>
+      </div>
+
+      <section class="appMenu__section">
+        <span class="appMenu__label">Design</span>
+        <div class="appMenu__themeRow">
+          <button type="button" class="btn" data-theme-option="light">Light</button>
+          <button type="button" class="btn" data-theme-option="dark">Dark</button>
+        </div>
+      </section>
+
+      <section class="appMenu__section">
+        <span class="appMenu__label">More</span>
+        <a class="btn appMenu__link" href="./index.html">← Reading demo</a>
+      </section>
+    </aside>
+
     <main class="flash-layout">
       <aside class="flash-sidebar">
-        <section class="panel">
+        <section class="panel demo-only-hide">
           <h2 class="panel__title">Deck settings</h2>
           <label class="field">
             <span class="field__label">Title</span>
@@ -60,53 +83,22 @@
           </label>
         </section>
 
-        <section class="panel">
-          <div class="panel__titleRow">
-            <h2 class="panel__title">Glossary</h2>
-            <span id="vocabCount" class="muted"></span>
-          </div>
-          <input id="vocabSearch" class="search" type="search" placeholder="Filter terms…" />
+        <!-- Hidden settings kept for flashcards.js; student UI focuses on drill -->
+        <div class="demo-only-hide">
+          <input id="vocabSearch" class="search" type="search" />
           <div id="vocabEditor" class="vocab-editor"></div>
-          <div class="btnRow demo-only-hide">
-            <button class="btn" id="addTermBtn" type="button">Add term</button>
-            <button class="btn" id="exportJsonBtn" type="button">Export JSON</button>
-          </div>
-        </section>
-
-        <section class="panel demo-only-hide">
-          <h2 class="panel__title">H5P export</h2>
-          <label class="field field--row">
-            <input id="exportFlashcards" type="checkbox" checked />
-            <span>Flashcards package</span>
-          </label>
-          <label class="field field--row">
-            <input id="exportQuiz" type="checkbox" checked />
-            <span>Quiz package (Column)</span>
-          </label>
-          <fieldset class="quiz-types">
-            <legend class="small">Quiz types</legend>
-            <label class="field field--row">
-              <input type="checkbox" name="quizType" value="multi-choice" checked />
-              <span>Multiple Choice</span>
-            </label>
-            <label class="field field--row">
-              <input type="checkbox" name="quizType" value="simple-multi-choice" />
-              <span>Simple Multiple Choice</span>
-            </label>
-            <label class="field field--row">
-              <input type="checkbox" name="quizType" value="advanced-blanks" checked />
-              <span>Advanced Blanks</span>
-            </label>
-          </fieldset>
-          <label class="field">
-            <span class="field__label">Max quiz questions</span>
-            <input id="maxQuestions" class="input" type="number" min="1" max="50" value="12" />
-          </label>
-          <div class="btnRow">
-            <button class="btn btn--accent" id="downloadVocabBtn" type="button">Download vocab JSON</button>
-          </div>
+          <button class="btn" id="addTermBtn" type="button">Add term</button>
+          <button class="btn" id="exportJsonBtn" type="button">Export JSON</button>
+          <span id="vocabCount" class="muted"></span>
+          <input id="exportFlashcards" type="checkbox" checked />
+          <input id="exportQuiz" type="checkbox" checked />
+          <input type="checkbox" name="quizType" value="multi-choice" checked />
+          <input type="checkbox" name="quizType" value="simple-multi-choice" />
+          <input type="checkbox" name="quizType" value="advanced-blanks" checked />
+          <input id="maxQuestions" class="input" type="number" value="12" />
+          <button class="btn" id="downloadVocabBtn" type="button">Download</button>
           <pre class="cli-hint" id="cliHint"></pre>
-        </section>
+        </div>
       </aside>
 
       <section class="flash-main">

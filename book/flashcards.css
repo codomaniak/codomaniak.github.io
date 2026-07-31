@@ -297,3 +297,15 @@
     grid-template-columns: 1fr;
   }
 }
+
+body[data-demo="true"] .flash-layout {
+  grid-template-columns: 1fr;
+}
+
+body[data-demo="true"] .flash-sidebar {
+  display: none;
+}
+
+body[data-demo="true"] .demoBanner {
+  display: none;
+}

@@ -498,11 +498,18 @@ function normalizeBookData(bookData) {
 
 function renderGlossaryList(bookData, state) {
   const list = $("#glossaryList");
+  if (!list) return;
+  if (document.body.classList.contains("glossary-hidden")) {
+    clearEl(list);
+    const count = $("#glossaryCount");
+    if (count) count.textContent = "";
+    return;
+  }
+
   const search = $("#glossarySearch");
   const glossaryCount = $("#glossaryCount");
-
   const allEntries = bookData.glossary;
-  glossaryCount.textContent = `${allEntries.length} terms`;
+  if (glossaryCount) glossaryCount.textContent = `${allEntries.length} terms`;
 
   function doRender(filterText) {
     clearEl(list);
@@ -543,8 +550,8 @@ function renderGlossaryList(bookData, state) {
     }
   }
 
-  search.oninput = () => doRender(search.value);
-  doRender(search.value || "");
+  if (search) search.oninput = () => doRender(search.value);
+  doRender(search?.value || "");
 }
 
 function renderLinkedText(text, bookData, state) {
@@ -589,6 +596,52 @@ function renderLinkedText(text, bookData, state) {
   return container;
 }
 
+function goToPage(bookData, state, pageId) {
+  if (!pageId) return;
+  state.currentPageId = pageId;
+  persistKnownAndPages(bookData, state);
+  closeAppMenu();
+  dismissCover(true);
+  renderAll(bookData, state);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function appendChapterNav(container, bookData, state) {
+  const pages = bookData.pages || [];
+  const index = pages.findIndex((page) => page.id === state.currentPageId);
+  if (index < 0 || pages.length < 2) return;
+
+  const nav = createEl("nav", "chapterNav");
+  nav.setAttribute("aria-label", "Chapter navigation");
+
+  const prevBtn = createEl("button", "btn chapterNav__btn", "← Previous");
+  prevBtn.type = "button";
+  prevBtn.disabled = index <= 0;
+  if (index > 0) {
+    prevBtn.title = pages[index - 1].title;
+    prevBtn.onclick = () => goToPage(bookData, state, pages[index - 1].id);
+  }
+
+  const label = createEl(
+    "span",
+    "chapterNav__label muted",
+    `${pages[index].title} · ${index + 1} / ${pages.length}`
+  );
+
+  const nextBtn = createEl("button", "btn btn--accent chapterNav__btn", "Next →");
+  nextBtn.type = "button";
+  nextBtn.disabled = index >= pages.length - 1;
+  if (index < pages.length - 1) {
+    nextBtn.title = pages[index + 1].title;
+    nextBtn.onclick = () => goToPage(bookData, state, pages[index + 1].id);
+  }
+
+  nav.appendChild(prevBtn);
+  nav.appendChild(label);
+  nav.appendChild(nextBtn);
+  container.appendChild(nav);
+}
+
 function renderTextPage(page, bookData, state) {
   const header = $("#pageHeader");
   const body = $("#pageBody");
@@ -610,6 +663,8 @@ function renderTextPage(page, bookData, state) {
     para.appendChild(renderLinkedText(p, bookData, state));
     body.appendChild(para);
   }
+
+  appendChapterNav(body, bookData, state);
 
   if (page.cornellNotes) {
     body.appendChild(renderCornellNotesPanel(page, bookData));
@@ -1037,19 +1092,101 @@ function renderTaskPage(page, bookData, state) {
 }
 
 function renderTOC(bookData, state) {
-  const toc = $("#toc");
-  clearEl(toc);
+  const targets = [$("#toc"), $("#menuToc")].filter(Boolean);
 
-  for (const page of bookData.pages) {
-    const btn = createEl("button", "tocBtn", page.title);
-    btn.classList.toggle("tocBtn--active", page.id === state.currentPageId);
+  for (const toc of targets) {
+    clearEl(toc);
+
+    for (const page of bookData.pages) {
+      const btn = createEl("button", "tocBtn", page.title);
+      btn.classList.toggle("tocBtn--active", page.id === state.currentPageId);
     btn.onclick = () => {
-      state.currentPageId = page.id;
-      persistKnownAndPages(bookData, state);
-      renderAll(bookData, state);
+      goToPage(bookData, state, page.id);
     };
-    toc.appendChild(btn);
+      toc.appendChild(btn);
+    }
   }
+}
+
+function isDemoMode() {
+  return document.body?.dataset?.demo === "true";
+}
+
+function closeAppMenu() {
+  document.body.classList.remove("menu-open");
+  const toggle = $("#menuToggleBtn");
+  if (toggle) toggle.setAttribute("aria-expanded", "false");
+}
+
+function openAppMenu() {
+  document.body.classList.add("menu-open");
+  const toggle = $("#menuToggleBtn");
+  if (toggle) toggle.setAttribute("aria-expanded", "true");
+}
+
+function toggleAppMenu() {
+  if (document.body.classList.contains("menu-open")) closeAppMenu();
+  else openAppMenu();
+}
+
+function coverStorageKey(bookData) {
+  const bookId = bookData?.id || slugifyTerm(bookData?.title || "interactive-book");
+  return `interactive-book:cover-dismissed:${bookId}`;
+}
+
+function dismissCover(persist = true) {
+  const cover = $("#bookCover");
+  if (!cover) return;
+  cover.classList.add("bookCover--hidden");
+  cover.setAttribute("aria-hidden", "true");
+  if (persist && window.__bookData) {
+    try {
+      sessionStorage.setItem(coverStorageKey(window.__bookData), "1");
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+function showCoverIfNeeded(bookData) {
+  const cover = $("#bookCover");
+  if (!cover) return;
+  let dismissed = false;
+  try {
+    dismissed = sessionStorage.getItem(coverStorageKey(bookData)) === "1";
+  } catch {
+    dismissed = false;
+  }
+  if (dismissed) {
+    dismissCover(false);
+    return;
+  }
+  cover.classList.remove("bookCover--hidden");
+  cover.setAttribute("aria-hidden", "false");
+}
+
+function initDemoChrome(bookData, state) {
+  if (!isDemoMode()) return;
+
+  // Glossary panel is teacher-facing — keep highlighting, hide the list UI.
+  document.body.classList.add("glossary-hidden");
+
+  $("#menuToggleBtn")?.addEventListener("click", () => toggleAppMenu());
+  $("#menuBackdrop")?.addEventListener("click", () => closeAppMenu());
+  $("#menuCloseBtn")?.addEventListener("click", () => closeAppMenu());
+
+  $("#coverStartBtn")?.addEventListener("click", () => {
+    dismissCover(true);
+    closeAppMenu();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeAppMenu();
+    }
+  });
+
+  showCoverIfNeeded(bookData);
 }
 
 function renderPage(bookData, state) {
@@ -1132,10 +1269,12 @@ async function init() {
       json = await attachVocabularySources(json);
     }
     bookData = normalizeBookData(json);
+    window.__bookData = bookData;
     const stored = setKnownFromStorage(bookData);
     state.knownTermIds = stored.knownTermIds;
     state.pageDone = stored.pageDone;
     state.currentPageId = bookData.pages[0]?.id || "";
+    initDemoChrome(bookData, state);
     renderAll(bookData, state);
   } catch (e) {
     console.error(e);

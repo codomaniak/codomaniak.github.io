@@ -4,10 +4,16 @@ Self-contained demo for presentation and test-drive.
 
 ## Contents
 
-- `index.html` — Chapters I–III reader (glossary highlights, Cornell notes)
+- `index.html` — Chapters I–III reader (cover, hamburger menu, in-text vocabulary highlights, Cornell notes)
 - `flashcards.html` — vocabulary flashcards + quiz preview
+- `images/` — vertical / square / horizontal covers
 - `data/book.demo.json` — demo book + 26 glossary terms
-- `styles.css`, `flashcards.css`, `app.js`, `flashcards.js`, `theme.js`
+
+## Student UI notes
+
+- Glossary **list** is hidden; highlighted words in the text still show definitions on hover/click.
+- Chapters and Light/Dark design live in the **hamburger menu**.
+- Mobile uses the **vertical** cover; tablet/default uses **square**; wide screens use **horizontal**.
 
 ## Run locally
 
@@ -16,17 +22,7 @@ cd demo-site
 python3 -m http.server 5173
 ```
 
-Open:
-
-- http://localhost:5173/
-- http://localhost:5173/flashcards.html
-
-## Hosting
-
-Upload the entire `demo-site` folder to any static host (Netlify, GitHub Pages, nginx, etc.).
-No build step required. Google Fonts load from the CDN (needs network).
-
-Regenerate this folder from the main project:
+Regenerate from the main project:
 
 ```bash
 node scripts/pack-demo-site.mjs

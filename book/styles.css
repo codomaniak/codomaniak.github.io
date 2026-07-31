@@ -167,6 +167,216 @@ body[data-demo="true"] .demo-only-hide {
   display: none !important;
 }
 
+body.glossary-hidden .sidebarGlossary,
+body.glossary-hidden #glossaryPanel {
+  display: none !important;
+}
+
+/* Demo reader: content-first, chapters live in the hamburger menu */
+body[data-demo="true"] .layout {
+  grid-template-columns: 1fr;
+}
+
+body[data-demo="true"] .sidebar {
+  display: none;
+}
+
+body[data-demo="true"] .demoBanner {
+  display: none;
+}
+
+/* ── Hamburger / drawer ── */
+.menuToggle {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.menuToggle__bar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+body.menu-open .menuToggle__bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+body.menu-open .menuToggle__bar:nth-child(2) {
+  opacity: 0;
+}
+
+body.menu-open .menuToggle__bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.menuBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: var(--overlay-bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  border: 0;
+}
+
+body.menu-open .menuBackdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.appMenu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 90;
+  width: min(22rem, 92vw);
+  height: 100%;
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  box-shadow: var(--shadow-modal);
+  transform: translateX(100%);
+  transition: transform 0.28s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.125rem 1.5rem;
+  overflow: auto;
+}
+
+body.menu-open .appMenu {
+  transform: translateX(0);
+}
+
+.appMenu__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.appMenu__title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+.appMenu__section {
+  margin-top: 1.25rem;
+}
+
+.appMenu__label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  font-weight: 600;
+  margin-bottom: 0.625rem;
+}
+
+.appMenu .toc {
+  gap: 6px;
+}
+
+.appMenu__themeRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.appMenu__themeRow .btn.is-active {
+  border-color: var(--btn-accent-border);
+  background: var(--btn-accent-bg);
+  color: #fff;
+  box-shadow: var(--btn-accent-shadow);
+}
+
+.appMenu__link {
+  display: flex;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* ── Book cover ── */
+.bookCover {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--bg);
+}
+
+.bookCover--hidden {
+  display: none;
+}
+
+.bookCover__frame {
+  position: relative;
+  width: min(100%, 42rem);
+  max-height: min(92vh, 56rem);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-modal);
+  background: #000;
+}
+
+.bookCover__frame picture,
+.bookCover__frame img {
+  display: block;
+  width: 100%;
+  height: min(78vh, 48rem);
+  object-fit: cover;
+  object-position: center;
+}
+
+.bookCover__actions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.25rem 1rem 1.5rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72), transparent);
+  display: flex;
+  justify-content: center;
+}
+
+.bookCover__actions .btn {
+  min-width: 10rem;
+}
+
+@media (max-width: 640px) {
+  .bookCover {
+    padding: 0;
+  }
+
+  .bookCover__frame {
+    width: 100%;
+    max-height: none;
+    height: 100%;
+    border-radius: 0;
+    border: 0;
+  }
+
+  .bookCover__frame picture,
+  .bookCover__frame img {
+    height: 100%;
+  }
+}
+
 .brand {
   font-family: var(--font-display);
   font-size: 1.125rem;
@@ -374,10 +584,41 @@ textarea:focus {
 }
 
 .paragraph {
-  line-height: 1.7;
-  font-size: 1rem;
+  line-height: 1.8;
+  font-size: 1.05rem;
   white-space: pre-wrap;
   color: var(--text-soft);
+  margin: 0 0 1.75rem;
+}
+
+.paragraph:last-of-type {
+  margin-bottom: 0.5rem;
+}
+
+.chapterNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 2rem 0 0.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.chapterNav__label {
+  font-size: 0.875rem;
+  text-align: center;
+  flex: 1 1 auto;
+}
+
+.chapterNav__btn {
+  min-width: 7.5rem;
+}
+
+.chapterNav__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .termLink {
