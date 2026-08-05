@@ -1,0 +1,366 @@
+/* Benny Greb alphabet trainer */
+
+.alpha-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .alpha-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.alpha-stage {
+  text-align: center;
+  padding: 1.25rem 1rem 1.5rem;
+}
+
+.alpha-letter-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.75rem 1.25rem;
+  min-height: 7.5rem;
+  margin-bottom: 1rem;
+}
+
+.alpha-current {
+  font-size: clamp(4.5rem, 14vw, 7rem);
+  font-weight: 700;
+  line-height: 1;
+  color: #1f4a7a;
+  letter-spacing: 0.02em;
+}
+
+.alpha-next {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.alpha-next-label {
+  font-size: 0.72rem;
+  color: #6b7a90;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  width: 100%;
+  text-align: center;
+}
+
+.alpha-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.45rem;
+  border-radius: 10px;
+  border: 1px solid #dce3ef;
+  background: #f5f8fc;
+  color: #3d506e;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.alpha-chip.done {
+  opacity: 0.35;
+}
+
+.alpha-chip.upcoming {
+  background: white;
+}
+
+.alpha-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.5rem;
+  font-size: 0.88rem;
+  color: #4c5b73;
+  margin-bottom: 1.25rem;
+}
+
+.alpha-meta strong {
+  color: #1f2a3f;
+  font-weight: 600;
+}
+
+/* Stroke lane */
+.stroke-board {
+  margin: 0 auto 1.25rem;
+  max-width: 36rem;
+}
+
+.stroke-board-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6b7a90;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.45rem;
+}
+
+.stroke-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.45rem;
+}
+
+.stroke-cell {
+  border: 1px solid #dce3ef;
+  border-radius: 14px;
+  background: white;
+  padding: 0.65rem 0.35rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  transition: background 0.12s, border-color 0.12s, transform 0.12s;
+}
+
+.stroke-cell.active {
+  border-color: #1f4a7a;
+  background: #eaf0fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(31, 74, 122, 0.12);
+}
+
+.stroke-hand {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #6b7a90;
+}
+
+.stroke-glyph {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #1f2a3f;
+  font-family: "IBM Plex Mono", "SF Mono", ui-monospace, monospace;
+  min-height: 2.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.stroke-name {
+  font-size: 0.68rem;
+  color: #6b7a90;
+}
+
+.stroke-count {
+  font-size: 0.62rem;
+  color: #8a96a8;
+  margin-top: 0.15rem;
+}
+
+.stroke-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  justify-content: center;
+  margin-top: 0.65rem;
+  font-size: 0.75rem;
+  color: #4c5b73;
+}
+
+.stroke-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.stroke-legend .lg {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 700;
+  color: #1f2a3f;
+}
+
+/* Controls */
+.alpha-controls {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.control-row {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+@media (max-width: 500px) {
+  .control-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.control-row label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #3d506e;
+}
+
+.control-row input[type="number"],
+.control-row input[type="text"],
+.control-row select {
+  border: 1px solid #dce3ef;
+  border-radius: 10px;
+  padding: 0.45rem 0.65rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  background: white;
+  width: 100%;
+}
+
+.control-row input[type="range"] {
+  width: 100%;
+}
+
+.tempo-readout {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #1f4a7a;
+  min-width: 4.5rem;
+}
+
+.duration-toggle {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.duration-toggle button,
+.mode-toggle button,
+.hand-toggle button,
+.transport button {
+  border: 1px solid #dce3ef;
+  background: white;
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  color: #3d506e;
+  cursor: pointer;
+}
+
+.duration-toggle button.active,
+.mode-toggle button.active,
+.hand-toggle button.active {
+  background: #1f4a7a;
+  border-color: #1f4a7a;
+  color: white;
+  font-weight: 600;
+}
+
+.duration-toggle button:disabled,
+.mode-toggle button:disabled,
+.hand-toggle button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.transport {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+}
+
+.transport button.primary {
+  background: #1f4a7a;
+  border-color: #1f4a7a;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+}
+
+.transport button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.word-field.hidden,
+.control-row.hidden,
+.hidden {
+  display: none !important;
+}
+
+/* Chart */
+.letter-chart {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0.45rem;
+}
+
+.letter-card {
+  border: 1px solid #e9edf4;
+  border-radius: 12px;
+  padding: 0.55rem 0.6rem;
+  background: #fafbfd;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.letter-card:hover,
+.letter-card.active {
+  border-color: #1f4a7a;
+  background: #eaf0fa;
+}
+
+.letter-card .lc-id {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f4a7a;
+}
+
+.letter-card .lc-greb {
+  font-size: 0.72rem;
+  color: #6b7a90;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+.letter-card .lc-strokes {
+  font-size: 0.85rem;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 700;
+  color: #1f2a3f;
+  margin-top: 0.25rem;
+  letter-spacing: 0.08em;
+}
+
+/* Notation host */
+.alpha-notation {
+  margin-top: 0.5rem;
+}
+
+.alpha-notation .notation-preview-host {
+  min-height: 6rem;
+  border: 1px solid #e9edf4;
+  border-radius: 14px;
+  padding: 0.5rem;
+  background: #fafbfd;
+  overflow-x: auto;
+}
+
+.pulse-bar {
+  height: 4px;
+  border-radius: 999px;
+  background: #e9edf4;
+  overflow: hidden;
+  margin: 0.75rem auto 0;
+  max-width: 20rem;
+}
+
+.pulse-fill {
+  height: 100%;
+  width: 0%;
+  background: #1f4a7a;
+  transition: width 0.08s linear;
+}

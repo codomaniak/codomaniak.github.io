@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benny Greb Alphabet Trainer</title>
+  <link rel="stylesheet" href="drums.css">
+  <link rel="stylesheet" href="planner.css">
+  <link rel="stylesheet" href="vendor/drum-notation/drum-notation-embed.css">
+  <link rel="stylesheet" href="alphabet.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>🥁 Greb <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">alphabet trainer</span></h1>
+    <div class="subhead">Binary letters A–P · Full / Down / Tap / Up strokes · kit notation via obsidian-drum-notation</div>
+
+    <nav class="planner-nav">
+      <a href="english.html">Competency map</a>
+      <a href="planner.html">Planner</a>
+      <a href="alphabet.html" class="active">Alphabet</a>
+      <a href="Binary Letters (16th-Note Grid).md">Letters reference</a>
+    </nav>
+
+    <div class="alpha-layout">
+      <div class="main-column">
+
+        <div class="panel alpha-stage">
+          <div class="alpha-letter-row">
+            <div class="alpha-current" id="current-letter">A</div>
+            <div class="alpha-next">
+              <span class="alpha-next-label">Up next</span>
+              <div id="next-letters"></div>
+            </div>
+          </div>
+
+          <div class="alpha-meta">
+            <span>Letter <strong id="meta-index">1</strong> / <strong id="meta-total">16</strong></span>
+            <span id="meta-duration">20 bars</span>
+            <span>Beat <strong id="meta-beat">1</strong> · Slot <strong id="meta-slot">1</strong></span>
+            <span id="meta-status">Ready</span>
+          </div>
+
+          <div class="stroke-board">
+            <div class="stroke-board-title">Stroke types · <span id="stroke-mode-label">one hand (R)</span></div>
+            <div class="stroke-grid" id="stroke-grid"></div>
+            <div class="stroke-legend">
+              <span><span class="lg">|</span> Full</span>
+              <span><span class="lg">↓</span> Down</span>
+              <span><span class="lg">.</span> Tap</span>
+              <span><span class="lg">↑</span> Up</span>
+            </div>
+            <div class="pulse-bar" aria-hidden="true"><div class="pulse-fill" id="pulse-fill"></div></div>
+          </div>
+
+          <div class="alpha-notation">
+            <p class="panel-sub" style="margin-bottom:0.5rem">Kit pattern (snare + sticking) — Play / Stop / Loop below. <strong>Grid 16</strong> / <strong>32</strong> use the full-bar patterns from the letters table. Engraving shows a short window; practice length is set in controls.</p>
+            <div id="notation-preview-host" class="notation-preview-host"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Letter chart</h2>
+          <p class="panel-sub">Tap a letter to preview. Sequence: alphabetical A–P or random (words later).</p>
+          <div class="letter-chart" id="letter-chart"></div>
+        </div>
+      </div>
+
+      <div class="side-column">
+        <div class="panel">
+          <h2>Practice settings</h2>
+          <div class="alpha-controls">
+
+            <div class="control-row">
+              <label>Sequence</label>
+              <div class="mode-toggle" id="mode-toggle">
+                <button type="button" class="active" data-mode="alpha">A→P</button>
+                <button type="button" data-mode="random">Random</button>
+                <button type="button" data-mode="word" disabled title="Words need the full alphabet (ternary Q–X too) — coming later">Word</button>
+              </div>
+            </div>
+
+            <div class="control-row word-field hidden" id="word-row">
+              <label for="word-input">Word</label>
+              <input type="text" id="word-input" placeholder="e.g. BEAD or ACE" maxlength="32" autocomplete="off">
+            </div>
+
+            <div class="control-row">
+              <label>Hands</label>
+              <div class="hand-toggle" id="hand-toggle">
+                <button type="button" class="active" data-hand="one">One hand (R)</button>
+                <button type="button" data-hand="left">One hand (L)</button>
+                <button type="button" data-hand="two">Both hands</button>
+              </div>
+            </div>
+
+            <div class="control-row">
+              <label>Duration</label>
+              <div class="duration-toggle" id="duration-toggle">
+                <button type="button" class="active" data-dur="bars">Bars</button>
+                <button type="button" data-dur="time">Time</button>
+              </div>
+            </div>
+
+            <div class="control-row" id="bars-row">
+              <label for="bars-input">Bars / letter</label>
+              <input type="number" id="bars-input" min="1" max="64" value="4">
+            </div>
+
+            <div class="control-row hidden" id="time-row">
+              <label for="time-input">Seconds / letter</label>
+              <input type="number" id="time-input" min="5" max="600" value="60" step="5">
+            </div>
+
+            <div class="control-row">
+              <label>Grid</label>
+              <div class="duration-toggle" id="grid-toggle">
+                <button type="button" class="active" data-grid="16" title="Bar = unit×2 (16 slots), e.g. X-g-g-x-X-g-g-x-">16</button>
+                <button type="button" data-grid="32" title="Bar = unit×4 (32 slots), e.g. X-g-g-x- ×4">32</button>
+              </div>
+            </div>
+
+            <div class="control-row">
+              <label for="tempo-range">Tempo</label>
+              <div style="display:flex;align-items:center;gap:0.65rem">
+                <input type="range" id="tempo-range" min="40" max="160" value="70" step="1">
+                <span class="tempo-readout"><span id="tempo-value">70</span> BPM</span>
+              </div>
+            </div>
+
+            <div class="control-row">
+              <label for="click-select">Click</label>
+              <select id="click-select">
+                <option value="quarter">Quarter notes</option>
+                <option value="eighth">Eighth notes</option>
+                <option value="sixteenth">16th notes</option>
+                <option value="off">Off</option>
+              </select>
+            </div>
+
+            <div class="transport">
+              <button type="button" class="primary" id="btn-start">Start</button>
+              <button type="button" id="btn-pause" disabled>Pause</button>
+              <button type="button" id="btn-stop" disabled>Stop</button>
+              <button type="button" id="btn-reshuffle">Reshuffle</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>How it works</h2>
+          <ul class="principle-list">
+            <li>Each letter is one beat of 16ths (1 e &amp; a).</li>
+            <li>Play every slot with the stroke types — accents and Moeller prep (tap/up) on “rest” slots.</li>
+            <li><strong>|</strong> full · <strong>↓</strong> down · <strong>.</strong> tap · <strong>↑</strong> up</li>
+            <li>Kit notation: unit <code>X-g-g-x-</code> · <strong>Grid 16</strong> bar = ×2 · <strong>Grid 32</strong> bar = ×4 (from the letters table).</li>
+            <li>Words (full alphabet) — disabled until ternary letters are in.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">Greb binary alphabet · stroke glyphs · <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank" rel="noopener">obsidian-drum-notation</a> (MIT)</div>
+  </div>
+
+  <script src="alphabet-data.js"></script>
+  <script src="vendor/drum-notation/drum-notation-embed.js"></script>
+  <script src="alphabet-app.js"></script>
+</body>
+
+</html>
