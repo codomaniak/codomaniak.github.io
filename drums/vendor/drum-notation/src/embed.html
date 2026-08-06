@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Drum notation embed</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        font-family: "IBM Plex Sans", system-ui, sans-serif;
+      }
+      .embed {
+        padding: 0.5rem 0.35rem 0.65rem;
+      }
+      .embed-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        align-items: center;
+        margin-bottom: 0.45rem;
+      }
+      .embed-toolbar button {
+        border: 1px solid #dce3ef;
+        background: #fff;
+        border-radius: 999px;
+        padding: 0.28rem 0.7rem;
+        font: inherit;
+        font-size: 0.75rem;
+        color: #1f4a7a;
+        cursor: pointer;
+      }
+      .embed-toolbar button:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      .embed-toolbar button.primary {
+        background: #1f4a7a;
+        color: #fff;
+        border-color: #1f4a7a;
+      }
+      .embed-status {
+        font-size: 0.7rem;
+        color: #6b7a90;
+        margin-left: auto;
+      }
+      .embed-preview {
+        color: #1f2a3f;
+        min-height: 4rem;
+      }
+      .embed-error {
+        white-space: pre-wrap;
+        font-size: 0.75rem;
+        color: #8a4a4a;
+        background: #fff5f5;
+        border-radius: 8px;
+        padding: 0.5rem 0.65rem;
+      }
+      .embed-empty {
+        font-size: 0.78rem;
+        color: #6b7a90;
+        font-style: italic;
+      }
+      .embed-credit {
+        margin-top: 0.4rem;
+        font-size: 0.62rem;
+        color: #8a96a8;
+      }
+      .embed-credit a {
+        color: #1f4a7a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="embed">
+      <div class="embed-toolbar">
+        <button type="button" class="primary" id="play">Play</button>
+        <button type="button" id="stop">Stop</button>
+        <button type="button" id="loop">Loop</button>
+        <span class="embed-status" id="status">Waiting for notation…</span>
+      </div>
+      <div class="embed-preview drum-notation" id="preview"></div>
+      <div class="embed-credit">
+        Notation engine:
+        <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank" rel="noopener">obsidian-drum-notation</a>
+        (MIT)
+      </div>
+    </div>
+    <script type="module" src="/src/embed.ts"></script>
+  </body>
+</html>
