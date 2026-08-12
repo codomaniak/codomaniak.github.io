@@ -83,7 +83,7 @@
   gap: 0.75rem 1.5rem;
   font-size: 0.88rem;
   color: #4c5b73;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .alpha-meta strong {
@@ -91,94 +91,248 @@
   font-weight: 600;
 }
 
-/* Stroke lane */
-.stroke-board {
-  margin: 0 auto 1.25rem;
-  max-width: 36rem;
+/* Classic Greb letter shape: ● accents · - rests */
+.greb-classic {
+  margin: 0 auto 1.15rem;
+  max-width: 28rem;
 }
 
-.stroke-board-title {
+.greb-classic-title {
   font-size: 0.72rem;
   font-weight: 600;
   color: #6b7a90;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.45rem;
+  text-align: center;
+}
+
+.greb-classic-card {
+  position: relative;
+  border: 2px solid #d5deea;
+  border-radius: 18px;
+  background: #fff;
+  padding: 1.1rem 1.25rem 0.85rem;
+  box-shadow: 0 4px 14px rgba(0, 20, 40, 0.05);
+}
+
+.greb-classic-letter {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1f2a3f;
+}
+
+.greb-classic-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.1rem;
+  min-height: 3.5rem;
+  padding-top: 0.35rem;
+}
+
+.greb-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 2.4rem;
+  transition: transform 0.12s;
+}
+
+.greb-slot.active {
+  transform: translateY(-2px) scale(1.08);
+}
+
+.greb-dot {
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 50%;
+  background: #d1242f;
+  box-shadow: 0 2px 0 rgba(120, 20, 28, 0.25);
+}
+
+.greb-dash {
+  width: 1.55rem;
+  height: 0.28rem;
+  border-radius: 999px;
+  background: #2a3548;
+  margin: 0.64rem 0;
+}
+
+.greb-slot.active .greb-dot {
+  box-shadow: 0 0 0 4px rgba(209, 36, 47, 0.22);
+}
+
+.greb-slot.active .greb-dash {
+  background: #1f4a7a;
+  box-shadow: 0 0 0 3px rgba(31, 74, 122, 0.18);
+}
+
+.greb-slot-count {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #8a96a8;
+}
+
+.greb-slot.active .greb-slot-count {
+  color: #1f4a7a;
+}
+
+/* Stroke lane */
+.stroke-board {
+  margin: 0 auto 1.35rem;
+  max-width: 44rem;
+}
+
+.stroke-board-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b7a90;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.55rem;
+  text-align: center;
 }
 
 .stroke-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.45rem;
+  gap: 0.65rem;
 }
 
 .stroke-cell {
-  border: 1px solid #dce3ef;
-  border-radius: 14px;
-  background: white;
-  padding: 0.65rem 0.35rem 0.5rem;
+  border: 2px solid #d5deea;
+  border-radius: 18px;
+  background: #fff;
+  padding: 0.85rem 0.4rem 0.7rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
-  transition: background 0.12s, border-color 0.12s, transform 0.12s;
+  gap: 0.35rem;
+  min-height: 9.5rem;
+  transition: background 0.12s, border-color 0.12s, transform 0.12s, box-shadow 0.12s;
 }
 
 .stroke-cell.active {
   border-color: #1f4a7a;
-  background: #eaf0fa;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(31, 74, 122, 0.12);
+  background: #e8f0fa;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(31, 74, 122, 0.18);
 }
 
 .stroke-hand {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: #6b7a90;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #4c5b73;
+  text-transform: uppercase;
 }
 
 .stroke-glyph {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: clamp(3.25rem, 9vw, 4.75rem);
+  font-weight: 800;
   line-height: 1;
-  color: #1f2a3f;
+  color: #122033;
   font-family: "IBM Plex Mono", "SF Mono", ui-monospace, monospace;
-  min-height: 2.2rem;
+  min-height: 4.75rem;
+  min-width: 3.25rem;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Per-stroke contrast — easy to read while playing */
+.stroke-glyph[data-stroke="full"] {
+  color: #0f2f57;
+  font-size: clamp(3.6rem, 10vw, 5.25rem);
+  transform: scaleY(1.08);
+}
+
+.stroke-glyph[data-stroke="down"] {
+  color: #1f4a7a;
+}
+
+.stroke-glyph[data-stroke="up"] {
+  color: #0d6b5c;
+}
+
+.stroke-glyph[data-stroke="tap"] {
+  color: #8a5a12;
+}
+
+.stroke-cell.active .stroke-glyph {
+  transform: scale(1.08);
+}
+
+.stroke-cell.active .stroke-glyph[data-stroke="full"] {
+  transform: scaleY(1.08) scale(1.08);
 }
 
 .stroke-name {
-  font-size: 0.68rem;
-  color: #6b7a90;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1f2a3f;
 }
 
 .stroke-count {
-  font-size: 0.62rem;
-  color: #8a96a8;
-  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #6b7a90;
+  background: #eef2f8;
+  border-radius: 999px;
+  padding: 0.12rem 0.55rem;
+  margin-top: 0.1rem;
+}
+
+.stroke-cell.active .stroke-count {
+  background: #1f4a7a;
+  color: #fff;
 }
 
 .stroke-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1rem;
+  gap: 0.65rem 1.25rem;
   justify-content: center;
-  margin-top: 0.65rem;
-  font-size: 0.75rem;
+  margin-top: 0.85rem;
+  font-size: 0.88rem;
   color: #4c5b73;
 }
 
 .stroke-legend span {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.4rem;
 }
 
 .stroke-legend .lg {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-weight: 700;
-  color: #1f2a3f;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: #122033;
+  min-width: 1.4rem;
+  text-align: center;
+}
+
+.stroke-legend .lg[data-stroke="full"] { color: #0f2f57; }
+.stroke-legend .lg[data-stroke="down"] { color: #1f4a7a; }
+.stroke-legend .lg[data-stroke="up"] { color: #0d6b5c; }
+.stroke-legend .lg[data-stroke="tap"] { color: #8a5a12; }
+
+@media (max-width: 600px) {
+  .stroke-cell {
+    min-height: 8rem;
+    padding: 0.65rem 0.25rem 0.55rem;
+  }
+
+  .stroke-glyph {
+    min-height: 3.6rem;
+  }
 }
 
 /* Controls */
@@ -318,6 +472,30 @@
   font-size: 1.25rem;
   font-weight: 700;
   color: #1f4a7a;
+}
+
+.letter-card .lc-classic {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.35rem 0 0.2rem;
+  min-height: 0.85rem;
+}
+
+.letter-card .lc-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: #d1242f;
+  display: inline-block;
+}
+
+.letter-card .lc-dash {
+  width: 0.7rem;
+  height: 0.16rem;
+  border-radius: 999px;
+  background: #2a3548;
+  display: inline-block;
 }
 
 .letter-card .lc-greb {

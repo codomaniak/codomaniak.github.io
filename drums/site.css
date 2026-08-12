@@ -1,0 +1,481 @@
+/* Drum practice site — book-ui shell + theme-aware overrides */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.topbar .brand {
+  text-decoration: none;
+  color: inherit;
+}
+
+.hub-layout {
+  grid-template-columns: 1fr;
+  max-width: 56rem;
+  margin: 0 auto;
+  padding-top: 1.25rem;
+  padding-bottom: 2rem;
+}
+
+.hub-content { min-height: auto; }
+.hub-content .pageHeader h1 {
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  margin-bottom: 0.35rem;
+}
+.hub-content .pageHeader .muted { margin: 0; max-width: 42rem; }
+.hub-section { margin-top: 1rem; }
+.hub-section .panel__title { margin-bottom: 0.75rem; }
+
+.hub-pages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (max-width: 640px) { .hub-pages { grid-template-columns: 1fr; } }
+
+.hub-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.875rem 1rem;
+  background: var(--surface-muted);
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+.hub-page:hover {
+  border-color: var(--toc-hover-border);
+  background: var(--surface-toc);
+  transform: translateY(-1px);
+}
+.hub-page__tag {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  font-weight: 600;
+}
+.hub-page__title {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--text);
+}
+.hub-page__desc { font-size: 0.8125rem; line-height: 1.45; color: var(--muted); }
+.hub-ref .btnRow { margin-top: 0; }
+.hub-ref .filebtn { font-size: 0.8125rem; padding: 0.5rem 0.75rem; }
+.hub-footer { margin-top: 1.25rem; font-size: 0.8125rem; color: var(--dim); line-height: 1.5; }
+.hub-footer code {
+  font-size: 0.75rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.35rem;
+  background: var(--surface-badge);
+  border: 1px solid var(--border);
+}
+
+.topbar__themeRow { display: flex; gap: 6px; }
+.topbar__themeRow .btn { padding: 0.45rem 0.75rem; font-size: 0.8125rem; }
+.topbar__themeRow .btn.is-active {
+  border-color: var(--btn-accent-border);
+  background: var(--btn-accent-bg);
+  color: #fff;
+  box-shadow: var(--btn-accent-shadow);
+}
+
+/* ── Site shell ── */
+body.site {
+  padding: 0;
+  color: var(--text);
+  background: radial-gradient(1000px 600px at 20% 0%, var(--bg-gradient-1), transparent),
+    radial-gradient(900px 600px at 80% 10%, var(--bg-gradient-2), transparent),
+    var(--bg);
+}
+
+body.site .layout {
+  padding: 16px;
+}
+
+body.site .site-layout {
+  grid-template-columns: 1fr;
+  margin: 0 auto;
+  padding-top: 0.5rem;
+  padding-bottom: 2rem;
+}
+
+body.site .site-layout--hub {
+  max-width: 56rem;
+}
+
+body.site .site-layout--wide {
+  max-width: 1600px;
+}
+
+body.site .site-content {
+  min-height: auto;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px 20px;
+}
+
+body.site .site-content .pageHeader h1 {
+  font-size: clamp(1.65rem, 3.5vw, 2.25rem);
+  margin: 0 0 0.35rem;
+  font-weight: 300;
+  color: var(--text);
+}
+
+body.site .site-content .pageHeader .muted,
+body.site .subhead {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+body.site .subhead {
+  margin-bottom: 1.25rem;
+  border-left: 3px solid var(--border-strong);
+  padding-left: 0.85rem;
+}
+
+body.site .container {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+body.site h1,
+body.site h2,
+body.site h3,
+body.site .panel h2,
+body.site .domain-title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+body.site h1 span,
+body.site .domain-title span {
+  color: var(--muted) !important;
+  font-weight: 300 !important;
+}
+
+/* ── Navigation ── */
+body.site .planner-nav {
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+body.site .planner-nav a,
+body.site .planner-export-btn {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  background: var(--surface-btn);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.85rem;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+body.site .planner-nav a:hover,
+body.site .planner-export-btn:hover {
+  color: var(--text);
+  border-color: var(--btn-hover-border);
+  background: var(--surface-toc);
+}
+
+body.site .planner-nav a.active {
+  color: #fff;
+  border-color: transparent;
+  background: var(--btn-accent-bg);
+  box-shadow: var(--btn-accent-shadow);
+}
+
+body.site .planner-export-btn {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+body.site .planner-nav .site-nav-extra {
+  width: 100%;
+  margin-top: 0.35rem;
+}
+
+body.site .site-nav-extra .filebtn {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.65rem;
+}
+
+/* ── Panels & cards ── */
+body.site .panel {
+  background: linear-gradient(180deg, var(--surface-panel-shine), transparent 55%), var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+  padding: 14px 16px;
+  margin-bottom: 1rem;
+}
+
+body.site .panel h2,
+body.site .panel__title {
+  color: var(--text);
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+body.site .panel-sub,
+body.site .focus-hint,
+body.site .save-hint,
+body.site .footer-note {
+  color: var(--muted);
+}
+
+body.site .domain-card,
+body.site .goal-card,
+body.site .project-card,
+body.site .howto {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: none;
+  color: var(--text-soft);
+}
+
+body.site .domain-title,
+body.site .comp-header,
+body.site .goal-card h3,
+body.site .project-head strong {
+  color: var(--text);
+}
+
+body.site .domain-sub,
+body.site .level-box .desc,
+body.site .level-box .evidence,
+body.site .goal-card p,
+body.site .project-goal {
+  color: var(--muted);
+}
+
+body.site .level-box {
+  background: var(--surface-muted);
+  border-color: var(--border);
+}
+
+body.site .level-box strong {
+  color: var(--text);
+}
+
+body.site .badge {
+  background: var(--surface-badge);
+  color: var(--text-soft);
+  border-color: var(--border);
+}
+
+body.site .goal-card {
+  background: var(--surface-muted);
+  border-left-width: 4px;
+}
+
+body.site .howto {
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.1rem;
+}
+
+body.site .howto h3 {
+  color: var(--text);
+}
+
+body.site .howto li {
+  color: var(--text-soft);
+}
+
+/* ── Forms & inputs ── */
+body.site input[type="text"],
+body.site input[type="number"],
+body.site input[type="search"],
+body.site select,
+body.site textarea,
+body.site .notation-editor,
+body.site .day-fields input,
+body.site .project-add input,
+body.site .map-add input,
+body.site .search {
+  background: var(--surface-input);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+}
+
+body.site input:focus,
+body.site select:focus,
+body.site textarea:focus {
+  border-color: var(--focus-border);
+  box-shadow: 0 0 0 1px var(--focus-ring);
+  outline: none;
+}
+
+body.site input::placeholder,
+body.site textarea::placeholder {
+  color: var(--placeholder);
+}
+
+/* ── Planner widgets ── */
+body.site .month-tabs button,
+body.site .domain-tabs button,
+body.site .track-tabs button,
+body.site .map-chip,
+body.site .starter-chip,
+body.site .tech-tag,
+body.site .status-btn {
+  background: var(--surface-btn);
+  border-color: var(--border-strong);
+  color: var(--text-soft);
+}
+
+body.site .month-tabs button.active,
+body.site .domain-tabs button.active,
+body.site .track-tabs button.active,
+body.site .map-chip.active,
+body.site .starter-chip:hover,
+body.site .tech-tag.active,
+body.site .status-btn.active {
+  color: var(--text);
+  border-color: var(--toc-active-border);
+  background: var(--toc-active-bg);
+}
+
+body.site .planner-export-btn:hover,
+body.site .project-add-btn:hover {
+  color: #fff;
+  border-color: transparent;
+  background: var(--btn-accent-bg);
+}
+
+body.site .progress-bar {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+}
+
+body.site .progress-fill {
+  background: linear-gradient(to right, #6366f1, #2563eb);
+}
+
+body.site .progress-label,
+body.site .checklist-item label,
+body.site .eval-header,
+body.site .milestone-row,
+body.site .week-block h4 {
+  color: var(--text-soft);
+}
+
+body.site .checklist-item {
+  border-color: var(--border);
+}
+
+body.site .calendar-grid,
+body.site .day-detail,
+body.site .session-mix-card,
+body.site .mix-bar,
+body.site .principle-list,
+body.site .map-editor,
+body.site .groove-form,
+body.site .groove-notation,
+body.site .app-row-active {
+  background: var(--surface-muted);
+  border-color: var(--border);
+}
+
+body.site .cal-day {
+  background: var(--panel);
+  border-color: var(--border);
+  color: var(--text-soft);
+}
+
+body.site .cal-day.today {
+  border-color: var(--focus-border);
+}
+
+body.site .cal-day.selected {
+  background: var(--toc-active-bg);
+  border-color: var(--toc-active-border);
+  color: var(--text);
+}
+
+body.site .sticky-sidebar .panel {
+  position: sticky;
+  top: 4.5rem;
+}
+
+body.site .panel-accordion {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+}
+
+body.site .panel-accordion-summary {
+  color: var(--text);
+}
+
+body.site details.panel > summary {
+  list-style: none;
+}
+
+/* ── Alphabet trainer ── */
+body.site .alpha-current {
+  color: var(--accent);
+}
+
+body.site .alpha-chip,
+body.site .stroke-cell,
+body.site .classic-hit {
+  background: var(--surface-muted);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+body.site .alpha-controls label,
+body.site .alpha-meta,
+body.site .alpha-next-label {
+  color: var(--muted);
+}
+
+body.site .btn-link {
+  color: var(--accent);
+}
+
+/* ── Hub (index) ── */
+body.site .hub-layout {
+  max-width: 56rem;
+}
+
+body.site .hub-content {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+body.site a {
+  color: var(--accent);
+}
+
+body.site a:hover {
+  color: var(--text);
+}
+
+body.site .footer-note a {
+  color: var(--accent);
+}

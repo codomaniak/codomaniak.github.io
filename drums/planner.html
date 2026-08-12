@@ -5,28 +5,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Drum Practice Planner · Full Competency Program</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    (function () {
+      var t = localStorage.getItem('drums-hub:theme');
+      if (!t && window.matchMedia('(prefers-color-scheme: light)').matches) t = 'light';
+      if (t === 'light') document.documentElement.dataset.theme = 'light';
+    })();
+  </script>
+  <link rel="stylesheet" href="book-ui.css">
   <link rel="stylesheet" href="drums.css">
   <link rel="stylesheet" href="planner.css">
+  <link rel="stylesheet" href="site.css">
 </head>
 
-<body>
+<body class="site">
+  <header class="topbar">
+    <div class="topbar__left">
+      <a href="index.html" class="brand">Drum Practice</a>
+      <div class="book-title">Practice planner</div>
+    </div>
+    <div class="topbar__right">
+      <div class="topbar__themeRow" aria-label="Theme">
+        <button type="button" class="btn" data-theme-option="light">Light</button>
+        <button type="button" class="btn" data-theme-option="dark">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout site-layout site-layout--wide">
+    <section class="content site-content">
   <div class="container">
 
     <h1>🥁 Practice <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">planner</span></h1>
-    <div class="subhead">6-month program · six competencies across Technical Execution, Musical Perception &amp;
-      Musicality · novice → advanced</div>
+    <div class="subhead">Technical slow &amp; heavy · perception &amp; musicality from day 1 · measurable pass criteria</div>
 
     <nav class="planner-nav">
+      <a href="index.html">Home</a>
       <a href="english.html">Competency map</a>
       <a href="planner.html" class="active">Planner</a>
-      <!-- <a href="rudiments.md">Rudiments</a>
-      <a href="coordination.md">Coordination</a>
-      <a href="subdivision.md">Subdivision</a>
-      <a href="adaptation.md">Listening</a>
-      <a href="versatility.md">Versatility</a>
-      <a href="Improvisation.md">Improvisation</a> -->
+      <a href="library.html">Grooves &amp; songs</a>
+      <a href="alphabet.html">Alphabet</a>
       <button type="button" class="planner-export-btn" id="export-csv" title="Download all planner data as CSV">↓ Download CSV</button>
     </nav>
+    <div class="btnRow site-nav-extra">
+      <a class="filebtn" href="map/rudiments.md">Rudiments</a>
+      <a class="filebtn" href="map/coordination.md">Coordination</a>
+      <a class="filebtn" href="alphabet.html">Greb alphabet</a>
+      <a class="filebtn" href="Binary Letters (16th-Note Grid).md">Letters table</a>
+      <a class="filebtn" href="map/subdivision.md">Subdivision</a>
+      <a class="filebtn" href="map/adaptation.md">Listening</a>
+      <a class="filebtn" href="map/versatility.md">Versatility</a>
+      <a class="filebtn" href="map/Improvisation.md">Improvisation</a>
+    </div>
 
     <div class="goal-grid" id="goal-grid"></div>
 
@@ -34,16 +67,35 @@
       <div class="main-column">
 
         <div class="panel">
-          <h2>Self-evaluation</h2>
-          <p class="panel-sub">Mark your current level on the competency map, then rate each month of the program.
-            Goal: move from <strong>novice</strong> → <strong>advanced</strong> in 6 months.</p>
-          <div class="status-legend" id="status-legend"></div>
-          <div id="eval-sections"></div>
+          <h2>Session mix</h2>
+          <p class="panel-sub">Not “fewer tracks” — <strong>different difficulty</strong>. Technique needs most of the minutes and a slower calendar. Perception &amp; musicality start day 1 in shorter blocks.</p>
+          <div class="session-mix" id="session-mix"></div>
+          <div class="mix-bar" id="mix-bar" aria-hidden="true"></div>
+          <p class="focus-hint" id="mix-hint"></p>
         </div>
+
+        <div class="panel panel-compact">
+          <h2>Grooves &amp; songs</h2>
+          <p class="panel-sub">Groove library, per-song transcriptions, and technique projects live on a separate page (same browser storage).</p>
+          <a class="btn-link" href="library.html">Open groove &amp; song library →</a>
+        </div>
+
+        <details class="panel panel-accordion" id="eval-accordion">
+          <summary class="panel-accordion-summary">
+            <span class="panel-accordion-title">Self-evaluation</span>
+            <span class="panel-accordion-meta" id="eval-summary-meta"></span>
+            <span class="panel-accordion-chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="panel-accordion-body">
+            <p class="panel-sub">Mark a level only when you can meet its <strong>Pass</strong> evidence. Rate each month with ✅ / ⚠️ / 🔄 (auto-suggested from checklist %).</p>
+            <div class="status-legend" id="status-legend"></div>
+            <div id="eval-sections"></div>
+          </div>
+        </details>
 
         <div class="panel">
           <h2>6-month curriculum</h2>
-          <p class="panel-sub">Check off daily practice items and monthly milestones as you go.</p>
+          <p class="panel-sub">Check items when the <em>pass</em> criterion is true — not when you merely “touched” the topic.</p>
 
           <div class="progress-bar-wrap">
             <div class="progress-label">
@@ -87,9 +139,18 @@
           <div class="day-detail" id="day-detail">
             <h4 id="day-detail-title">Select a day</h4>
             <div class="practice-toggles" id="practice-toggles"></div>
+            <div class="day-fields">
+              <label>BPM / ladder
+                <input type="text" id="day-bpm" placeholder="e.g. 40 → 60 → 72">
+              </label>
+              <label>Song / project
+                <input type="text" id="day-song" placeholder="e.g. Rumba del Capitano">
+              </label>
+            </div>
+            <div class="tech-tags" id="tech-tags"></div>
             <div class="notes-field">
               <label for="day-notes">Day notes</label>
-              <textarea id="day-notes" placeholder="What did you work on? BPM? How did it feel?"></textarea>
+              <textarea id="day-notes" placeholder="What worked? What failed? Next target?"></textarea>
             </div>
           </div>
         </div>
@@ -98,12 +159,13 @@
 
     <div class="footer-note">⏳ Practice planner · linked to competency map · data stored locally</div>
   </div>
+    </section>
+  </main>
 
   <script src="planner-data.js"></script>
+  <script src="planner-storage.js"></script>
   <script>
-    const STORAGE_KEY = 'drums-planner-v2';
-
-    let state = loadState();
+    let state = PlannerStorage.loadState();
     let currentMonth = 1;
     let currentDomain = DOMAINS[0].id;
     let currentTrack = DOMAINS[0].tracks[0];
@@ -111,55 +173,8 @@
     let calMonth = new Date().getMonth();
     let selectedDate = formatDate(new Date());
 
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (raw) return migrateV2(JSON.parse(raw));
-        const legacy = localStorage.getItem('drums-planner-v1');
-        if (legacy) return migrateV1(JSON.parse(legacy));
-      } catch (_) { /* ignore */ }
-      return { checks: {}, eval: {}, monthStatus: {}, days: {}, monthNotes: {} };
-    }
-
-    function migrateV1(old) {
-      const days = {};
-      for (const [date, d] of Object.entries(old.days || {})) {
-        days[date] = { notes: d.notes || '' };
-        if (d.rudiments) days[date].rudiments = true;
-        if (d.coordination) days[date].coordination = true;
-      }
-      const monthStatus = {};
-      for (const track of ALL_TRACKS) {
-        for (let m = 1; m <= 6; m++) {
-          if (old.checks && old.checks[mk(track, m)]) {
-            monthStatus[monthStatusKey(track, m)] = 'done';
-          }
-        }
-      }
-      return {
-        checks: old.checks || {},
-        eval: old.eval || {},
-        monthStatus,
-        days,
-        monthNotes: old.monthNotes || {}
-      };
-    }
-
-    function migrateV2(old) {
-      if (old.monthStatus) return old;
-      const monthStatus = {};
-      for (const track of ALL_TRACKS) {
-        for (let m = 1; m <= 6; m++) {
-          if (old.checks && old.checks[mk(track, m)]) {
-            monthStatus[monthStatusKey(track, m)] = 'done';
-          }
-        }
-      }
-      return { ...old, monthStatus };
-    }
-
     function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      PlannerStorage.saveState(state);
       updateProgress();
     }
 
@@ -265,6 +280,27 @@
       return n;
     }
 
+    function monthChecklistPct(track, monthNum) {
+      const plan = PLANS[track].find(m => m.month === monthNum);
+      if (!plan) return 0;
+      let total = 0, done = 0;
+      for (const week of plan.weeks) {
+        for (let i = 0; i < week.items.length; i++) {
+          total++;
+          if (isChecked(ck(track, monthNum, week.week, i))) done++;
+        }
+      }
+      return total ? Math.round((done / total) * 100) : 0;
+    }
+
+    function suggestStatus(track, monthNum) {
+      const pct = monthChecklistPct(track, monthNum);
+      if (pct >= 90) return 'done';
+      if (pct >= 40) return 'partial';
+      if (pct > 0) return 'progress';
+      return '';
+    }
+
     function countChecked() {
       return Object.keys(state.checks).filter(k => state.checks[k]).length;
     }
@@ -295,19 +331,21 @@
 
     function renderGoals() {
       const goals = [
-        { track: 'rudiments', domain: 'Technical Execution', title: 'Rudimental Vocabulary', text: 'Know all 26 American rudiments, apply them on the kit, learn Swiss & hybrid rudiments, and use them as melodic phrases.' },
-        { track: 'coordination', domain: 'Technical Execution', title: 'Independence & Coordination', text: 'Move from basic rock beats to 4-way independence, foot ostinatos, polyrhythms (2:3, 3:4), broken-time grooves, and Latin coordination.' },
-        { track: 'subdivision', domain: 'Musical Perception', title: 'Subdivision & Polyrhythm', text: 'Internalize 8ths, 16ths, and triplets; play 2:3, 3:4, 4:5 polyrhythms; shift between feels (4/4 → 6/8 → 5/4) without losing form.' },
-        { track: 'adaptation', domain: 'Musical Perception', title: 'Listening & Adaptation', text: 'Anticipate band phrasing, comp for soloists, shape dynamics, and lead from the kit with visual and audio cues.' },
-        { track: 'versatility', domain: 'Musicality & Repertoire', title: 'Stylistic Versatility', text: 'Move from Rock/Pop to Jazz, Funk, Shuffles, Afro-Cuban, Brazilian, and odd-meter styles with authentic feel and touch.' },
-        { track: 'improvisation', domain: 'Musicality & Repertoire', title: 'Soloing & Improvisation', text: 'Perform structured 8- and 16-bar solos, trade 4s and 8s, develop themes, and improvise with tension, release, and emotional narrative.' }
+        { track: 'rudiments', domain: 'Technical Execution', pace: 'slow', title: 'Rudimental Vocabulary', text: 'Most session time. Stretch each month. Singles/doubles/stroke types before racing the 26.' },
+        { track: 'coordination', domain: 'Technical Execution', pace: 'slow', title: 'Independence & Coordination', text: 'Most session time with rudiments. Limb envelopes and money beat need slow, honest BPM ladders.' },
+        { track: 'accents', domain: 'Technical Execution', pace: 'slow', title: 'Greb Alphabet Accents', text: 'Binary letters A–P from Benny Greb. Start every letter at 40 BPM — one hand (R, then L), then two-hand stroke types; build combinations later.', link: 'alphabet.html', linkLabel: 'Open Alphabet trainer' },
+        { track: 'subdivision', domain: 'Musical Perception', pace: 'fast', title: 'Subdivision & Polyrhythm', text: 'Start day 1 in short blocks. Accent grids and song pulse — advance when Pass evidence is clear.' },
+        { track: 'adaptation', domain: 'Musical Perception', pace: 'fast', title: 'Listening & Adaptation', text: 'Start day 1. Groove library + song applications; does not wait for advanced technique.' },
+        { track: 'versatility', domain: 'Musicality & Repertoire', pace: 'fast', title: 'Stylistic Versatility', text: 'Start day 1 via song projects (rock + early Latin). Short kit blocks alongside technique.' },
+        { track: 'improvisation', domain: 'Musicality & Repertoire', pace: 'fast', title: 'Soloing & Improvisation', text: 'Start day 1 with groove→fill→groove on named tunes while technique is still building.' }
       ];
       document.getElementById('goal-grid').innerHTML = goals.map(g => `
         <div class="goal-card ${g.track}">
           <span class="domain-tag">${g.domain}</span>
-          <span class="comp-tag">competency map</span>
+          <span class="comp-tag pace-${g.pace}">${g.pace === 'slow' ? 'slow · heavy time' : 'early · parallel'}</span>
           <h3>${g.title}</h3>
           <p>${g.text}</p>
+          ${g.link ? `<p class="goal-link"><a class="btn-link" href="${g.link}">${g.linkLabel} →</a></p>` : ''}
         </div>
       `).join('');
     }
@@ -315,9 +353,13 @@
     function renderEval() {
       let html = '';
       let lastDomain = '';
+      let rated = 0;
       for (const comp of EVAL_COMPETENCIES) {
+        if (state.eval[comp.id] !== undefined) rated++;
         if (comp.domain !== lastDomain) {
-          html += `<div class="eval-domain-label">${comp.domain}</div>`;
+          const dom = DOMAINS.find(d => d.label === comp.domain);
+          const pace = dom ? (dom.pace === 'slow' ? ' · slow calendar, most minutes' : ' · start early, shorter blocks') : '';
+          html += `<div class="eval-domain-label">${comp.domain}<span class="eval-pace">${pace}</span></div>`;
           lastDomain = comp.domain;
         }
         html += `
@@ -330,7 +372,7 @@
               ${comp.levels.map((lv, i) => `
                 <div class="eval-level">
                   <input type="radio" name="eval-${comp.id}" id="eval-${comp.id}-${i}" value="${i}">
-                  <label for="eval-${comp.id}-${i}"><strong>${lv.label}</strong><span class="desc">${lv.desc}</span></label>
+                  <label for="eval-${comp.id}-${i}"><strong>${lv.label}</strong><span class="desc">${lv.desc}</span>${lv.pass ? `<span class="evidence">Pass: ${lv.pass}</span>` : ''}</label>
                 </div>
               `).join('')}
             </div>
@@ -346,6 +388,8 @@
           </div>`;
       }
       document.getElementById('eval-sections').innerHTML = html;
+      const meta = document.getElementById('eval-summary-meta');
+      if (meta) meta.textContent = `${rated}/${EVAL_COMPETENCIES.length} levels set · expand when needed`;
       bindStatusPickers(document.getElementById('eval-sections'));
 
       for (const comp of EVAL_COMPETENCIES) {
@@ -361,6 +405,11 @@
           const comp = radio.name.replace('eval-', '');
           state.eval[comp] = parseInt(radio.value, 10);
           saveState();
+          const n = Object.keys(state.eval).filter(k =>
+            EVAL_COMPETENCIES.some(c => c.id === k)
+          ).length;
+          const m = document.getElementById('eval-summary-meta');
+          if (m) m.textContent = `${n}/${EVAL_COMPETENCIES.length} levels set · expand when needed`;
         });
       });
     }
@@ -368,7 +417,10 @@
     function renderDomainTabs() {
       const el = document.getElementById('domain-tabs');
       el.innerHTML = DOMAINS.map(d => `
-        <button type="button" class="domain-tab${d.id === currentDomain ? ' active' : ''}" data-domain="${d.id}">${d.label}</button>
+        <button type="button" class="domain-tab${d.id === currentDomain ? ' active' : ''}" data-domain="${d.id}">
+          ${d.label}
+          <span class="pace-pill pace-${d.pace}">${d.pace === 'slow' ? 'slow' : 'early'}</span>
+        </button>
       `).join('');
       el.querySelectorAll('.domain-tab').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -429,13 +481,23 @@
       const monthSt = getMonthStatus(currentTrack, currentMonth);
       const statusHint = STATUS_TYPES.find(s => s.id === monthSt);
 
+      const pct = monthChecklistPct(currentTrack, currentMonth);
+      const suggested = suggestStatus(currentTrack, currentMonth);
+      const domain = DOMAINS.find(d => d.id === meta.domain);
+      const paceLine = domain
+        ? (domain.pace === 'slow'
+          ? `Pace: slow — treat this unit as ~6–10 weeks if needed. Spend most kit/pad time here (${state.sessionMix.technical} min suggested).`
+          : `Pace: early/parallel — short daily blocks OK (${state.sessionMix[domain.id]} min suggested). Advance when Pass evidence is met.`)
+        : '';
+
       el.innerHTML = `
         <div class="month-status-row">
           <span class="status-label">Month status</span>
           <div class="status-picker">${statusPickerHTML(currentTrack, currentMonth)}</div>
-          <span class="month-status-hint" id="month-status-hint">${statusHint ? statusHint.desc : 'Rate this month once you have a clear picture of your progress.'}</span>
+          <button type="button" class="auto-status-btn" id="auto-status-btn" title="Set from checklist %">Auto ${pct}%</button>
+          <span class="month-status-hint" id="month-status-hint">${statusHint ? statusHint.desc : 'Rate honestly — or press Auto from checklist %.'}${suggested && !monthSt ? ` Suggested: ${STATUS_TYPES.find(s => s.id === suggested).icon}` : ''}</span>
         </div>
-        <div class="month-summary"><strong>Month ${plan.month} · ${meta.label}:</strong> ${plan.title}<br>${plan.focus}</div>
+        <div class="month-summary"><strong>Month ${plan.month} · ${meta.label}:</strong> ${plan.title}<br>${plan.focus}<br><em class="pace-line">${paceLine}</em></div>
         <div class="week-list">
           ${plan.weeks.map(w => `
             <div class="week-card">
@@ -445,9 +507,14 @@
                   const key = ck(currentTrack, currentMonth, w.week, i);
                   const checked = isChecked(key);
                   const id = `chk-${key}`;
+                  const target = itemTarget(item);
+                  const pass = itemPass(item);
                   return `<li class="${checked ? 'done' : ''}">
                     <input type="checkbox" id="${id}" data-key="${key}" ${checked ? 'checked' : ''}>
-                    <label for="${id}">${item}</label>
+                    <label for="${id}">
+                      <span class="item-text">${itemText(item)}</span>
+                      ${target || pass ? `<span class="item-meta">${target ? `<em>${target}</em>` : ''}${target && pass ? ' · ' : ''}${pass ? `Pass: ${pass}` : ''}</span>` : ''}
+                    </label>
                   </li>`;
                 }).join('')}
               </ul>
@@ -462,12 +529,69 @@
 
       bindStatusPickers(el);
 
+      document.getElementById('auto-status-btn')?.addEventListener('click', () => {
+        const s = suggestStatus(currentTrack, currentMonth);
+        if (!s) return;
+        state.monthStatus[monthStatusKey(currentTrack, currentMonth)] = s;
+        if (s === 'done') state.checks[mk(currentTrack, currentMonth)] = true;
+        saveState();
+        syncStatusUI(currentTrack, currentMonth);
+        renderMonthContent();
+      });
+
       el.querySelectorAll('input[type="checkbox"]').forEach(input => {
         input.addEventListener('change', () => {
           setChecked(input.dataset.key, input.checked);
           const li = input.closest('li');
           if (li) li.classList.toggle('done', input.checked);
           renderMonthTabs();
+          const hint = document.getElementById('month-status-hint');
+          const autoBtn = document.getElementById('auto-status-btn');
+          const pctNow = monthChecklistPct(currentTrack, currentMonth);
+          if (autoBtn) autoBtn.textContent = `Auto ${pctNow}%`;
+          if (hint && !getMonthStatus(currentTrack, currentMonth)) {
+            const sug = suggestStatus(currentTrack, currentMonth);
+            const st = STATUS_TYPES.find(s => s.id === sug);
+            hint.textContent = st
+              ? `Rate honestly — or press Auto. Suggested: ${st.icon} ${st.label}`
+              : 'Rate honestly — or press Auto from checklist %.';
+          }
+        });
+      });
+    }
+
+    function renderSessionMix() {
+      const mix = state.sessionMix;
+      const total = mix.technical + mix.perception + mix.musicality;
+      document.getElementById('session-mix').innerHTML = DOMAINS.map(d => `
+        <div class="mix-row mix-${d.pace}">
+          <div class="mix-row-head">
+            <strong>${d.label}</strong>
+            <span class="pace-pill pace-${d.pace}">${d.pace === 'slow' ? 'slow calendar' : 'from day 1'}</span>
+          </div>
+          <p class="mix-note">${d.paceNote}</p>
+          <label class="mix-minutes">Minutes / session
+            <input type="number" min="0" max="180" step="5" data-domain="${d.id}" value="${mix[d.id]}">
+          </label>
+          <div class="mix-tracks">${d.tracks.map(t => TRACK_META[t].label).join(' · ')}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('mix-bar').innerHTML = DOMAINS.map(d => {
+        const pct = total ? Math.round((mix[d.id] / total) * 100) : 0;
+        return `<div class="mix-seg mix-seg-${d.id}" style="flex:${mix[d.id] || 0.0001}" title="${d.label}: ${pct}%">${pct}%</div>`;
+      }).join('');
+
+      document.getElementById('mix-hint').textContent =
+        `Suggested split ~${total} min: ~${Math.round((mix.technical / total) * 100) || 0}% technical (extend months), ` +
+        `rest for listening/styles/fills from the start. Edit minutes to match your day.`;
+
+      document.querySelectorAll('#session-mix input[data-domain]').forEach(input => {
+        input.addEventListener('change', () => {
+          const id = input.dataset.domain;
+          state.sessionMix[id] = Math.max(0, parseInt(input.value, 10) || 0);
+          saveState();
+          renderSessionMix();
         });
       });
     }
@@ -493,14 +617,30 @@
     function renderPracticeToggles() {
       document.getElementById('practice-toggles').innerHTML = ALL_TRACKS.map(t => {
         const m = TRACK_META[t];
+        const slow = m.pace === 'slow';
         return `
-          <label class="practice-toggle" style="--track-color:${m.color};--track-bg:${m.bg}">
+          <label class="practice-toggle${slow ? ' slow-track' : ' early-track'}" style="--track-color:${m.color};--track-bg:${m.bg}">
             <input type="checkbox" id="day-${t}" data-track="${t}"> ${m.label}
+            <span class="toggle-pace">${slow ? 'slow' : 'early'}</span>
           </label>`;
       }).join('');
 
       ALL_TRACKS.forEach(t => {
         document.getElementById(`day-${t}`).addEventListener('change', saveDay);
+      });
+    }
+
+    function renderTechTags() {
+      const dayData = state.days[selectedDate] || {};
+      const selected = new Set(dayData.techniques || []);
+      document.getElementById('tech-tags').innerHTML = TECHNIQUE_TAGS.map(tag =>
+        `<button type="button" class="tech-tag${selected.has(tag) ? ' active' : ''}" data-tag="${tag}">${tag}</button>`
+      ).join('');
+      document.getElementById('tech-tags').querySelectorAll('.tech-tag').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active');
+          saveDay();
+        });
       });
     }
 
@@ -563,12 +703,21 @@
         const el = document.getElementById(`day-${t}`);
         if (el) el.checked = !!dayData[t];
       });
+      document.getElementById('day-bpm').value = dayData.bpm || '';
+      document.getElementById('day-song').value = dayData.song || '';
       document.getElementById('day-notes').value = dayData.notes || '';
+      renderTechTags();
     }
 
     function saveDay() {
       if (!selectedDate) return;
-      const entry = { notes: document.getElementById('day-notes').value };
+      const techniques = [...document.querySelectorAll('#tech-tags .tech-tag.active')].map(b => b.dataset.tag);
+      const entry = {
+        notes: document.getElementById('day-notes').value,
+        bpm: document.getElementById('day-bpm').value.trim(),
+        song: document.getElementById('day-song').value.trim(),
+        techniques
+      };
       let anyPractice = false;
       ALL_TRACKS.forEach(t => {
         const checked = document.getElementById(`day-${t}`).checked;
@@ -577,7 +726,7 @@
           anyPractice = true;
         }
       });
-      if (anyPractice || entry.notes) {
+      if (anyPractice || entry.notes || entry.bpm || entry.song || techniques.length) {
         state.days[selectedDate] = entry;
       } else {
         delete state.days[selectedDate];
@@ -628,13 +777,64 @@
 
       const header = [
         'section', 'domain', 'competency', 'track', 'month', 'week', 'topic',
-        'description', 'level', 'status', 'completed', 'date', 'notes'
+        'description', 'level', 'status', 'completed', 'date', 'notes', 'bpm', 'song', 'techniques', 'target', 'pass'
       ];
       const lines = [csvRow(header)];
 
       lines.push(csvRow([
-        'summary', '', '', '', '', '', '', 'Overall checklist progress', '', '', `${pct}% (${done}/${total})`, exportedAt, ''
+        'summary', '', '', '', '', '', '', 'Overall checklist progress', '', '', `${pct}% (${done}/${total})`, exportedAt, '', '', '', '', '', ''
       ]));
+      lines.push(csvRow([
+        'session_mix', '', '', 'technical', '', '', '',
+        `Technical ${state.sessionMix.technical} min · Perception ${state.sessionMix.perception} min · Musicality ${state.sessionMix.musicality} min`,
+        '', '', '', '', 'Asymmetric session mix', '', '', '', '', ''
+      ]));
+
+      for (const p of state.projects) {
+        lines.push(csvRow([
+          'project', '', '', (p.tracks || []).map(t => TRACK_META[t]?.label || t).join('; '), '', '', '',
+          p.title, '', statusLabel(p.status), '', '', p.goal || '', '', '', '', '', ''
+        ]));
+      }
+
+      for (const map of state.maps) {
+        const g = PlannerStorage.normalizeGroove(map);
+        lines.push(csvRow([
+          'groove', '', 'Listening & Adaptation', g.name, '', '', g.style,
+          [g.pattern, g.notation ? '[template notation]' : ''].filter(Boolean).join(' · '),
+          g.level || '', '', '', g.updatedAt || '', g.notes || '', g.tempoRange || '', '', '', '', ''
+        ]));
+        if (g.notation) {
+          lines.push(csvRow([
+            'groove_template_notation', '', 'Listening & Adaptation', g.name, '', '', 'drums',
+            g.notation.replace(/\n/g, '\\n'),
+            g.level || '', '', '', g.updatedAt || '', '', '', '', '', '', ''
+          ]));
+        }
+        for (const app of g.applications) {
+          if (!app.song && !app.artist && !app.notes && !app.notation) continue;
+          lines.push(csvRow([
+            'groove_application', '', 'Listening & Adaptation', g.name, '', '', app.song || '',
+            app.notes || '',
+            g.level || '', '', '', '', '', '', app.artist || '', '', '', ''
+          ]));
+          if (app.notation && app.notation.trim()) {
+            lines.push(csvRow([
+              'song_notation', '', 'Listening & Adaptation', g.name, '', '', app.song || app.id,
+              app.notation.replace(/\n/g, '\\n'),
+              g.level || '', '', '', g.updatedAt || '', '', '', app.artist || '', '', '', ''
+            ]));
+          }
+        }
+        for (const row of g.sections || []) {
+          if (!row.label && !row.bars && !row.description && !row.drumFocus) continue;
+          lines.push(csvRow([
+            'groove_form', '', 'Listening & Adaptation', g.name, '', '', row.label || '',
+            row.description || '',
+            '', '', row.bars || '', g.updatedAt || '', row.drumFocus || '', g.tempoRange || '', g.style || '', '', '', ''
+          ]));
+        }
+      }
 
       for (const comp of EVAL_COMPETENCIES) {
         const levelIdx = state.eval[comp.id];
@@ -643,7 +843,7 @@
           'self_evaluation', comp.domain, comp.title, comp.id, '', '', '',
           level ? level.desc : '',
           level ? level.label : '',
-          '', '', '', ''
+          '', '', '', level?.pass || '', '', '', '', '', level?.pass || ''
         ]));
       }
 
@@ -681,10 +881,12 @@
 
           for (const week of plan.weeks) {
             for (let i = 0; i < week.items.length; i++) {
+              const item = week.items[i];
               lines.push(csvRow([
                 'checklist_item', domain, competency, trackLabel, m, week.week, week.topic,
-                week.items[i],
-                '', '', isChecked(ck(track, m, week.week, i)) ? 'yes' : 'no', '', ''
+                itemText(item),
+                '', '', isChecked(ck(track, m, week.week, i)) ? 'yes' : 'no', '', '', '', '', '',
+                itemTarget(item), itemPass(item)
               ]));
             }
           }
@@ -696,9 +898,10 @@
         const day = state.days[date];
         const practiced = ALL_TRACKS.filter(t => day[t]).map(t => TRACK_META[t].label).join('; ');
         lines.push(csvRow([
-          'practice_day', '', '', '', '', '', '',
+          'practice_day', '', '', practiced || '(no tracks logged)', '', '', '',
           practiced || '(no tracks logged)',
-          '', '', '', date, day.notes || ''
+          '', '', '', date, day.notes || '', day.bpm || '', day.song || '',
+          (day.techniques || []).join('; '), '', ''
         ]));
       }
 
@@ -721,6 +924,8 @@
 
     document.getElementById('month-notes').addEventListener('input', saveMonthNotes);
     document.getElementById('day-notes').addEventListener('input', debounce(saveDay, 300));
+    document.getElementById('day-bpm').addEventListener('input', debounce(saveDay, 300));
+    document.getElementById('day-song').addEventListener('input', debounce(saveDay, 300));
 
     document.getElementById('cal-prev').addEventListener('click', () => {
       calMonth--;
@@ -735,6 +940,7 @@
     });
 
     renderGoals();
+    renderSessionMix();
     renderStatusLegend();
     renderEval();
     renderDomainTabs();
@@ -748,6 +954,7 @@
     selectDay(selectedDate);
     updateProgress();
   </script>
+  <script src="hub-theme.js"></script>
 </body>
 
 </html>

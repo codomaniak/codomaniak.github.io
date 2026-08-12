@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drum Practice · Hub</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    (function () {
+      var t = localStorage.getItem('drums-hub:theme');
+      if (!t && window.matchMedia('(prefers-color-scheme: light)').matches) t = 'light';
+      if (t === 'light') document.documentElement.dataset.theme = 'light';
+    })();
+  </script>
+  <link rel="stylesheet" href="book-ui.css">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body class="site">
+  <header class="topbar">
+    <div class="topbar__left">
+      <a href="index.html" class="brand">Drum Practice</a>
+      <div class="book-title">Competency map · planner · library · alphabet</div>
+    </div>
+    <div class="topbar__right">
+      <div class="topbar__themeRow" aria-label="Theme">
+        <button type="button" class="btn" data-theme-option="light">Light</button>
+        <button type="button" class="btn" data-theme-option="dark">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout hub-layout site-layout site-layout--hub">
+    <section class="content hub-content">
+      <div class="pageHeader">
+        <h1>Practice hub</h1>
+        <p class="muted">Local drum practice site — competency map, session planner, groove &amp; song library, Greb alphabet trainer.</p>
+      </div>
+
+      <div class="pageBody">
+        <section class="panel hub-section">
+          <h2 class="panel__title">Pages</h2>
+          <nav class="hub-pages" aria-label="Site pages">
+            <a class="hub-page" href="english.html">
+              <span class="hub-page__tag">Overview</span>
+              <span class="hub-page__title">Competency map</span>
+              <span class="hub-page__desc">Four domains · novice → expert · pass criteria and asymmetric pacing</span>
+            </a>
+            <a class="hub-page" href="planner.html">
+              <span class="hub-page__tag">Practice</span>
+              <span class="hub-page__title">Practice planner</span>
+              <span class="hub-page__desc">Calendar · curriculum checklists · self-evaluation · session mix</span>
+            </a>
+            <a class="hub-page" href="library.html">
+              <span class="hub-page__tag">Repertoire</span>
+              <span class="hub-page__title">Grooves &amp; songs</span>
+              <span class="hub-page__desc">Style grooves · per-song transcriptions · technique projects</span>
+            </a>
+            <a class="hub-page" href="alphabet.html">
+              <span class="hub-page__tag">Technique</span>
+              <span class="hub-page__title">Greb alphabet trainer</span>
+              <span class="hub-page__desc">Binary letters A–P · stroke types · kit notation</span>
+            </a>
+          </nav>
+        </section>
+
+        <section class="panel hub-section hub-ref">
+          <h2 class="panel__title">Reference plans</h2>
+          <p class="muted small">Markdown source plans and letter grids.</p>
+          <div class="btnRow">
+            <a class="filebtn" href="map/rudiments.md">Rudiments</a>
+            <a class="filebtn" href="map/coordination.md">Coordination</a>
+            <a class="filebtn" href="map/subdivision.md">Subdivision</a>
+            <a class="filebtn" href="map/adaptation.md">Listening</a>
+            <a class="filebtn" href="map/versatility.md">Versatility</a>
+            <a class="filebtn" href="map/Improvisation.md">Improvisation</a>
+            <a class="filebtn" href="styles.md">Styles / grooves</a>
+            <a class="filebtn" href="Binary Letters (16th-Note Grid).md">Binary letters</a>
+            <a class="filebtn" href="Ternary Letters (16th-Note Grid).md">Ternary letters</a>
+          </div>
+        </section>
+
+        <p class="hub-footer">Reload after editing alphabet data or running <code>node scripts/sync-alphabet.js</code></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="hub-theme.js"></script>
+</body>
+
+</html>

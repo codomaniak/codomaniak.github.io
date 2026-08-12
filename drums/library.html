@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Groove &amp; Song Library · Drum Practice</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    (function () {
+      var t = localStorage.getItem('drums-hub:theme');
+      if (!t && window.matchMedia('(prefers-color-scheme: light)').matches) t = 'light';
+      if (t === 'light') document.documentElement.dataset.theme = 'light';
+    })();
+  </script>
+  <link rel="stylesheet" href="book-ui.css">
+  <link rel="stylesheet" href="drums.css">
+  <link rel="stylesheet" href="planner.css">
+  <link rel="stylesheet" href="vendor/drum-notation/drum-notation-embed.css">
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body class="site">
+  <header class="topbar">
+    <div class="topbar__left">
+      <a href="index.html" class="brand">Drum Practice</a>
+      <div class="book-title">Grooves &amp; songs</div>
+    </div>
+    <div class="topbar__right">
+      <div class="topbar__themeRow" aria-label="Theme">
+        <button type="button" class="btn" data-theme-option="light">Light</button>
+        <button type="button" class="btn" data-theme-option="dark">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout site-layout site-layout--wide">
+    <section class="content site-content">
+  <div class="container">
+
+    <h1>🥁 Groove &amp; <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">song library</span></h1>
+    <div class="subhead">Template · style-first grooves · add your own songs and transcriptions</div>
+
+    <nav class="planner-nav">
+      <a href="index.html">Home</a>
+      <a href="english.html">Competency map</a>
+      <a href="planner.html">Planner</a>
+      <a href="library.html" class="active">Grooves &amp; songs</a>
+      <a href="alphabet.html">Alphabet</a>
+      <a href="styles.md">Styles</a>
+    </nav>
+
+    <div class="panel">
+      <p class="panel-sub" style="margin-bottom: 0;">Blank starter for anyone: sample <strong>groove skeletons</strong> only. Song lists and projects start empty — add your repertoire below. Data stays in this browser (shared with the planner).</p>
+    </div>
+
+    <div class="panel">
+      <h2>Song / technique projects</h2>
+      <p class="panel-sub">Your vehicles for practice (songs or technique goals). Empty until you add one. Mark status ✅ / ⚠️ / 🔄.</p>
+      <div id="projects-list"></div>
+      <form class="project-add" id="project-add">
+        <input type="text" id="project-title" placeholder="Project name (song or technique)" required>
+        <input type="text" id="project-goal" placeholder="Measurable goal (BPM, fill length…)">
+        <button type="submit" class="planner-export-btn project-add-btn">Add</button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>Groove library</h2>
+      <p class="panel-sub">Start with a <strong>style / groove</strong>, then attach your own songs. Sample chips add a skeleton with no songs — use <strong>+ song</strong> for each application (each keeps its own transcription).</p>
+      <ul class="principle-list" id="practice-principles"></ul>
+      <div class="starter-songs" id="starter-songs"></div>
+      <div id="maps-list"></div>
+      <form class="map-add" id="map-add">
+        <input type="text" id="map-title" placeholder="Groove name" required>
+        <input type="text" id="map-style" placeholder="Style (e.g. Rumba)">
+        <select id="map-level" aria-label="Level">
+          <option value="beginner">beginner</option>
+          <option value="intermediate">intermediate</option>
+          <option value="advanced">advanced</option>
+        </select>
+        <input type="text" id="map-tempo" placeholder="Tempo range">
+        <button type="submit" class="planner-export-btn project-add-btn">Add groove</button>
+      </form>
+      <div id="map-editor" class="map-editor hidden"></div>
+    </div>
+
+    <div class="save-hint" id="library-save-hint">Saved automatically in your browser (shared with planner)</div>
+    <div class="footer-note">Template library · kit notation via <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank" rel="noopener">obsidian-drum-notation</a> (MIT)</div>
+  </div>
+    </section>
+  </main>
+
+  <script src="planner-data.js"></script>
+  <script src="notation-headers.js"></script>
+  <script src="planner-storage.js"></script>
+  <script src="vendor/drum-notation/drum-notation-embed.js"></script>
+  <script src="library.js"></script>
+  <script src="hub-theme.js"></script>
+</body>
+
+</html>

@@ -5,23 +5,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Benny Greb Alphabet Trainer</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    (function () {
+      var t = localStorage.getItem('drums-hub:theme');
+      if (!t && window.matchMedia('(prefers-color-scheme: light)').matches) t = 'light';
+      if (t === 'light') document.documentElement.dataset.theme = 'light';
+    })();
+  </script>
+  <link rel="stylesheet" href="book-ui.css">
   <link rel="stylesheet" href="drums.css">
   <link rel="stylesheet" href="planner.css">
   <link rel="stylesheet" href="vendor/drum-notation/drum-notation-embed.css">
   <link rel="stylesheet" href="alphabet.css">
+  <link rel="stylesheet" href="site.css">
 </head>
 
-<body>
+<body class="site">
+  <header class="topbar">
+    <div class="topbar__left">
+      <a href="index.html" class="brand">Drum Practice</a>
+      <div class="book-title">Alphabet trainer</div>
+    </div>
+    <div class="topbar__right">
+      <div class="topbar__themeRow" aria-label="Theme">
+        <button type="button" class="btn" data-theme-option="light">Light</button>
+        <button type="button" class="btn" data-theme-option="dark">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout site-layout site-layout--wide">
+    <section class="content site-content">
   <div class="container">
 
     <h1>🥁 Greb <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">alphabet trainer</span></h1>
-    <div class="subhead">Binary letters A–P · Full / Down / Tap / Up strokes · kit notation via obsidian-drum-notation</div>
+    <div class="subhead">Binary A–P + ternary Q–X · Full / Down / Tap / Up strokes · kit notation via obsidian-drum-notation</div>
 
     <nav class="planner-nav">
+      <a href="index.html">Home</a>
       <a href="english.html">Competency map</a>
       <a href="planner.html">Planner</a>
+      <a href="library.html">Grooves &amp; songs</a>
       <a href="alphabet.html" class="active">Alphabet</a>
-      <a href="Binary Letters (16th-Note Grid).md">Letters reference</a>
+      <a href="Binary Letters (16th-Note Grid).md">Binary letters</a>
+      <a href="Ternary Letters (16th-Note Grid).md">Ternary letters</a>
     </nav>
 
     <div class="alpha-layout">
@@ -37,33 +67,41 @@
           </div>
 
           <div class="alpha-meta">
-            <span>Letter <strong id="meta-index">1</strong> / <strong id="meta-total">16</strong></span>
+            <span>Letter <strong id="meta-index">1</strong> / <strong id="meta-total">24</strong></span>
             <span id="meta-duration">20 bars</span>
             <span>Beat <strong id="meta-beat">1</strong> · Slot <strong id="meta-slot">1</strong></span>
             <span id="meta-status">Ready</span>
+          </div>
+
+          <div class="greb-classic" aria-label="Classic letter shape">
+            <div class="greb-classic-title">Letter shape · accents ● · rests -</div>
+            <div class="greb-classic-card">
+              <span class="greb-classic-letter" id="greb-classic-letter">A</span>
+              <div class="greb-classic-row" id="greb-classic-row"></div>
+            </div>
           </div>
 
           <div class="stroke-board">
             <div class="stroke-board-title">Stroke types · <span id="stroke-mode-label">one hand (R)</span></div>
             <div class="stroke-grid" id="stroke-grid"></div>
             <div class="stroke-legend">
-              <span><span class="lg">|</span> Full</span>
-              <span><span class="lg">↓</span> Down</span>
-              <span><span class="lg">.</span> Tap</span>
-              <span><span class="lg">↑</span> Up</span>
+              <span><span class="lg" data-stroke="full">|</span> Full</span>
+              <span><span class="lg" data-stroke="down">↓</span> Down</span>
+              <span><span class="lg" data-stroke="tap">-</span> Tap</span>
+              <span><span class="lg" data-stroke="up">↑</span> Up</span>
             </div>
             <div class="pulse-bar" aria-hidden="true"><div class="pulse-fill" id="pulse-fill"></div></div>
           </div>
 
           <div class="alpha-notation">
-            <p class="panel-sub" style="margin-bottom:0.5rem">Kit pattern (snare + sticking) — Play / Stop / Loop below. <strong>Grid 16</strong> / <strong>32</strong> use the full-bar patterns from the letters table. Engraving shows a short window; practice length is set in controls.</p>
+            <p class="panel-sub" style="margin-bottom:0.5rem">Kit pattern (snare + sticking) — Play / Stop / Loop below. Grid follows the letter: <strong>16</strong> for binary A–P, <strong>12</strong> for ternary Q–X. <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank" rel="noopener">obsidian-drum-notation</a>.</p>
             <div id="notation-preview-host" class="notation-preview-host"></div>
           </div>
         </div>
 
         <div class="panel">
           <h2>Letter chart</h2>
-          <p class="panel-sub">Tap a letter to preview. Sequence: alphabetical A–P or random (words later).</p>
+          <p class="panel-sub">Tap a letter to preview. Sequence: alphabetical A–X, random, or words.</p>
           <div class="letter-chart" id="letter-chart"></div>
         </div>
       </div>
@@ -76,15 +114,15 @@
             <div class="control-row">
               <label>Sequence</label>
               <div class="mode-toggle" id="mode-toggle">
-                <button type="button" class="active" data-mode="alpha">A→P</button>
+                <button type="button" class="active" data-mode="alpha">A→X</button>
                 <button type="button" data-mode="random">Random</button>
-                <button type="button" data-mode="word" disabled title="Words need the full alphabet (ternary Q–X too) — coming later">Word</button>
+                <button type="button" data-mode="word">Word</button>
               </div>
             </div>
 
             <div class="control-row word-field hidden" id="word-row">
               <label for="word-input">Word</label>
-              <input type="text" id="word-input" placeholder="e.g. BEAD or ACE" maxlength="32" autocomplete="off">
+              <input type="text" id="word-input" placeholder="e.g. BEAD or QUIX" maxlength="32" autocomplete="off">
             </div>
 
             <div class="control-row">
@@ -115,11 +153,8 @@
             </div>
 
             <div class="control-row">
-              <label>Grid</label>
-              <div class="duration-toggle" id="grid-toggle">
-                <button type="button" class="active" data-grid="16" title="Bar = unit×2 (16 slots), e.g. X-g-g-x-X-g-g-x-">16</button>
-                <button type="button" data-grid="32" title="Bar = unit×4 (32 slots), e.g. X-g-g-x- ×4">32</button>
-              </div>
+              <label for="time-sig-input">Time</label>
+              <input type="text" id="time-sig-input" value="4/4" placeholder="4/4" spellcheck="false" autocomplete="off" title="Time signature, e.g. 4/4, 3/4, 6/8">
             </div>
 
             <div class="control-row">
@@ -152,22 +187,26 @@
         <div class="panel">
           <h2>How it works</h2>
           <ul class="principle-list">
-            <li>Each letter is one beat of 16ths (1 e &amp; a).</li>
+            <li>Binary letters A–P are four-part 16th-note beats (1 e &amp; a); ternary letters Q–X are three-part triplet beats (1 ka ta).</li>
             <li>Play every slot with the stroke types — accents and Moeller prep (tap/up) on “rest” slots.</li>
-            <li><strong>|</strong> full · <strong>↓</strong> down · <strong>.</strong> tap · <strong>↑</strong> up</li>
-            <li>Kit notation: unit <code>X-g-g-x-</code> · <strong>Grid 16</strong> bar = ×2 · <strong>Grid 32</strong> bar = ×4 (from the letters table).</li>
-            <li>Words (full alphabet) — disabled until ternary letters are in.</li>
+            <li><strong>|</strong> full · <strong>↓</strong> down · <strong>-</strong> tap · <strong>↑</strong> up</li>
+            <li>Kit notation: binary unit <code>X-g-g-g-</code> at <strong>Grid 16</strong> (×2 per bar); ternary unit <code>X-x-x-</code> at <strong>Grid 12</strong> (×2 per bar).</li>
+            <li>Word mode accepts letters A–X.</li>
           </ul>
         </div>
       </div>
     </div>
 
-    <div class="footer-note">Greb binary alphabet · stroke glyphs · <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank" rel="noopener">obsidian-drum-notation</a> (MIT)</div>
+    <div class="footer-note">Greb binary + ternary alphabet · stroke glyphs · <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank" rel="noopener">obsidian-drum-notation</a> (MIT)</div>
   </div>
+    </section>
+  </main>
 
+  <script src="notation-headers.js"></script>
   <script src="alphabet-data.js"></script>
   <script src="vendor/drum-notation/drum-notation-embed.js"></script>
   <script src="alphabet-app.js"></script>
+  <script src="hub-theme.js"></script>
 </body>
 
 </html>

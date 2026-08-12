@@ -4,15 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Карта компетенций драммера / перкуссиониста</title>
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    (function () {
+      var t = localStorage.getItem('drums-hub:theme');
+      if (!t && window.matchMedia('(prefers-color-scheme: light)').matches) t = 'light';
+      if (t === 'light') document.documentElement.dataset.theme = 'light';
+    })();
+  </script>
+  <link rel="stylesheet" href="book-ui.css">
   <link rel="stylesheet" href="drums.css">
+  <link rel="stylesheet" href="site.css">
 </head>
 
-<body>
+<body class="site">
+  <header class="topbar">
+    <div class="topbar__left">
+      <a href="index.html" class="brand">Drum Practice</a>
+      <div class="book-title">Карта компетенций</div>
+    </div>
+    <div class="topbar__right">
+      <div class="topbar__themeRow" aria-label="Theme">
+        <button type="button" class="btn" data-theme-option="light">Light</button>
+        <button type="button" class="btn" data-theme-option="dark">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout site-layout site-layout--wide">
+    <section class="content site-content">
 <div class="container">
 
   <h1>🥁 Карта компетенций <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">драммера / перкуссиониста</span></h1>
   <div class="subhead">Четыре основных сферы · от осознания до мастерства · плюс специализированная ветвь перкуссии</div>
+
+  <nav class="planner-nav">
+    <a href="index.html">Home</a>
+    <a href="english.html">Competency map (EN)</a>
+    <a href="planner.html">Planner</a>
+    <a href="library.html">Grooves &amp; songs</a>
+    <a href="alphabet.html">Alphabet</a>
+  </nav>
 
   <!-- DOMAIN GRID -->
   <div class="domain-grid">
@@ -117,10 +151,10 @@
       <div class="competency">
         <div class="comp-header"><span>Стилевая универсальность</span></div>
         <div class="comp-levels">
-          <div class="level-box"><strong>начальный</strong><span class="desc">Рок, Поп</span></div>
-          <div class="level-box"><strong>средний</strong><span class="desc">Джаз, Фанк, Шаффл</span></div>
-          <div class="level-box"><strong>продвинутый</strong><span class="desc">Афро‑кубинский, бразильский, нечётные размеры</span></div>
-          <div class="level-box"><strong>эксперт</strong><span class="desc">Хамелеон, аутентичный культурный язык</span></div>
+          <div class="level-box"><strong>начальный</strong><span class="desc">Рок/поп + ясные песни в 4/4</span></div>
+          <div class="level-box"><strong>средний</strong><span class="desc">Фанк, шаффл, лёгкий latin-rock</span></div>
+          <div class="level-box"><strong>продвинутый</strong><span class="desc">Афро‑кубинский, бразильский; глубокое изучение стиля</span></div>
+          <div class="level-box"><strong>эксперт</strong><span class="desc">Джазовый язык, нечётные размеры, культурная беглость</span></div>
         </div>
       </div>
 
@@ -226,5 +260,8 @@
 
   <div class="footer-note">⏳ Карта компетенций v1.0 · барабаны и перкуссия · от осознания к мастерству</div>
 </div>
+    </section>
+  </main>
+  <script src="hub-theme.js"></script>
 </body>
 </html>

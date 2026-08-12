@@ -2,17 +2,12 @@
 
 Built from [vkamolov/obsidian-drum-notation](https://github.com/vkamolov/obsidian-drum-notation) (MIT).
 
-Files used by `planner.html` / `alphabet.html`:
+Files used by `planner.html`:
 
-- `load-notation-engine.js` — fetch + blob inject (works when hosts serve `.js` as `text/plain`)
-- `drum-notation-embed.js` — IIFE exposing `window.DrumNotationEmbed.mount(host)` (**must be deployed**)
-- `drum-notation-embed.css` — engraving styles (**must be deployed**)
+- `drum-notation-embed.js` — IIFE exposing `window.DrumNotationEmbed.mount(host)`
+- `drum-notation-embed.css` — engraving styles
 
-Mounted **in-page** (not iframe).
-
-## Deploy checklist
-
-Copy the whole `vendor/drum-notation/` folder to the host (especially the ~780KB `drum-notation-embed.js`). If the engine file is missing, the UI shows the resolved URL and HTTP status.
+Mounted **in-page** (not iframe) so it works with `file://` and local static servers.
 
 ## Rebuild
 

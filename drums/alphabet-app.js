@@ -7,7 +7,7 @@
     barsPerLetter: 4,
     secondsPerLetter: 60,
     tempo: 70,
-    grid: 16,
+    time: '4/4',
     click: 'quarter',
     word: 'BEAD'
   };
@@ -26,6 +26,18 @@
 
   const $ = (id) => document.getElementById(id);
 
+  function currentLetterData() {
+    return LETTER_BY_ID[currentLetter()] || null;
+  }
+
+  function currentSubdivisionLabels() {
+    return letterSubdivisionLabels(currentLetter());
+  }
+
+  function currentSubdivisionCount() {
+    return currentSubdivisionLabels().length;
+  }
+
   function currentLetter() {
     if (!sequence.length) return 'A';
     if (index < 0) index = 0;
@@ -33,16 +45,20 @@
     return sequence[index];
   }
 
+  function barDurationMs() {
+    const quarters = NotationHeaders.barQuarterLength(settings.time);
+    return (quarters * 60 * 1000) / settings.tempo;
+  }
+
   function letterDurationMs() {
     if (settings.durationMode === 'time') {
       return settings.secondsPerLetter * 1000;
     }
-    const barMs = (4 * 60 * 1000) / settings.tempo;
-    return settings.barsPerLetter * barMs;
+    return settings.barsPerLetter * barDurationMs();
   }
 
-  function sixteenthMs() {
-    return (60 * 1000) / settings.tempo / 4;
+  function subdivisionMs() {
+    return (60 * 1000) / settings.tempo / currentSubdivisionCount();
   }
 
   function ensureAudio() {
@@ -90,12 +106,44 @@
     notationHandle.setSource(buildAlphabetNotation({
       letters: [letter],
       tempo: settings.tempo,
+      time: settings.time,
       barsPerLetter: barsShow,
       handMode: settings.handMode,
-      grid: settings.grid,
       title: `Letter ${letter}`,
       maxBars: barsShow
     }));
+  }
+
+  function renderGrebClassic(activeSlot) {
+    const letter = currentLetter();
+    const L = LETTER_BY_ID[letter];
+    const row = $('greb-classic-row');
+    const label = $('greb-classic-letter');
+    if (!L || !row) return;
+    if (label) label.textContent = letter;
+    const hits = L.hits || parseGrebHits(L.greb);
+    const counts = letterSubdivisionLabels(letter);
+    row.innerHTML = hits.map((hit, i) => {
+      const active = activeSlot === i ? ' active' : '';
+      if (hit) {
+        return `<span class="greb-slot accent${active}" title="${counts[i]} accent">
+          <span class="greb-dot" aria-hidden="true"></span>
+          <span class="greb-slot-count">${counts[i]}</span>
+        </span>`;
+      }
+      return `<span class="greb-slot rest${active}" title="${counts[i]} rest">
+        <span class="greb-dash" aria-hidden="true"></span>
+        <span class="greb-slot-count">${counts[i]}</span>
+      </span>`;
+    }).join('');
+  }
+
+  function chartClassicLine(L) {
+    const hits = L.hits || parseGrebHits(L.greb);
+    return hits.map(h => h
+      ? '<span class="lc-dot"></span>'
+      : '<span class="lc-dash"></span>'
+    ).join('');
   }
 
   function chartStrokeLine(L) {
@@ -114,19 +162,21 @@
       return;
     }
 
+    renderGrebClassic(activeSlot);
+
     const two = settings.handMode === 'two';
     $('stroke-mode-label').textContent =
       settings.handMode === 'two' ? 'both hands' :
       settings.handMode === 'left' ? 'one hand (L)' : 'one hand (R)';
 
-    const counts = ['1', 'e', '&', 'a'];
+    const counts = letterSubdivisionLabels(letter);
     grid.innerHTML = L.oneHand.map((stroke, i) => {
       const hand = two ? L.twoHands[i].hand : (settings.handMode === 'left' ? 'L' : 'R');
       const st = two ? L.twoHands[i].stroke : stroke;
       const active = activeSlot === i ? ' active' : '';
-      return `<div class="stroke-cell${active}">
+      return `<div class="stroke-cell stroke-${st}${active}">
         <span class="stroke-hand">${hand}</span>
-        <span class="stroke-glyph">${strokeGlyph(st)}</span>
+        <span class="stroke-glyph" data-stroke="${st}" aria-label="${STROKE_LABEL[st] || st}">${strokeGlyph(st)}</span>
         <span class="stroke-name">${STROKE_LABEL[st] || st}</span>
         <span class="stroke-count">${counts[i]}</span>
       </div>`;
@@ -150,15 +200,18 @@
 
     if (settings.durationMode === 'bars') {
       $('meta-duration').textContent =
-        `${settings.barsPerLetter} bar${settings.barsPerLetter === 1 ? '' : 's'} / letter · Grid ${settings.grid}`;
+        `${settings.barsPerLetter} bar${settings.barsPerLetter === 1 ? '' : 's'} / letter · ${settings.time} · Grid ${letterGrid(letter)}`;
     } else {
       $('meta-duration').textContent =
-        `${settings.secondsPerLetter}s / letter · Grid ${settings.grid}`;
+        `${settings.secondsPerLetter}s / letter · ${settings.time} · Grid ${letterGrid(letter)}`;
     }
 
     const slot = Number.isFinite(slotInBeat) ? Math.max(0, slotInBeat) : 0;
-    $('meta-beat').textContent = String(Math.floor(slot / 4) % 4 + 1);
-    $('meta-slot').textContent = ['1', 'e', '&', 'a'][slot % 4];
+    const subdivisions = currentSubdivisionLabels();
+    const perBeat = subdivisions.length;
+    const beatsPerBar = Math.max(1, Math.round(NotationHeaders.barQuarterLength(settings.time)));
+    $('meta-beat').textContent = String(Math.floor(slot / perBeat) % beatsPerBar + 1);
+    $('meta-slot').textContent = subdivisions[slot % perBeat];
     $('meta-status').textContent = playing ? (paused ? 'Paused' : 'Playing') : 'Ready';
     $('pulse-fill').style.width = `${progressRatio * 100}%`;
 
@@ -202,6 +255,7 @@
     $('letter-chart').innerHTML = BINARY_LETTERS.map(L => `
       <button type="button" class="letter-card" data-id="${L.id}">
         <div class="lc-id">${L.id}</div>
+        <div class="lc-classic">${chartClassicLine(L)}</div>
         <div class="lc-greb">${L.greb}</div>
         <div class="lc-strokes">${chartStrokeLine(L)}</div>
       </button>
@@ -259,7 +313,7 @@
     const elapsed = performance.now() - letterStartedAt;
     return {
       ratio: Math.min(1, Math.max(0, elapsed / dur)),
-      slot: Math.floor(elapsed / sixteenthMs())
+      slot: Math.floor(elapsed / subdivisionMs())
     };
   }
 
@@ -268,7 +322,7 @@
     const live = liveProgress();
     syncAll({
       resetProgress: !playing || retime,
-      activeSlot: playing && !paused ? (live.slot % 4) : -1,
+      activeSlot: playing && !paused ? (live.slot % currentSubdivisionCount()) : -1,
       elapsedRatio: (!playing || retime) ? 0 : live.ratio,
       slotInBeat: live.slot
     });
@@ -290,20 +344,21 @@
     const dur = letterDurationMs();
     const elapsed = now - letterStartedAt;
     const ratio = elapsed / dur;
-    const absoluteSlot = Math.floor(elapsed / sixteenthMs());
+    const absoluteSlot = Math.floor(elapsed / subdivisionMs());
     slotPhase = absoluteSlot;
 
     if (settings.click !== 'off' && absoluteSlot !== lastClickSlot) {
       lastClickSlot = absoluteSlot;
-      const isQuarter = absoluteSlot % 4 === 0;
+      const spb = NotationHeaders.slotsPerBeat(settings.time, letterGrid(currentLetter()));
+      const isDownbeat = absoluteSlot % spb === 0;
       const isEighth = absoluteSlot % 2 === 0;
-      if (settings.click === 'sixteenth') clickSound(isQuarter);
-      else if (settings.click === 'eighth' && isEighth) clickSound(isQuarter);
-      else if (settings.click === 'quarter' && isQuarter) clickSound(true);
+      if (settings.click === 'sixteenth') clickSound(isDownbeat);
+      else if (settings.click === 'eighth' && isEighth) clickSound(isDownbeat);
+      else if (settings.click === 'quarter' && isDownbeat) clickSound(true);
     }
 
     // Update letter UI every frame; notation only when letter identity already set
-    renderStrokeGrid(absoluteSlot % 4);
+    renderStrokeGrid(absoluteSlot % currentSubdivisionCount());
     renderNext();
     renderMeta(ratio, absoluteSlot);
 
@@ -401,12 +456,10 @@
     });
   });
 
-  $('grid-toggle').querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      settings.grid = parseInt(btn.dataset.grid, 10) === 32 ? 32 : 16;
-      setToggleGroup('grid-toggle', btn);
-      applySettingsToView({ retime: false });
-    });
+  $('time-sig-input').addEventListener('change', () => {
+    settings.time = NotationHeaders.normalizeTime($('time-sig-input').value);
+    $('time-sig-input').value = settings.time;
+    applySettingsToView({ retime: true });
   });
 
   $('bars-input').addEventListener('change', () => {

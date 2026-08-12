@@ -5,13 +5,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Drummer & Percussionist Competency Map</title>
-
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    (function () {
+      var t = localStorage.getItem('drums-hub:theme');
+      if (!t && window.matchMedia('(prefers-color-scheme: light)').matches) t = 'light';
+      if (t === 'light') document.documentElement.dataset.theme = 'light';
+    })();
+  </script>
+  <link rel="stylesheet" href="book-ui.css">
   <link rel="stylesheet" href="drums.css">
   <link rel="stylesheet" href="planner.css">
-
+  <link rel="stylesheet" href="site.css">
 </head>
 
-<body>
+<body class="site">
+  <header class="topbar">
+    <div class="topbar__left">
+      <a href="index.html" class="brand">Drum Practice</a>
+      <div class="book-title">Competency map</div>
+    </div>
+    <div class="topbar__right">
+      <div class="topbar__themeRow" aria-label="Theme">
+        <button type="button" class="btn" data-theme-option="light">Light</button>
+        <button type="button" class="btn" data-theme-option="dark">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout site-layout site-layout--wide">
+    <section class="content site-content">
   <div class="container">
 
     <h1>🥁 Drummer &amp; Percussionist <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">competency
@@ -19,8 +44,11 @@
     <div class="subhead">Four core domains · graded from Awareness to Mastery · plus specialised percussion branch</div>
 
     <nav class="planner-nav">
+      <a href="index.html">Home</a>
       <a href="english.html" class="active">Competency map</a>
       <a href="planner.html">Practice planner</a>
+      <a href="library.html">Grooves &amp; songs</a>
+      <a href="alphabet.html">Alphabet</a>
     </nav>
 
     <!-- DOMAIN GRID -->
@@ -35,40 +63,47 @@
         <div class="competency">
           <div class="comp-header"><span>Stick / Pedal Control</span> <span class="badge">fundamental</span></div>
           <div class="comp-levels">
-            <div class="level-box"><strong>novice</strong><span class="desc">Basic grip, steady 8ths</span></div>
-            <div class="level-box"><strong>intermediate</strong><span class="desc">Moeller, rebound, double
-                strokes</span></div>
-            <div class="level-box"><strong>advanced</strong><span class="desc">Full dynamics (pp–ff), heel-toe</span>
+            <div class="level-box"><strong>novice</strong><span class="desc">Matched grip, steady 8ths at 40–60 BPM</span><span class="evidence">Pass: even R/L, no tension after 5 min</span></div>
+            <div class="level-box"><strong>intermediate</strong><span class="desc">Rebound, doubles, Full / Down / Tap / Up</span><span class="evidence">Pass: doubles clean at 80 BPM; Down-Up on groove</span></div>
+            <div class="level-box"><strong>advanced</strong><span class="desc">Moeller, pp–ff, heel-toe</span><span class="evidence">Pass: rebuild a song groove with Moeller accents</span>
             </div>
             <div class="level-box"><strong>expert</strong><span class="desc">Effortless speed, whiplash strokes,
-                nuance</span></div>
+                nuance</span><span class="evidence">Pass: intentional stroke types mid-phrase</span></div>
           </div>
         </div>
 
         <div class="competency">
           <div class="comp-header"><span>Independence &amp; Coordination</span></div>
           <div class="comp-levels">
-            <div class="level-box"><strong>novice</strong><span class="desc">Basic rock beat (kick 1&3, snare
-                2&4)</span></div>
-            <div class="level-box"><strong>intermediate</strong><span class="desc">Limb separation, polyrhythms
-                (2:3)</span></div>
+            <div class="level-box"><strong>novice</strong><span class="desc">Money beat + hi-hat foot on 2&amp;4</span><span class="evidence">Pass: 60 BPM × 8 bars, no limb collapse</span></div>
+            <div class="level-box"><strong>intermediate</strong><span class="desc">Limb envelopes, accents+kick, 2:3</span><span class="evidence">Pass: move one 16th to tom while groove holds</span></div>
             <div class="level-box"><strong>advanced</strong><span class="desc">4‑way independence, broken time, Latin
-                feet</span></div>
+                feet</span><span class="evidence">Pass: feet ostinato + improvised hands</span></div>
             <div class="level-box"><strong>expert</strong><span class="desc">Complete limb autonomy, metric
-                modulation</span></div>
+                modulation</span><span class="evidence">Pass: change feel without losing form</span></div>
           </div>
         </div>
 
         <div class="competency">
           <div class="comp-header"><span>Rudimental Vocabulary</span></div>
           <div class="comp-levels">
-            <div class="level-box"><strong>novice</strong><span class="desc">5 basic rudiments</span></div>
-            <div class="level-box"><strong>intermediate</strong><span class="desc">26 rudiments, applied on set</span>
+            <div class="level-box"><strong>novice</strong><span class="desc">Singles, doubles, paradiddle, flam, drag</span><span class="evidence">Pass: each clean at target BPM (ladder, not rush)</span></div>
+            <div class="level-box"><strong>intermediate</strong><span class="desc">26 rudiments, applied on set</span><span class="evidence">Pass: rudiment as fill in a real song</span>
             </div>
-            <div class="level-box"><strong>advanced</strong><span class="desc">Swiss rudiments, melodic phrasing</span>
+            <div class="level-box"><strong>advanced</strong><span class="desc">Swiss rudiments, melodic phrasing</span><span class="evidence">Pass: 8-bar phrase mixing 3+ rudiments</span>
             </div>
-            <div class="level-box"><strong>expert</strong><span class="desc">Hybrid rudiments, seamless at speed</span>
+            <div class="level-box"><strong>expert</strong><span class="desc">Hybrid rudiments, seamless at speed</span><span class="evidence">Pass: hybrids inside improvised solo</span>
             </div>
+          </div>
+        </div>
+
+        <div class="competency">
+          <div class="comp-header"><span>Greb Alphabet Accents</span> <span class="badge">Language of Drumming</span></div>
+          <div class="comp-levels">
+            <div class="level-box"><strong>novice</strong><span class="desc">A–D one hand at 40 BPM; Full/Down/Tap/Up named</span><span class="evidence">Pass: A–D R and L at 40 BPM, clear accents</span></div>
+            <div class="level-box"><strong>intermediate</strong><span class="desc">A–P one hand; two-hand A–H; start letter pairs</span><span class="evidence">Pass: A→P one hand at 40; two-hand A–H at 40</span></div>
+            <div class="level-box"><strong>advanced</strong><span class="desc">2–4 letter words; kit transfer; 50–60 BPM ladders</span><span class="evidence">Pass: personal words + letter inside a song groove</span></div>
+            <div class="level-box"><strong>expert</strong><span class="desc">Cold random A–P; musical phrases; honest high BPM</span><span class="evidence">Pass: random A–P at 60; 8-bar multi-letter phrase</span></div>
           </div>
         </div>
 
@@ -108,12 +143,12 @@
         <div class="competency">
           <div class="comp-header"><span>Subdivision &amp; Polyrhythm</span></div>
           <div class="comp-levels">
-            <div class="level-box"><strong>novice</strong><span class="desc">Quarter, 8th, 16th notes</span></div>
-            <div class="level-box"><strong>intermediate</strong><span class="desc">Triplets, 16th syncopation</span>
+            <div class="level-box"><strong>novice</strong><span class="desc">Quarters, 8ths, 16ths, accent grids</span><span class="evidence">Pass: 2–3–4–5–6 + displaced accents at 40–60 BPM</span></div>
+            <div class="level-box"><strong>intermediate</strong><span class="desc">Triplets, 16th syncopation</span><span class="evidence">Pass: switch 16ths ↔ triplets without rushing</span>
             </div>
-            <div class="level-box"><strong>advanced</strong><span class="desc">3:4, 5:4 polyrhythms over groove</span>
+            <div class="level-box"><strong>advanced</strong><span class="desc">3:4, 5:4 polyrhythms over groove</span><span class="evidence">Pass: 2:3 inside a named groove</span>
             </div>
-            <div class="level-box"><strong>expert</strong><span class="desc">Modulate between feels (4/4→6/8→5/4)</span>
+            <div class="level-box"><strong>expert</strong><span class="desc">Modulate between feels (4/4→6/8→5/4)</span><span class="evidence">Pass: modulate mid-song, land on 1</span>
             </div>
           </div>
         </div>
@@ -121,13 +156,13 @@
         <div class="competency">
           <div class="comp-header"><span>Listening &amp; Adaptation</span></div>
           <div class="comp-levels">
-            <div class="level-box"><strong>novice</strong><span class="desc">Follows click or bass</span></div>
-            <div class="level-box"><strong>intermediate</strong><span class="desc">Notices guitar riff, adjusts
-                volume</span></div>
+            <div class="level-box"><strong>novice</strong><span class="desc">Follows click or one instrument</span><span class="evidence">Pass: play along matching kick to bass line</span></div>
+            <div class="level-box"><strong>intermediate</strong><span class="desc">Hears riff/groove language; adjusts
+                volume</span><span class="evidence">Pass: learn a song groove by ear (e.g. Santana)</span></div>
             <div class="level-box"><strong>advanced</strong><span class="desc">Anticipates phrasing, comping for
-                soloists</span></div>
+                soloists</span><span class="evidence">Pass: set up chorus/fill without a chart</span></div>
             <div class="level-box"><strong>expert</strong><span class="desc">Dynamic shape, pushes &amp; pulls
-                energy</span></div>
+                energy</span><span class="evidence">Pass: lead energy for a full tune</span></div>
           </div>
         </div>
 
@@ -152,12 +187,11 @@
         <div class="competency">
           <div class="comp-header"><span>Stylistic Versatility</span></div>
           <div class="comp-levels">
-            <div class="level-box"><strong>novice</strong><span class="desc">Rock, Pop</span></div>
-            <div class="level-box"><strong>intermediate</strong><span class="desc">Jazz, Funk, Shuffles</span></div>
-            <div class="level-box"><strong>advanced</strong><span class="desc">Afro‑Cuban, Brazilian, odd‑meter</span>
+            <div class="level-box"><strong>novice</strong><span class="desc">Rock/Pop + song vehicles (clear 4/4)</span><span class="evidence">Pass: money beat + fills on a named rock/pop tune</span></div>
+            <div class="level-box"><strong>intermediate</strong><span class="desc">Funk, shuffles, light Latin-rock</span><span class="evidence">Pass: switch rock ↔ funk/shuffle feel on songs</span></div>
+            <div class="level-box"><strong>advanced</strong><span class="desc">Afro‑Cuban, Brazilian; deep style study</span><span class="evidence">Pass: clave-correct groove with feet</span>
             </div>
-            <div class="level-box"><strong>expert</strong><span class="desc">Chameleon, authentic cultural
-                language</span></div>
+            <div class="level-box"><strong>expert</strong><span class="desc">Jazz language, odd meters, cultural fluency</span><span class="evidence">Pass: authentic feel after long study — not a checklist song</span></div>
           </div>
         </div>
 
@@ -177,11 +211,11 @@
         <div class="competency">
           <div class="comp-header"><span>Soloing &amp; Improvisation</span></div>
           <div class="comp-levels">
-            <div class="level-box"><strong>novice</strong><span class="desc">4‑bar drum fill</span></div>
-            <div class="level-box"><strong>intermediate</strong><span class="desc">Structured 8‑bar solo</span></div>
-            <div class="level-box"><strong>advanced</strong><span class="desc">Trades 4s, thematic development</span>
+            <div class="level-box"><strong>novice</strong><span class="desc">1–2 bar fills inside a song</span><span class="evidence">Pass: groove→fill→groove on a named tune</span></div>
+            <div class="level-box"><strong>intermediate</strong><span class="desc">Structured 8‑bar solo</span><span class="evidence">Pass: ABA solo written + played to click</span></div>
+            <div class="level-box"><strong>advanced</strong><span class="desc">Trades 4s, thematic development</span><span class="evidence">Pass: answer a phrase on a backing track</span>
             </div>
-            <div class="level-box"><strong>expert</strong><span class="desc">Conversational, tension & release</span>
+            <div class="level-box"><strong>expert</strong><span class="desc">Conversational, tension &amp; release</span><span class="evidence">Pass: 2-min solo with clear story arc</span>
             </div>
           </div>
         </div>
@@ -286,16 +320,21 @@
     <div class="howto">
       <h3>📌 How to use this map</h3>
       <ul>
-        <li><strong>Self‑assessment</strong> — highlight the box you currently occupy in each competency</li>
-        <li><strong>Goal setting</strong> — pick <em>one</em> competency to move from intermediate → advanced each month
-        </li>
+        <li><strong>Self‑assessment</strong> — mark a level only when you can meet its <em>Pass</em> evidence</li>
+        <li><strong>Asymmetric time</strong> — Technical Execution is hardest: give it most pad/kit minutes and stretch each plan “month” (often 6–10 weeks)</li>
+        <li><strong>Start musical domains early</strong> — Perception &amp; Musicality are easier; train them from day 1 in shorter blocks, not after technique is “finished”</li>
+        <li><strong>Groove library</strong> — style/groove first, then song applications + form adaptations (see planner; samples in <code>styles.md</code>)</li>
+        <li><strong>Measurable goals</strong> — BPM ladders (+5 only when clean); named songs for musical work</li>
         <li><strong>Band audition</strong> — prioritise Musicality &amp; Professional domains; a reliable Novice often
           beats a difficult Expert</li>
       </ul>
     </div>
 
-    <div class="footer-note">⏳ Competency map v1.0 · drum &amp; percussion · from awareness to mastery</div>
+    <div class="footer-note">⏳ Competency map v1.1 · asymmetric pacing · technical slow · perception &amp; musicality from day 1</div>
   </div>
+    </section>
+  </main>
+  <script src="hub-theme.js"></script>
 </body>
 
 </html>

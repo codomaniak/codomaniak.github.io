@@ -134,6 +134,15 @@
       word-break: break-word;
     }
 
+    .level-box .evidence {
+      display: block;
+      margin-top: 0.25rem;
+      font-size: 0.6rem;
+      font-weight: 500;
+      color: #3f6a9b;
+      line-height: 1.25;
+    }
+
     /* SPECIALIZED BRANCH (percussionist) */
     .specialized-section {
       background: white;
