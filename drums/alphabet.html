@@ -39,166 +39,178 @@
 
   <main class="layout site-layout site-layout--wide">
     <section class="content site-content">
-  <div class="container">
+      <div class="container">
 
-    <h1>🥁 Greb <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">alphabet trainer</span></h1>
-    <div class="subhead">Binary A–P + ternary Q–X · Full / Down / Tap / Up strokes · kit notation via obsidian-drum-notation</div>
+        <h1>🥁 Greb <span style="font-weight: 300; font-size: 1.8rem; color: #3c5c7c;">alphabet trainer</span></h1>
+        <div class="subhead">Binary A–P + ternary Q–X · Full / Down / Tap / Up strokes · kit notation via
+          obsidian-drum-notation</div>
 
-    <nav class="planner-nav">
-      <a href="index.html">Home</a>
-      <a href="english.html">Competency map</a>
-      <a href="planner.html">Planner</a>
-      <a href="library.html">Grooves &amp; songs</a>
-      <a href="alphabet.html" class="active">Alphabet</a>
-      <a href="Binary Letters (16th-Note Grid).md">Binary letters</a>
-      <a href="Ternary Letters (16th-Note Grid).md">Ternary letters</a>
-    </nav>
+        <nav class="planner-nav">
+          <a href="index.html">Home</a>
+          <a href="english.html">Competency map</a>
+          <a href="planner.html">Planner</a>
+          <a href="library.html">Grooves &amp; songs</a>
+          <a href="alphabet.html" class="active">Alphabet</a>
+          <a href="Binary Letters (16th-Note Grid).md">Binary letters</a>
+          <a href="Ternary Letters (16th-Note Grid).md">Ternary letters</a>
+        </nav>
 
-    <div class="alpha-layout">
-      <div class="main-column">
+        <div class="alpha-layout">
+          <div class="main-column">
 
-        <div class="panel alpha-stage">
-          <div class="alpha-letter-row">
-            <div class="alpha-current" id="current-letter">A</div>
-            <div class="alpha-next">
-              <span class="alpha-next-label">Up next</span>
-              <div id="next-letters"></div>
+            <div class="panel alpha-stage">
+              <div class="alpha-letter-row">
+                <div class="alpha-current" id="current-letter">A</div>
+                <div class="alpha-next">
+                  <span class="alpha-next-label">Up next</span>
+                  <div id="next-letters"></div>
+                </div>
+              </div>
+
+              <div class="alpha-meta">
+                <span>Letter <strong id="meta-index">1</strong> / <strong id="meta-total">24</strong></span>
+                <span id="meta-duration">20 bars</span>
+                <span>Beat <strong id="meta-beat">1</strong> · Slot <strong id="meta-slot">1</strong></span>
+                <span id="meta-status">Ready</span>
+              </div>
+
+              <div class="greb-classic" aria-label="Classic letter shape">
+                <div class="greb-classic-title">Letter shape · accents ● · rests -</div>
+                <div class="greb-classic-card">
+                  <span class="greb-classic-letter" id="greb-classic-letter">A</span>
+                  <div class="greb-classic-row" id="greb-classic-row"></div>
+                </div>
+              </div>
+
+              <div class="stroke-board">
+                <div class="stroke-board-title">Stroke types · <span id="stroke-mode-label">one hand (R)</span></div>
+                <div class="stroke-grid" id="stroke-grid"></div>
+                <div class="stroke-legend">
+                  <span><span class="lg" data-stroke="full">|</span> Full</span>
+                  <span><span class="lg" data-stroke="down">↓</span> Down</span>
+                  <span><span class="lg" data-stroke="tap">-</span> Tap</span>
+                  <span><span class="lg" data-stroke="up">↑</span> Up</span>
+                </div>
+                <div class="pulse-bar" aria-hidden="true">
+                  <div class="pulse-fill" id="pulse-fill"></div>
+                </div>
+              </div>
+
+              <div class="alpha-notation">
+                <p class="panel-sub" style="margin-bottom:0.5rem">Kit pattern (snare + sticking) — Play / Stop / Loop
+                  below. Grid follows the letter: <strong>16</strong> for binary A–P, <strong>12</strong> for ternary
+                  Q–X. <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank"
+                    rel="noopener">obsidian-drum-notation</a>.</p>
+                <div id="notation-preview-host" class="notation-preview-host"></div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h2>Letter chart</h2>
+              <p class="panel-sub">Tap a letter to preview. Sequence: alphabetical A–X, random, or words.</p>
+              <div class="letter-chart" id="letter-chart"></div>
             </div>
           </div>
 
-          <div class="alpha-meta">
-            <span>Letter <strong id="meta-index">1</strong> / <strong id="meta-total">24</strong></span>
-            <span id="meta-duration">20 bars</span>
-            <span>Beat <strong id="meta-beat">1</strong> · Slot <strong id="meta-slot">1</strong></span>
-            <span id="meta-status">Ready</span>
-          </div>
+          <div class="side-column">
+            <div class="panel">
+              <h2>Practice settings</h2>
+              <div class="alpha-controls">
 
-          <div class="greb-classic" aria-label="Classic letter shape">
-            <div class="greb-classic-title">Letter shape · accents ● · rests -</div>
-            <div class="greb-classic-card">
-              <span class="greb-classic-letter" id="greb-classic-letter">A</span>
-              <div class="greb-classic-row" id="greb-classic-row"></div>
+                <div class="control-row">
+                  <label>Sequence</label>
+                  <div class="mode-toggle" id="mode-toggle">
+                    <button type="button" class="active" data-mode="alpha">A→X</button>
+                    <button type="button" data-mode="random">Random</button>
+                    <button type="button" data-mode="word">Word</button>
+                  </div>
+                </div>
+
+                <div class="control-row word-field hidden" id="word-row">
+                  <label for="word-input">Word</label>
+                  <input type="text" id="word-input" placeholder="e.g. BEAD or QUIX" maxlength="32" autocomplete="off">
+                </div>
+
+                <div class="control-row">
+                  <label>Hands</label>
+                  <div class="hand-toggle" id="hand-toggle">
+                    <button type="button" class="active" data-hand="one">One hand (R)</button>
+                    <button type="button" data-hand="left">One hand (L)</button>
+                    <button type="button" data-hand="two">Both hands</button>
+                  </div>
+                </div>
+
+                <div class="control-row">
+                  <label>Duration</label>
+                  <div class="duration-toggle" id="duration-toggle">
+                    <button type="button" class="active" data-dur="bars">Bars</button>
+                    <button type="button" data-dur="time">Time</button>
+                  </div>
+                </div>
+
+                <div class="control-row" id="bars-row">
+                  <label for="bars-input">Bars / letter</label>
+                  <input type="number" id="bars-input" min="1" max="64" value="4">
+                </div>
+
+                <div class="control-row hidden" id="time-row">
+                  <label for="time-input">Seconds / letter</label>
+                  <input type="number" id="time-input" min="5" max="600" value="60" step="5">
+                </div>
+
+                <div class="control-row">
+                  <label for="time-sig-input">Time</label>
+                  <input type="text" id="time-sig-input" value="4/4" placeholder="4/4" spellcheck="false"
+                    autocomplete="off" title="Time signature, e.g. 4/4, 3/4, 6/8">
+                </div>
+
+                <div class="control-row">
+                  <label for="tempo-range">Tempo</label>
+                  <div style="display:flex;align-items:center;gap:0.65rem">
+                    <input type="range" id="tempo-range" min="20" max="160" value="40" step="1">
+                    <span class="tempo-readout"><span id="tempo-value">40</span> BPM</span>
+                  </div>
+                </div>
+
+                <div class="control-row">
+                  <label for="click-select">Click</label>
+                  <select id="click-select">
+                    <option value="quarter">Quarter notes</option>
+                    <option value="eighth">Eighth notes</option>
+                    <option value="sixteenth">16th notes</option>
+                    <option value="off">Off</option>
+                  </select>
+                </div>
+
+                <div class="transport">
+                  <button type="button" class="primary" id="btn-start">Start</button>
+                  <button type="button" id="btn-pause" disabled>Pause</button>
+                  <button type="button" id="btn-stop" disabled>Stop</button>
+                  <button type="button" id="btn-reshuffle">Reshuffle</button>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div class="stroke-board">
-            <div class="stroke-board-title">Stroke types · <span id="stroke-mode-label">one hand (R)</span></div>
-            <div class="stroke-grid" id="stroke-grid"></div>
-            <div class="stroke-legend">
-              <span><span class="lg" data-stroke="full">|</span> Full</span>
-              <span><span class="lg" data-stroke="down">↓</span> Down</span>
-              <span><span class="lg" data-stroke="tap">-</span> Tap</span>
-              <span><span class="lg" data-stroke="up">↑</span> Up</span>
+            <div class="panel">
+              <h2>How it works</h2>
+              <ul class="principle-list">
+                <li>Binary letters A–P are four-part 16th-note beats (1 e &amp; a); ternary letters Q–X are three-part
+                  triplet beats (1 ka ta).</li>
+                <li>Play every slot with the stroke types — accents and Moeller prep (tap/up) on “rest” slots.</li>
+                <li><strong>|</strong> full · <strong>↓</strong> down · <strong>-</strong> tap · <strong>↑</strong> up
+                </li>
+                <li>Kit notation: binary unit <code>X-g-g-g-</code> at <strong>Grid 16</strong> (×2 per bar); ternary
+                  unit <code>X-x-x-</code> at <strong>Grid 12</strong> (×2 per bar).</li>
+                <li>Word mode accepts letters A–X.</li>
+              </ul>
             </div>
-            <div class="pulse-bar" aria-hidden="true"><div class="pulse-fill" id="pulse-fill"></div></div>
-          </div>
-
-          <div class="alpha-notation">
-            <p class="panel-sub" style="margin-bottom:0.5rem">Kit pattern (snare + sticking) — Play / Stop / Loop below. Grid follows the letter: <strong>16</strong> for binary A–P, <strong>12</strong> for ternary Q–X. <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank" rel="noopener">obsidian-drum-notation</a>.</p>
-            <div id="notation-preview-host" class="notation-preview-host"></div>
           </div>
         </div>
 
-        <div class="panel">
-          <h2>Letter chart</h2>
-          <p class="panel-sub">Tap a letter to preview. Sequence: alphabetical A–X, random, or words.</p>
-          <div class="letter-chart" id="letter-chart"></div>
-        </div>
+        <div class="footer-note">Greb binary + ternary alphabet · stroke glyphs · <a
+            href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank"
+            rel="noopener">obsidian-drum-notation</a> (MIT)</div>
       </div>
-
-      <div class="side-column">
-        <div class="panel">
-          <h2>Practice settings</h2>
-          <div class="alpha-controls">
-
-            <div class="control-row">
-              <label>Sequence</label>
-              <div class="mode-toggle" id="mode-toggle">
-                <button type="button" class="active" data-mode="alpha">A→X</button>
-                <button type="button" data-mode="random">Random</button>
-                <button type="button" data-mode="word">Word</button>
-              </div>
-            </div>
-
-            <div class="control-row word-field hidden" id="word-row">
-              <label for="word-input">Word</label>
-              <input type="text" id="word-input" placeholder="e.g. BEAD or QUIX" maxlength="32" autocomplete="off">
-            </div>
-
-            <div class="control-row">
-              <label>Hands</label>
-              <div class="hand-toggle" id="hand-toggle">
-                <button type="button" class="active" data-hand="one">One hand (R)</button>
-                <button type="button" data-hand="left">One hand (L)</button>
-                <button type="button" data-hand="two">Both hands</button>
-              </div>
-            </div>
-
-            <div class="control-row">
-              <label>Duration</label>
-              <div class="duration-toggle" id="duration-toggle">
-                <button type="button" class="active" data-dur="bars">Bars</button>
-                <button type="button" data-dur="time">Time</button>
-              </div>
-            </div>
-
-            <div class="control-row" id="bars-row">
-              <label for="bars-input">Bars / letter</label>
-              <input type="number" id="bars-input" min="1" max="64" value="4">
-            </div>
-
-            <div class="control-row hidden" id="time-row">
-              <label for="time-input">Seconds / letter</label>
-              <input type="number" id="time-input" min="5" max="600" value="60" step="5">
-            </div>
-
-            <div class="control-row">
-              <label for="time-sig-input">Time</label>
-              <input type="text" id="time-sig-input" value="4/4" placeholder="4/4" spellcheck="false" autocomplete="off" title="Time signature, e.g. 4/4, 3/4, 6/8">
-            </div>
-
-            <div class="control-row">
-              <label for="tempo-range">Tempo</label>
-              <div style="display:flex;align-items:center;gap:0.65rem">
-                <input type="range" id="tempo-range" min="40" max="160" value="70" step="1">
-                <span class="tempo-readout"><span id="tempo-value">70</span> BPM</span>
-              </div>
-            </div>
-
-            <div class="control-row">
-              <label for="click-select">Click</label>
-              <select id="click-select">
-                <option value="quarter">Quarter notes</option>
-                <option value="eighth">Eighth notes</option>
-                <option value="sixteenth">16th notes</option>
-                <option value="off">Off</option>
-              </select>
-            </div>
-
-            <div class="transport">
-              <button type="button" class="primary" id="btn-start">Start</button>
-              <button type="button" id="btn-pause" disabled>Pause</button>
-              <button type="button" id="btn-stop" disabled>Stop</button>
-              <button type="button" id="btn-reshuffle">Reshuffle</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>How it works</h2>
-          <ul class="principle-list">
-            <li>Binary letters A–P are four-part 16th-note beats (1 e &amp; a); ternary letters Q–X are three-part triplet beats (1 ka ta).</li>
-            <li>Play every slot with the stroke types — accents and Moeller prep (tap/up) on “rest” slots.</li>
-            <li><strong>|</strong> full · <strong>↓</strong> down · <strong>-</strong> tap · <strong>↑</strong> up</li>
-            <li>Kit notation: binary unit <code>X-g-g-g-</code> at <strong>Grid 16</strong> (×2 per bar); ternary unit <code>X-x-x-</code> at <strong>Grid 12</strong> (×2 per bar).</li>
-            <li>Word mode accepts letters A–X.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer-note">Greb binary + ternary alphabet · stroke glyphs · <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank" rel="noopener">obsidian-drum-notation</a> (MIT)</div>
-  </div>
     </section>
   </main>
 
