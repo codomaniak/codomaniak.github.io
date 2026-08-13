@@ -48,7 +48,7 @@ const BINARY_LETTERS = [
     grid: 16,
     pattern: 'X-g-g-g-X-g-g-g-',
     oneHand: parseOneHand('down-tap-tap-up'),
-    twoHands: parseTwoHands('Rdown-Ltap-Rtap-Lup')
+    twoHands: parseTwoHands('Rdown-Ltap-Rup-Ltap')
   },
   {
     id: 'B', greb: '. X . .', hits: parseGrebHits('. X . .'), unit: 'g-X-g-g-',

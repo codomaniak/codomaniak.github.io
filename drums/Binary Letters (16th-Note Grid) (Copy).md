@@ -8,7 +8,7 @@ Note: kit patterns use unit `X-g-g-x-` (8 slots). **Grid 16** bar = unit × 2 (1
 
 | Letter | Greb's notation | pattern (Grid 16) | pattern (Grid 32) | one hand stroke types | two hands stroke types |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| A | X . . . | X-g-g-x-X-g-g-x- | X-g-g-x-X-g-g-x-X-g-g-x-X-g-g-x- | full-tap-tap-up | Rdown-Ldown-Rup-Lup |
+| A | X . . . | X-g-g-x-X-g-g-x- | X-g-g-x-X-g-g-x-X-g-g-x-X-g-g-x- | full-tap-tap-up | Rdown-Ltap-Rup-Ltap |
 | B | . X . . | g-X-x-x-g-X-x-x- | g-X-x-x-g-X-x-x-g-X-x-x-g-X-x-x- | up-down-tap-up | Rtap-Ldown-Rup-Lup |
 | C | . . X . | g-x-X-x-g-x-X-x- | g-x-X-x-g-x-X-x-g-x-X-x-g-x-X-x- | tap-up-down-up | Rup-Ltap-Rfull-Ltap |
 | D | . . . X | g-g-x-X-g-g-x-X- | g-g-x-X-g-g-x-X-g-g-x-X-g-g-x-X- | tap-tap-up-down | Rtap-Lup-Rtap-Lfull |
