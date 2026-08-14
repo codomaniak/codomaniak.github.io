@@ -55,14 +55,14 @@ const BINARY_LETTERS = [
     grid: 16,
     pattern: 'g-X-g-g-g-X-g-g-',
     oneHand: parseOneHand('up-down-tap-tap'),
-    twoHands: parseTwoHands('Rtap-Ldown-Rup-Lup')
+    twoHands: parseTwoHands('Rtap-Ldown-Rtap-Lup')
   },
   {
     id: 'C', greb: '. . X .', hits: parseGrebHits('. . X .'), unit: 'g-g-X-g-',
     grid: 16,
     pattern: 'g-g-X-g-g-g-X-g-',
     oneHand: parseOneHand('tap-up-down-tap'),
-    twoHands: parseTwoHands('Rup-Ltap-Rfull-Ltap')
+    twoHands: parseTwoHands('Rup-Ltap-Rdown-Ltap')
   },
   {
     id: 'D', greb: '. . . X', hits: parseGrebHits('. . . X'), unit: 'g-g-g-X-',
