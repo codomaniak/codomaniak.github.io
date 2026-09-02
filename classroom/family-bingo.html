@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Family — Classroom Bingo</title>
+    <style>
+        :root {
+            font-family: system-ui, sans-serif;
+            color: #1a1a1a;
+            background: #f5f7fb;
+        }
+
+        body {
+            margin: 0;
+            padding: 1.5rem;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .panel {
+            background: #fff;
+            border: 1px solid #d7deea;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+        }
+
+        .controls {
+            display: flex;
+            gap: .75rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: .65rem 1rem;
+            background: #356593;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button.secondary {
+            background: #5b6472;
+        }
+
+        .definition-box {
+            min-height: 4rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #eef4fb;
+            border: 1px solid #c9d7ea;
+            font-size: 1.25rem;
+            line-height: 1.5;
+        }
+
+        .term-reveal {
+            margin-top: .75rem;
+            font-weight: 600;
+            color: #356593;
+        }
+
+        .called-list {
+            columns: 2;
+            gap: 1rem;
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .bingo-card {
+            background: #fff;
+            border: 1px solid #d7deea;
+            border-radius: 10px;
+            padding: .75rem;
+            page-break-inside: avoid;
+        }
+
+        .bingo-card h2 {
+            font-size: 1rem;
+            margin: 0 0 .5rem;
+        }
+
+        table.board {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        table.board td {
+            border: 1px solid #333;
+            text-align: center;
+            vertical-align: middle;
+            height: 3.2rem;
+            padding: .25rem;
+            font-size: .85rem;
+            word-wrap: break-word;
+        }
+
+        table.board td.free {
+            background: #ffe08a;
+            font-weight: 700;
+        }
+
+        .student-name {
+            margin: .5rem 0 0;
+            font-size: .9rem;
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .cards-grid {
+                display: block;
+            }
+
+            .bingo-card {
+                break-inside: avoid;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="no-print">
+        <h1>Family</h1>
+        <p>Teacher view: call out definitions. Students mark the matching term on their printed cards.</p>
+
+        <section class="panel">
+            <h2>Definition caller</h2>
+            <div class="controls">
+                <button id="next-btn" type="button">Next definition</button>
+                <button id="reveal-btn" class="secondary" type="button">Reveal term</button>
+                <button id="reset-btn" class="secondary" type="button">Reset session</button>
+                <button id="print-btn" class="secondary" type="button" onclick="window.print()">Print student
+                    cards</button>
+            </div>
+            <div id="definition-box" class="definition-box">Press “Next definition” to start.</div>
+            <div id="term-reveal" class="term-reveal"></div>
+            <h3>Called (56 total)</h3>
+            <ol id="called-list" class="called-list"></ol>
+        </section>
+    </div>
+
+    <section class="panel">
+        <h2 class="no-print">Student cards (24)</h2>
+        <div class="cards-grid">
+            <section class="bingo-card" data-card="0">
+                <h2>Family — Card 1</h2>
+                <table class="board">
+                    <tr>
+                        <td>granddaughter</td>
+                        <td>younger</td>
+                        <td>twins</td>
+                        <td>to raise children</td>
+                        <td>elder</td>
+                    </tr>
+                    <tr>
+                        <td>wedding</td>
+                        <td>stepmother</td>
+                        <td>great-grandchild</td>
+                        <td>father</td>
+                        <td>brother</td>
+                    </tr>
+                    <tr>
+                        <td>grandson</td>
+                        <td>niece</td>
+                        <td class="free">FREE</td>
+                        <td>widow</td>
+                        <td>aunt</td>
+                    </tr>
+                    <tr>
+                        <td>sister</td>
+                        <td>daughter-in-law</td>
+                        <td>ex-wife</td>
+                        <td>family tree</td>
+                        <td>nephew</td>
+                    </tr>
+                    <tr>
+                        <td>uncle</td>
+                        <td>ex-husband</td>
+                        <td>son-in-law</td>
+                        <td>married</td>
+                        <td>sister-in-law</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="1">
+                <h2>Family — Card 2</h2>
+                <table class="board">
+                    <tr>
+                        <td>great-grandchild</td>
+                        <td>stepfather</td>
+                        <td>widower</td>
+                        <td>niece</td>
+                        <td>half-brother</td>
+                    </tr>
+                    <tr>
+                        <td>son-in-law</td>
+                        <td>marriage</td>
+                        <td>to bring up children</td>
+                        <td>sibling</td>
+                        <td>stepsister</td>
+                    </tr>
+                    <tr>
+                        <td>aunt</td>
+                        <td>uncle</td>
+                        <td class="free">FREE</td>
+                        <td>stepchild</td>
+                        <td>great-grandfather</td>
+                    </tr>
+                    <tr>
+                        <td>to marry</td>
+                        <td>stepbrother</td>
+                        <td>father</td>
+                        <td>granddaughter</td>
+                        <td>to get married</td>
+                    </tr>
+                    <tr>
+                        <td>mother-in-law</td>
+                        <td>wife</td>
+                        <td>grandson</td>
+                        <td>grandparents</td>
+                        <td>brother</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="2">
+                <h2>Family — Card 3</h2>
+                <table class="board">
+                    <tr>
+                        <td>ex-husband</td>
+                        <td>to get married</td>
+                        <td>ex-wife</td>
+                        <td>half-brother</td>
+                        <td>husband</td>
+                    </tr>
+                    <tr>
+                        <td>stepchild</td>
+                        <td>cousin</td>
+                        <td>to marry</td>
+                        <td>grandmother</td>
+                        <td>uncle</td>
+                    </tr>
+                    <tr>
+                        <td>father</td>
+                        <td>married</td>
+                        <td class="free">FREE</td>
+                        <td>mother-in-law</td>
+                        <td>daughter-in-law</td>
+                    </tr>
+                    <tr>
+                        <td>wife</td>
+                        <td>great-grandchild</td>
+                        <td>relatives</td>
+                        <td>parents</td>
+                        <td>granddaughter</td>
+                    </tr>
+                    <tr>
+                        <td>to bring up children</td>
+                        <td>stepsister</td>
+                        <td>grandparents</td>
+                        <td>younger</td>
+                        <td>single</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="3">
+                <h2>Family — Card 4</h2>
+                <table class="board">
+                    <tr>
+                        <td>elder</td>
+                        <td>ex-husband</td>
+                        <td>granddaughter</td>
+                        <td>sister-in-law</td>
+                        <td>ex-wife</td>
+                    </tr>
+                    <tr>
+                        <td>grandfather</td>
+                        <td>grandson</td>
+                        <td>mother</td>
+                        <td>son</td>
+                        <td>widow</td>
+                    </tr>
+                    <tr>
+                        <td>grandchildren</td>
+                        <td>son-in-law</td>
+                        <td class="free">FREE</td>
+                        <td>grandparents</td>
+                        <td>children</td>
+                    </tr>
+                    <tr>
+                        <td>stepfather</td>
+                        <td>brother-in-law</td>
+                        <td>daughter</td>
+                        <td>grandmother</td>
+                        <td>niece</td>
+                    </tr>
+                    <tr>
+                        <td>single</td>
+                        <td>great-grandmother</td>
+                        <td>stepchild</td>
+                        <td>nephew</td>
+                        <td>half-brother</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="4">
+                <h2>Family — Card 5</h2>
+                <table class="board">
+                    <tr>
+                        <td>elder</td>
+                        <td>great-grandmother</td>
+                        <td>mother-in-law</td>
+                        <td>children</td>
+                        <td>granddaughter</td>
+                    </tr>
+                    <tr>
+                        <td>daughter-in-law</td>
+                        <td>father-in-law</td>
+                        <td>ex-wife</td>
+                        <td>son</td>
+                        <td>grandchildren</td>
+                    </tr>
+                    <tr>
+                        <td>stepbrother</td>
+                        <td>great-grandchild</td>
+                        <td class="free">FREE</td>
+                        <td>stepsister</td>
+                        <td>stepfather</td>
+                    </tr>
+                    <tr>
+                        <td>sibling</td>
+                        <td>sister</td>
+                        <td>aunt</td>
+                        <td>son-in-law</td>
+                        <td>single</td>
+                    </tr>
+                    <tr>
+                        <td>widow</td>
+                        <td>marriage</td>
+                        <td>widower</td>
+                        <td>niece</td>
+                        <td>stepmother</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="5">
+                <h2>Family — Card 6</h2>
+                <table class="board">
+                    <tr>
+                        <td>stepsister</td>
+                        <td>to get married</td>
+                        <td>husband</td>
+                        <td>daughter</td>
+                        <td>grandparents</td>
+                    </tr>
+                    <tr>
+                        <td>father-in-law</td>
+                        <td>relatives</td>
+                        <td>aunt</td>
+                        <td>brother-in-law</td>
+                        <td>son</td>
+                    </tr>
+                    <tr>
+                        <td>half-brother</td>
+                        <td>great-grandmother</td>
+                        <td class="free">FREE</td>
+                        <td>elder</td>
+                        <td>cousin</td>
+                    </tr>
+                    <tr>
+                        <td>wedding</td>
+                        <td>sister-in-law</td>
+                        <td>wife</td>
+                        <td>married</td>
+                        <td>mother</td>
+                    </tr>
+                    <tr>
+                        <td>marriage</td>
+                        <td>son-in-law</td>
+                        <td>children</td>
+                        <td>stepmother</td>
+                        <td>to marry</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="6">
+                <h2>Family — Card 7</h2>
+                <table class="board">
+                    <tr>
+                        <td>stepmother</td>
+                        <td>father-in-law</td>
+                        <td>grandmother</td>
+                        <td>father</td>
+                        <td>uncle</td>
+                    </tr>
+                    <tr>
+                        <td>sibling</td>
+                        <td>grandparents</td>
+                        <td>parents</td>
+                        <td>stepchild</td>
+                        <td>cousin</td>
+                    </tr>
+                    <tr>
+                        <td>to raise children</td>
+                        <td>younger</td>
+                        <td class="free">FREE</td>
+                        <td>stepsister</td>
+                        <td>family tree</td>
+                    </tr>
+                    <tr>
+                        <td>daughter</td>
+                        <td>mother-in-law</td>
+                        <td>daughter-in-law</td>
+                        <td>to bring up children</td>
+                        <td>brother-in-law</td>
+                    </tr>
+                    <tr>
+                        <td>great-grandfather</td>
+                        <td>widower</td>
+                        <td>to marry</td>
+                        <td>son-in-law</td>
+                        <td>stepfather</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="7">
+                <h2>Family — Card 8</h2>
+                <table class="board">
+                    <tr>
+                        <td>sister</td>
+                        <td>to raise children</td>
+                        <td>sister-in-law</td>
+                        <td>stepsister</td>
+                        <td>widow</td>
+                    </tr>
+                    <tr>
+                        <td>mother</td>
+                        <td>niece</td>
+                        <td>family tree</td>
+                        <td>widower</td>
+                        <td>divorce</td>
+                    </tr>
+                    <tr>
+                        <td>grandfather</td>
+                        <td>to bring up children</td>
+                        <td class="free">FREE</td>
+                        <td>husband</td>
+                        <td>younger</td>
+                    </tr>
+                    <tr>
+                        <td>grandchildren</td>
+                        <td>mother-in-law</td>
+                        <td>father-in-law</td>
+                        <td>parents</td>
+                        <td>daughter-in-law</td>
+                    </tr>
+                    <tr>
+                        <td>to marry</td>
+                        <td>married</td>
+                        <td>daughter</td>
+                        <td>granddaughter</td>
+                        <td>great-grandmother</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="8">
+                <h2>Family — Card 9</h2>
+                <table class="board">
+                    <tr>
+                        <td>family tree</td>
+                        <td>ex-husband</td>
+                        <td>to get married</td>
+                        <td>great-grandfather</td>
+                        <td>wife</td>
+                    </tr>
+                    <tr>
+                        <td>to raise children</td>
+                        <td>sibling</td>
+                        <td>ex-wife</td>
+                        <td>half-sister</td>
+                        <td>uncle</td>
+                    </tr>
+                    <tr>
+                        <td>daughter-in-law</td>
+                        <td>great-grandmother</td>
+                        <td class="free">FREE</td>
+                        <td>to bring up children</td>
+                        <td>to marry</td>
+                    </tr>
+                    <tr>
+                        <td>grandfather</td>
+                        <td>parents</td>
+                        <td>grandchildren</td>
+                        <td>married</td>
+                        <td>younger</td>
+                    </tr>
+                    <tr>
+                        <td>stepmother</td>
+                        <td>wedding</td>
+                        <td>aunt</td>
+                        <td>twins</td>
+                        <td>mother</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="9">
+                <h2>Family — Card 10</h2>
+                <table class="board">
+                    <tr>
+                        <td>sister-in-law</td>
+                        <td>wedding</td>
+                        <td>divorce</td>
+                        <td>son</td>
+                        <td>aunt</td>
+                    </tr>
+                    <tr>
+                        <td>mother</td>
+                        <td>stepbrother</td>
+                        <td>cousin</td>
+                        <td>stepfather</td>
+                        <td>to marry</td>
+                    </tr>
+                    <tr>
+                        <td>family tree</td>
+                        <td>father-in-law</td>
+                        <td class="free">FREE</td>
+                        <td>grandfather</td>
+                        <td>niece</td>
+                    </tr>
+                    <tr>
+                        <td>granddaughter</td>
+                        <td>uncle</td>
+                        <td>ex-husband</td>
+                        <td>great-grandmother</td>
+                        <td>to raise children</td>
+                    </tr>
+                    <tr>
+                        <td>daughter-in-law</td>
+                        <td>grandson</td>
+                        <td>nephew</td>
+                        <td>elder</td>
+                        <td>mother-in-law</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="10">
+                <h2>Family — Card 11</h2>
+                <table class="board">
+                    <tr>
+                        <td>to raise children</td>
+                        <td>younger</td>
+                        <td>widow</td>
+                        <td>sister</td>
+                        <td>twins</td>
+                    </tr>
+                    <tr>
+                        <td>married</td>
+                        <td>granddaughter</td>
+                        <td>daughter</td>
+                        <td>brother-in-law</td>
+                        <td>to marry</td>
+                    </tr>
+                    <tr>
+                        <td>marriage</td>
+                        <td>uncle</td>
+                        <td class="free">FREE</td>
+                        <td>daughter-in-law</td>
+                        <td>relatives</td>
+                    </tr>
+                    <tr>
+                        <td>elder</td>
+                        <td>half-brother</td>
+                        <td>sister-in-law</td>
+                        <td>children</td>
+                        <td>ex-wife</td>
+                    </tr>
+                    <tr>
+                        <td>grandparents</td>
+                        <td>wife</td>
+                        <td>father-in-law</td>
+                        <td>stepchild</td>
+                        <td>cousin</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="11">
+                <h2>Family — Card 12</h2>
+                <table class="board">
+                    <tr>
+                        <td>stepmother</td>
+                        <td>marriage</td>
+                        <td>family tree</td>
+                        <td>divorce</td>
+                        <td>grandparents</td>
+                    </tr>
+                    <tr>
+                        <td>married</td>
+                        <td>stepfather</td>
+                        <td>mother-in-law</td>
+                        <td>sister</td>
+                        <td>ex-wife</td>
+                    </tr>
+                    <tr>
+                        <td>stepbrother</td>
+                        <td>daughter</td>
+                        <td class="free">FREE</td>
+                        <td>grandmother</td>
+                        <td>granddaughter</td>
+                    </tr>
+                    <tr>
+                        <td>father-in-law</td>
+                        <td>to bring up children</td>
+                        <td>brother-in-law</td>
+                        <td>elder</td>
+                        <td>wife</td>
+                    </tr>
+                    <tr>
+                        <td>great-grandchild</td>
+                        <td>brother</td>
+                        <td>son</td>
+                        <td>to raise children</td>
+                        <td>stepsister</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="12">
+                <h2>Family — Card 13</h2>
+                <table class="board">
+                    <tr>
+                        <td>niece</td>
+                        <td>stepsister</td>
+                        <td>sister</td>
+                        <td>son-in-law</td>
+                        <td>grandson</td>
+                    </tr>
+                    <tr>
+                        <td>daughter-in-law</td>
+                        <td>widow</td>
+                        <td>elder</td>
+                        <td>great-grandchild</td>
+                        <td>family tree</td>
+                    </tr>
+                    <tr>
+                        <td>marriage</td>
+                        <td>mother</td>
+                        <td class="free">FREE</td>
+                        <td>sibling</td>
+                        <td>father-in-law</td>
+                    </tr>
+                    <tr>
+                        <td>half-sister</td>
+                        <td>sister-in-law</td>
+                        <td>to marry</td>
+                        <td>uncle</td>
+                        <td>parents</td>
+                    </tr>
+                    <tr>
+                        <td>twins</td>
+                        <td>widower</td>
+                        <td>stepfather</td>
+                        <td>grandfather</td>
+                        <td>brother-in-law</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="13">
+                <h2>Family — Card 14</h2>
+                <table class="board">
+                    <tr>
+                        <td>brother-in-law</td>
+                        <td>granddaughter</td>
+                        <td>mother-in-law</td>
+                        <td>stepsister</td>
+                        <td>daughter</td>
+                    </tr>
+                    <tr>
+                        <td>to get married</td>
+                        <td>cousin</td>
+                        <td>twins</td>
+                        <td>elder</td>
+                        <td>nephew</td>
+                    </tr>
+                    <tr>
+                        <td>grandchildren</td>
+                        <td>brother</td>
+                        <td class="free">FREE</td>
+                        <td>stepchild</td>
+                        <td>grandfather</td>
+                    </tr>
+                    <tr>
+                        <td>grandparents</td>
+                        <td>to marry</td>
+                        <td>great-grandmother</td>
+                        <td>to raise children</td>
+                        <td>parents</td>
+                    </tr>
+                    <tr>
+                        <td>uncle</td>
+                        <td>stepfather</td>
+                        <td>younger</td>
+                        <td>husband</td>
+                        <td>widower</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="14">
+                <h2>Family — Card 15</h2>
+                <table class="board">
+                    <tr>
+                        <td>wife</td>
+                        <td>stepchild</td>
+                        <td>stepfather</td>
+                        <td>great-grandmother</td>
+                        <td>to raise children</td>
+                    </tr>
+                    <tr>
+                        <td>single</td>
+                        <td>stepbrother</td>
+                        <td>grandmother</td>
+                        <td>stepmother</td>
+                        <td>aunt</td>
+                    </tr>
+                    <tr>
+                        <td>grandchildren</td>
+                        <td>mother-in-law</td>
+                        <td class="free">FREE</td>
+                        <td>daughter-in-law</td>
+                        <td>grandson</td>
+                    </tr>
+                    <tr>
+                        <td>to get married</td>
+                        <td>half-sister</td>
+                        <td>widower</td>
+                        <td>sister</td>
+                        <td>sister-in-law</td>
+                    </tr>
+                    <tr>
+                        <td>relatives</td>
+                        <td>parents</td>
+                        <td>grandparents</td>
+                        <td>children</td>
+                        <td>great-grandfather</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="15">
+                <h2>Family — Card 16</h2>
+                <table class="board">
+                    <tr>
+                        <td>to raise children</td>
+                        <td>parents</td>
+                        <td>cousin</td>
+                        <td>daughter-in-law</td>
+                        <td>stepbrother</td>
+                    </tr>
+                    <tr>
+                        <td>son</td>
+                        <td>to bring up children</td>
+                        <td>son-in-law</td>
+                        <td>daughter</td>
+                        <td>aunt</td>
+                    </tr>
+                    <tr>
+                        <td>wedding</td>
+                        <td>father</td>
+                        <td class="free">FREE</td>
+                        <td>father-in-law</td>
+                        <td>divorce</td>
+                    </tr>
+                    <tr>
+                        <td>to marry</td>
+                        <td>stepchild</td>
+                        <td>children</td>
+                        <td>family tree</td>
+                        <td>sister-in-law</td>
+                    </tr>
+                    <tr>
+                        <td>stepfather</td>
+                        <td>grandparents</td>
+                        <td>half-sister</td>
+                        <td>great-grandmother</td>
+                        <td>twins</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="16">
+                <h2>Family — Card 17</h2>
+                <table class="board">
+                    <tr>
+                        <td>younger</td>
+                        <td>half-brother</td>
+                        <td>husband</td>
+                        <td>family tree</td>
+                        <td>divorce</td>
+                    </tr>
+                    <tr>
+                        <td>nephew</td>
+                        <td>grandson</td>
+                        <td>grandmother</td>
+                        <td>brother</td>
+                        <td>brother-in-law</td>
+                    </tr>
+                    <tr>
+                        <td>sister</td>
+                        <td>marriage</td>
+                        <td class="free">FREE</td>
+                        <td>daughter</td>
+                        <td>twins</td>
+                    </tr>
+                    <tr>
+                        <td>widow</td>
+                        <td>granddaughter</td>
+                        <td>grandchildren</td>
+                        <td>grandfather</td>
+                        <td>wedding</td>
+                    </tr>
+                    <tr>
+                        <td>son</td>
+                        <td>great-grandmother</td>
+                        <td>father-in-law</td>
+                        <td>niece</td>
+                        <td>daughter-in-law</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="17">
+                <h2>Family — Card 18</h2>
+                <table class="board">
+                    <tr>
+                        <td>wedding</td>
+                        <td>married</td>
+                        <td>stepsister</td>
+                        <td>twins</td>
+                        <td>stepbrother</td>
+                    </tr>
+                    <tr>
+                        <td>widower</td>
+                        <td>single</td>
+                        <td>family tree</td>
+                        <td>husband</td>
+                        <td>ex-wife</td>
+                    </tr>
+                    <tr>
+                        <td>granddaughter</td>
+                        <td>children</td>
+                        <td class="free">FREE</td>
+                        <td>sibling</td>
+                        <td>nephew</td>
+                    </tr>
+                    <tr>
+                        <td>grandfather</td>
+                        <td>cousin</td>
+                        <td>brother-in-law</td>
+                        <td>wife</td>
+                        <td>grandchildren</td>
+                    </tr>
+                    <tr>
+                        <td>aunt</td>
+                        <td>daughter-in-law</td>
+                        <td>mother</td>
+                        <td>sister</td>
+                        <td>father</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="18">
+                <h2>Family — Card 19</h2>
+                <table class="board">
+                    <tr>
+                        <td>stepmother</td>
+                        <td>to marry</td>
+                        <td>aunt</td>
+                        <td>family tree</td>
+                        <td>stepbrother</td>
+                    </tr>
+                    <tr>
+                        <td>married</td>
+                        <td>brother</td>
+                        <td>grandchildren</td>
+                        <td>to raise children</td>
+                        <td>granddaughter</td>
+                    </tr>
+                    <tr>
+                        <td>children</td>
+                        <td>uncle</td>
+                        <td class="free">FREE</td>
+                        <td>nephew</td>
+                        <td>divorce</td>
+                    </tr>
+                    <tr>
+                        <td>single</td>
+                        <td>stepfather</td>
+                        <td>son</td>
+                        <td>cousin</td>
+                        <td>widow</td>
+                    </tr>
+                    <tr>
+                        <td>wife</td>
+                        <td>wedding</td>
+                        <td>ex-husband</td>
+                        <td>grandmother</td>
+                        <td>father</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="19">
+                <h2>Family — Card 20</h2>
+                <table class="board">
+                    <tr>
+                        <td>niece</td>
+                        <td>half-sister</td>
+                        <td>granddaughter</td>
+                        <td>great-grandmother</td>
+                        <td>brother</td>
+                    </tr>
+                    <tr>
+                        <td>married</td>
+                        <td>grandchildren</td>
+                        <td>grandparents</td>
+                        <td>widow</td>
+                        <td>cousin</td>
+                    </tr>
+                    <tr>
+                        <td>sibling</td>
+                        <td>daughter</td>
+                        <td class="free">FREE</td>
+                        <td>sister-in-law</td>
+                        <td>children</td>
+                    </tr>
+                    <tr>
+                        <td>wife</td>
+                        <td>stepsister</td>
+                        <td>younger</td>
+                        <td>half-brother</td>
+                        <td>sister</td>
+                    </tr>
+                    <tr>
+                        <td>uncle</td>
+                        <td>wedding</td>
+                        <td>nephew</td>
+                        <td>daughter-in-law</td>
+                        <td>father</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="20">
+                <h2>Family — Card 21</h2>
+                <table class="board">
+                    <tr>
+                        <td>stepsister</td>
+                        <td>grandmother</td>
+                        <td>to raise children</td>
+                        <td>divorce</td>
+                        <td>half-sister</td>
+                    </tr>
+                    <tr>
+                        <td>grandchildren</td>
+                        <td>to get married</td>
+                        <td>stepbrother</td>
+                        <td>to marry</td>
+                        <td>single</td>
+                    </tr>
+                    <tr>
+                        <td>married</td>
+                        <td>ex-husband</td>
+                        <td class="free">FREE</td>
+                        <td>grandparents</td>
+                        <td>brother</td>
+                    </tr>
+                    <tr>
+                        <td>ex-wife</td>
+                        <td>widower</td>
+                        <td>to bring up children</td>
+                        <td>uncle</td>
+                        <td>daughter</td>
+                    </tr>
+                    <tr>
+                        <td>widow</td>
+                        <td>twins</td>
+                        <td>marriage</td>
+                        <td>wedding</td>
+                        <td>parents</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="21">
+                <h2>Family — Card 22</h2>
+                <table class="board">
+                    <tr>
+                        <td>sister</td>
+                        <td>great-grandfather</td>
+                        <td>stepmother</td>
+                        <td>ex-wife</td>
+                        <td>father-in-law</td>
+                    </tr>
+                    <tr>
+                        <td>wedding</td>
+                        <td>stepchild</td>
+                        <td>stepbrother</td>
+                        <td>parents</td>
+                        <td>granddaughter</td>
+                    </tr>
+                    <tr>
+                        <td>to marry</td>
+                        <td>cousin</td>
+                        <td class="free">FREE</td>
+                        <td>half-brother</td>
+                        <td>wife</td>
+                    </tr>
+                    <tr>
+                        <td>widower</td>
+                        <td>daughter-in-law</td>
+                        <td>father</td>
+                        <td>relatives</td>
+                        <td>half-sister</td>
+                    </tr>
+                    <tr>
+                        <td>ex-husband</td>
+                        <td>son-in-law</td>
+                        <td>grandchildren</td>
+                        <td>brother</td>
+                        <td>daughter</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="22">
+                <h2>Family — Card 23</h2>
+                <table class="board">
+                    <tr>
+                        <td>great-grandmother</td>
+                        <td>cousin</td>
+                        <td>half-sister</td>
+                        <td>relatives</td>
+                        <td>nephew</td>
+                    </tr>
+                    <tr>
+                        <td>stepsister</td>
+                        <td>mother</td>
+                        <td>stepfather</td>
+                        <td>husband</td>
+                        <td>grandson</td>
+                    </tr>
+                    <tr>
+                        <td>half-brother</td>
+                        <td>mother-in-law</td>
+                        <td class="free">FREE</td>
+                        <td>brother-in-law</td>
+                        <td>son</td>
+                    </tr>
+                    <tr>
+                        <td>great-grandchild</td>
+                        <td>stepbrother</td>
+                        <td>grandparents</td>
+                        <td>father</td>
+                        <td>married</td>
+                    </tr>
+                    <tr>
+                        <td>sister</td>
+                        <td>ex-wife</td>
+                        <td>ex-husband</td>
+                        <td>wedding</td>
+                        <td>niece</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+            <section class="bingo-card" data-card="23">
+                <h2>Family — Card 24</h2>
+                <table class="board">
+                    <tr>
+                        <td>grandchildren</td>
+                        <td>relatives</td>
+                        <td>sister-in-law</td>
+                        <td>sibling</td>
+                        <td>stepmother</td>
+                    </tr>
+                    <tr>
+                        <td>wife</td>
+                        <td>father-in-law</td>
+                        <td>younger</td>
+                        <td>great-grandfather</td>
+                        <td>elder</td>
+                    </tr>
+                    <tr>
+                        <td>grandparents</td>
+                        <td>married</td>
+                        <td class="free">FREE</td>
+                        <td>wedding</td>
+                        <td>brother</td>
+                    </tr>
+                    <tr>
+                        <td>granddaughter</td>
+                        <td>marriage</td>
+                        <td>cousin</td>
+                        <td>children</td>
+                        <td>to raise children</td>
+                    </tr>
+                    <tr>
+                        <td>to get married</td>
+                        <td>single</td>
+                        <td>great-grandmother</td>
+                        <td>mother</td>
+                        <td>husband</td>
+                    </tr>
+                </table>
+                <p class="student-name">Name: _________________________</p>
+            </section>
+        </div>
+    </section>
+
+    <script>
+        const vocabulary = [{ "term": "aunt", "definition": "the sister of one's father or mother, or the wife of one's uncle" }, { "term": "brother", "definition": "a male sibling" }, { "term": "brother-in-law", "definition": "the brother of one's spouse or the husband of one's sister" }, { "term": "children", "definition": "offspring produced by parents" }, { "term": "cousin", "definition": "the child of one's aunt or uncle" }, { "term": "daughter", "definition": "a female child" }, { "term": "daughter-in-law", "definition": "the wife of one's son" }, { "term": "divorce", "definition": "the legal dissolution of a marriage" }, { "term": "elder", "definition": "born before another person" }, { "term": "ex-husband", "definition": "a former husband" }, { "term": "ex-wife", "definition": "a former wife" }, { "term": "family tree", "definition": "a diagram showing the lineage and relationships of a family" }, { "term": "father", "definition": "a male parent" }, { "term": "father-in-law", "definition": "the father of one's spouse" }, { "term": "grandchildren", "definition": "the children of one's son or daughter" }, { "term": "granddaughter", "definition": "a daughter of one's son or daughter" }, { "term": "grandfather", "definition": "the father of one's father or mother" }, { "term": "grandmother", "definition": "the mother of one's father or mother" }, { "term": "grandparents", "definition": "the parents of one's parents" }, { "term": "grandson", "definition": "a son of one's son or daughter" }, { "term": "great-grandchild", "definition": "the child of one's grandchild" }, { "term": "great-grandfather", "definition": "the father of one's grandparent" }, { "term": "great-grandmother", "definition": "the mother of one's grandparent" }, { "term": "half-brother", "definition": "a brother with whom one shares only one parent" }, { "term": "half-sister", "definition": "a sister with whom one shares only one parent" }, { "term": "husband", "definition": "a male partner in a marriage" }, { "term": "marriage", "definition": "the legal or formal union of two people as spouses" }, { "term": "married", "definition": "having a married status" }, { "term": "mother", "definition": "a female parent" }, { "term": "mother-in-law", "definition": "the mother of one's spouse" }, { "term": "nephew", "definition": "the son of one's brother or sister" }, { "term": "niece", "definition": "the daughter of one's brother or sister" }, { "term": "parents", "definition": "a mother and father" }, { "term": "relatives", "definition": "people connected by blood or marriage" }, { "term": "sibling", "definition": "a brother or sister" }, { "term": "single", "definition": "not married or in a committed relationship" }, { "term": "sister", "definition": "a female sibling" }, { "term": "sister-in-law", "definition": "the sister of one's spouse or the wife of one's brother" }, { "term": "son", "definition": "a male child" }, { "term": "son-in-law", "definition": "the husband of one's daughter" }, { "term": "stepbrother", "definition": "the son of one's stepmother or stepfather" }, { "term": "stepchild", "definition": "the child of one's spouse from a previous relationship" }, { "term": "stepfather", "definition": "the man who marries someone who already has children" }, { "term": "stepmother", "definition": "the woman who marries someone who already has children" }, { "term": "stepsister", "definition": "the daughter of one's stepmother or stepfather" }, { "term": "to bring up children", "definition": "to care for and educate children as they grow up" }, { "term": "to marry", "definition": "to become a married person" }, { "term": "to get married", "definition": "to take part in a wedding ceremony" }, { "term": "to raise children", "definition": "to care for and help children to grow into adults" }, { "term": "twins", "definition": "two children born at the same birth" }, { "term": "uncle", "definition": "the brother of one's father or mother, or the husband of one's aunt" }, { "term": "wedding", "definition": "a marriage ceremony" }, { "term": "widow", "definition": "a woman whose husband has died" }, { "term": "widower", "definition": "a man whose wife has died" }, { "term": "wife", "definition": "a female partner in a marriage" }, { "term": "younger", "definition": "born after another person, having less age" }];
+        let remaining = [];
+        let current = null;
+
+        function shuffle(items) {
+            const copy = items.slice();
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function resetSession() {
+            remaining = shuffle(vocabulary);
+            current = null;
+            document.getElementById('definition-box').textContent = 'Press “Next definition” to start.';
+            document.getElementById('term-reveal').textContent = '';
+            document.getElementById('called-list').innerHTML = '';
+        }
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (!remaining.length) {
+                document.getElementById('definition-box').textContent = 'All definitions have been called.';
+                document.getElementById('term-reveal').textContent = '';
+                current = null;
+                return;
+            }
+            current = remaining.shift();
+            document.getElementById('definition-box').textContent = current.definition;
+            document.getElementById('term-reveal').textContent = '';
+            const item = document.createElement('li');
+            item.textContent = current.definition;
+            document.getElementById('called-list').appendChild(item);
+        });
+
+        document.getElementById('reveal-btn').addEventListener('click', () => {
+            if (!current) return;
+            document.getElementById('term-reveal').textContent = 'Term: ' + current.term;
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', resetSession);
+        resetSession();
+    </script>
+</body>
+
+</html>
