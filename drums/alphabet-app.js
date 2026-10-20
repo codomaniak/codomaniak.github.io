@@ -23,6 +23,7 @@
   let lastClickSlot = -1;
   let notationHandle = null;
   let progressRatio = 0;
+  let autoMeter = true;
 
   const $ = (id) => document.getElementById(id);
 
@@ -36,6 +37,16 @@
 
   function currentSubdivisionCount() {
     return currentSubdivisionLabels().length;
+  }
+
+  /** Binary letters (A–P) are 4/4; ternary letters (Q–X) are 3/4. */
+  function applyAutoMeter() {
+    if (!autoMeter) return;
+    const time = letterTimeSignature(currentLetter());
+    if (settings.time === time) return;
+    settings.time = time;
+    const input = $('time-sig-input');
+    if (input) input.value = time;
   }
 
   function currentLetter() {
@@ -198,12 +209,13 @@
     $('meta-index').textContent = String(sequence.length ? index + 1 : 0);
     $('meta-total').textContent = String(sequence.length);
 
+    const meterLabel = autoMeter ? `${settings.time} auto` : settings.time;
     if (settings.durationMode === 'bars') {
       $('meta-duration').textContent =
-        `${settings.barsPerLetter} bar${settings.barsPerLetter === 1 ? '' : 's'} / letter · ${settings.time} · Grid ${letterGrid(letter)}`;
+        `${settings.barsPerLetter} bar${settings.barsPerLetter === 1 ? '' : 's'} / letter · ${meterLabel} · Grid ${letterGrid(letter)}`;
     } else {
       $('meta-duration').textContent =
-        `${settings.secondsPerLetter}s / letter · ${settings.time} · Grid ${letterGrid(letter)}`;
+        `${settings.secondsPerLetter}s / letter · ${meterLabel} · Grid ${letterGrid(letter)}`;
     }
 
     const slot = Number.isFinite(slotInBeat) ? Math.max(0, slotInBeat) : 0;
@@ -239,6 +251,8 @@
     }
     if (index < 0) index = 0;
     if (index >= sequence.length) index = sequence.length - 1;
+
+    applyAutoMeter();
 
     const ratio = resetProgress ? 0 : (elapsedRatio == null ? progressRatio : elapsedRatio);
     const slotHighlight = activeSlot;
@@ -349,7 +363,7 @@
 
     if (settings.click !== 'off' && absoluteSlot !== lastClickSlot) {
       lastClickSlot = absoluteSlot;
-      const spb = NotationHeaders.slotsPerBeat(settings.time, letterGrid(currentLetter()));
+      const spb = currentSubdivisionCount();
       const isDownbeat = absoluteSlot % spb === 0;
       const isEighth = absoluteSlot % 2 === 0;
       if (settings.click === 'sixteenth') clickSound(isDownbeat);
@@ -432,6 +446,7 @@
     btn.addEventListener('click', () => {
       if (btn.disabled) return;
       settings.mode = btn.dataset.mode;
+      autoMeter = true;
       setToggleGroup('mode-toggle', btn);
       $('word-row').classList.toggle('hidden', settings.mode !== 'word');
       rebuildSequence();
@@ -457,6 +472,7 @@
   });
 
   $('time-sig-input').addEventListener('change', () => {
+    autoMeter = false;
     settings.time = NotationHeaders.normalizeTime($('time-sig-input').value);
     $('time-sig-input').value = settings.time;
     applySettingsToView({ retime: true });

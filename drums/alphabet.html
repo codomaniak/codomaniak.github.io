@@ -99,7 +99,7 @@
               <div class="alpha-notation">
                 <p class="panel-sub" style="margin-bottom:0.5rem">Kit pattern (snare + sticking) — Play / Stop / Loop
                   below. Grid follows the letter: <strong>16</strong> for binary A–P, <strong>12</strong> for ternary
-                  Q–X. <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank"
+                  Q–X, and the time signature switches automatically (<strong>4/4</strong> ↔ <strong>3/4</strong>). <a href="https://github.com/vkamolov/obsidian-drum-notation" target="_blank"
                     rel="noopener">obsidian-drum-notation</a>.</p>
                 <div id="notation-preview-host" class="notation-preview-host"></div>
               </div>
@@ -161,7 +161,8 @@
                 <div class="control-row">
                   <label for="time-sig-input">Time</label>
                   <input type="text" id="time-sig-input" value="4/4" placeholder="4/4" spellcheck="false"
-                    autocomplete="off" title="Time signature, e.g. 4/4, 3/4, 6/8">
+                    autocomplete="off"
+                    title="Auto: 4/4 for binary A–P, 3/4 for ternary Q–X. Type a value to override.">
                 </div>
 
                 <div class="control-row">
@@ -200,7 +201,7 @@
                 <li><strong>|</strong> full · <strong>↓</strong> down · <strong>-</strong> tap · <strong>↑</strong> up
                 </li>
                 <li>Kit notation: binary unit <code>X-g-g-g-</code> at <strong>Grid 16</strong> (×2 per bar); ternary
-                  unit <code>X-x-x-</code> at <strong>Grid 12</strong> (×2 per bar).</li>
+                  unit <code>X-x-x-</code> on a <strong>3/4</strong> bar (12 slots, ×2 per bar).</li>
                 <li>Word mode accepts letters A–X.</li>
               </ul>
             </div>

@@ -86,7 +86,7 @@ function buildAlphabetDataJs(rows) {
  *
  * Kit patterns (obsidian-drum-notation):
  *   Binary: unit × 2 at Grid 16 (16 slots per bar)
- *   Ternary: unit × 2 at Grid 12 (12 slots per bar)
+ *   Ternary: unit × 2 at Time 3/4 (12 slots; rendered at Grid 16)
  *
  * Stroke glyphs: full | · down ↓ · tap - · up ↑
  */
@@ -151,6 +151,11 @@ function letterSubdivisionLabels(letter) {
     : ['1', 'e', '&', 'a'];
 }
 
+/** Binary letters (A–P) are 4/4; ternary letters (Q–X) are 3/4. */
+function letterTimeSignature(letter) {
+  return letterSubdivisionCount(letter) === 3 ? '3/4' : '4/4';
+}
+
 /**
  * Sticking for one pattern unit.
  * Hand marks sit on sounding slots; \`-\` aligns with rest slots.
@@ -210,15 +215,19 @@ function buildAlphabetNotation({
   tempo = 80,
   barsPerLetter = 1,
   handMode = 'one',
-  time = '4/4',
+  time = null,
   title = 'Greb alphabet',
   maxBars = 4
 }) {
   const lead = letters[0] || 'A';
   const g = letterGrid(lead);
+  const leadTime = time || letterTimeSignature(lead);
   const t = typeof NotationHeaders !== 'undefined'
-    ? NotationHeaders.normalizeTime(time)
-    : (['3/4', '6/8'].includes(time) ? time : '4/4');
+    ? NotationHeaders.normalizeTime(leadTime)
+    : (['3/4', '6/8'].includes(leadTime) ? leadTime : '4/4');
+  // The embed only supports Grid 16/32. Ternary bars are 3/4, where Grid 16
+  // yields the 12 slots used by Q–X.
+  const headerGrid = g === 12 ? 16 : g;
   let barsBuilt = 0;
   const sdBars = [];
   const stBars = [];
@@ -249,7 +258,7 @@ function buildAlphabetNotation({
     \`Title: \${title} (\${parts.join(' ')})\`,
     \`Tempo: \${tempo}\`,
     \`Time: \${t}\`,
-    \`Grid: \${g}\`,
+    \`Grid: \${headerGrid}\`,
     'Legend: used',
     countLine,
     \`ST | \${stBars.join(' | ')}\`,
