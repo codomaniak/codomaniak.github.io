@@ -194,7 +194,7 @@ const BINARY_LETTERS = [
     id: 'V', greb: 'X . X', hits: parseGrebHits('X . X'), unit: 'X-g-X-',
     grid: 12,
     pattern: 'X-g-X-X-g-X-',
-    oneHand: parseOneHand('down-up-down'),
+    oneHand: parseOneHand('down-up-full'),
     twoHands: parseTwoHands('down-up-down')
   },
   {
